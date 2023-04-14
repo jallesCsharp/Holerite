@@ -10,5 +10,6 @@ namespace Holerite.Core.Models
     public class Profissoes : BaseModel
     {
         public string? NomeProfissao { get; set; }
+
     }
 }

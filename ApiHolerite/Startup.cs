@@ -1,13 +1,15 @@
 using Holerite.Infra;
+using Holerite.Infra.Data;
+using Holerite.IOC.IOC;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace ApiHolerite
 {
@@ -23,14 +25,24 @@ namespace ApiHolerite
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = Configuration["ConexaoSqlite:SqliteConnectionString"];
+            var connectionString = Configuration["ConexaoSqlite:SqliteConnectionString"];
             services.AddDbContext<HoleriteContext>(options =>
-                options.UseSqlite(connection)
+                options.UseSqlite(connectionString)
             );
+
+            services.AddAutoMapper(typeof(Startup));
+            services.AddMediatR(typeof(Startup));
+            services.AddRazorPages();
+
+            services.AddDbInjector();
+            services.AddServicesInjector();;
+            services.AddMediatorInjector();
+            services.AddAutoMapperInjector();
+            //services.AddDbContextInjector(connectionString);
+
 
             services.AddHttpClient();
             services.AddControllersWithViews();
-            // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
@@ -40,7 +52,7 @@ namespace ApiHolerite
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -55,6 +67,7 @@ namespace ApiHolerite
                 app.UseHsts();
             }
 
+            await app.EnsureMigrations();
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseHttpsRedirection();
