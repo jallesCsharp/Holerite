@@ -11,6 +11,8 @@ namespace Holerite.Core.Interfaces.Repositories
     {
         IUnitOfWork UnitOfWork { get; }
         TEntity Add(TEntity entity);
+        TEntity AddUpdate(TEntity entity, bool novo);
+        IEnumerable<TEntity> AddRange(List<TEntity> entity);
         TEntity FindById(params object[] keyValues);
         TEntity Update(TEntity entity);
         TEntity Remove(TEntity entity);

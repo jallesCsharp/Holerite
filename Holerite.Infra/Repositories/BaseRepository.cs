@@ -21,15 +21,38 @@ namespace Holerite.Infra.Repositories
             _mapper = mapper;
         }
 
+        public TEntity AddUpdate(TEntity entity, bool novo = true)
+        {
+            if (novo)
+                entity = Add(entity);
+            else
+                entity = Update(entity);
+
+            return entity;
+        }
+
         public TEntity Add(TEntity entity)
         {
             if (entity is BaseModel baseModel)
             {
                 baseModel.Created = DateTime.UtcNow;
-                baseModel.Updated = DateTime.UtcNow;
             }
 
             DbSet.Add(entity);
+            return entity;
+        }
+        
+        public IEnumerable<TEntity> AddRange(List<TEntity> entity)
+        {
+            entity.ForEach((pX) =>
+            {
+                if (pX is BaseModel baseModel)
+                {
+                    baseModel.Created = DateTime.UtcNow;
+                }
+            });
+
+            DbSet.AddRange(entity);
             return entity;
         }
 

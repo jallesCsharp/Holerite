@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Holerite.Core.Dtos;
 using Holerite.Core.Interfaces.Repositories.Holerite;
+using Holerite.Core.Interfaces.Services.Holerite;
 using Holerite.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Holerite.Core.Interfaces.Services.Holerite
+namespace Holerite.Core.Services.Holerite
 {
     public class EmpresasService : IEmpresasService
     {
@@ -33,6 +34,19 @@ namespace Holerite.Core.Interfaces.Services.Holerite
             return _mapper.Map<EmpresasDto>(empresa);
         }
 
+        public async Task<EmpresasDto> CreateUpdate(EmpresasDto empresaDto)
+        {
+            Empresas? resultEmpresa = new Empresas();
+            var empresa = _mapper.Map<Empresas>(empresaDto);
+
+            resultEmpresa = _repository.QueryableFilter().Where(pX => pX.NomeEmpresa == empresaDto.NomeEmpresa).FirstOrDefault();
+            if (resultEmpresa is null)
+                resultEmpresa = _repository.Add(empresa);
+
+            await _repository.UnitOfWork.Commit();
+            return _mapper.Map<EmpresasDto>(resultEmpresa);
+        }
+        
         public async Task<EmpresasDto> Create(EmpresasDto empresaDto)
         {
             var empresa = _mapper.Map<Empresas>(empresaDto);

@@ -10,6 +10,7 @@ namespace Holerite.IOC.IOC
         {
             var mapperConfig = new MapperConfiguration(mc =>
             {
+                mc.AddProfile(new ArquivoDocumentosProfile());
                 mc.AddProfile(new ArquivosProfile());
                 mc.AddProfile(new EmpresasProfile());
                 mc.AddProfile(new PessoasProfile());

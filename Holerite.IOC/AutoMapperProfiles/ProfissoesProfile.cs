@@ -11,7 +11,7 @@ namespace Holerite.IOC.AutoMapperProfiles
         public ProfissoesProfile()
         {
             CreateMap<Profissoes, ProfissoesDto>().ReverseMap();
-            CreateMap<PessoasDto, ProfissoesResponse>().ReverseMap();
+            CreateMap<ProfissoesDto, ProfissoesResponse>().ReverseMap();
 
             CreateMap<ProfissoesDto, CreateProfissoesRequest>().ReverseMap();
             CreateMap<ProfissoesDto, UpdateProfissoesRequest>().ReverseMap();

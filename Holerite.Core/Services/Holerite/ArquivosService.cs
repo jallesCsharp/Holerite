@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Holerite.Core.Dtos;
+using Holerite.Core.Extension.ModeloHolerite;
 using Holerite.Core.Interfaces.Repositories.Holerite;
+using Holerite.Core.Interfaces.Services.Holerite;
 using Holerite.Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
-namespace Holerite.Core.Interfaces.Services.Holerite
+namespace Holerite.Core.Services.Holerite
 {
     public class ArquivosService : IArquivosService
     {
@@ -56,12 +58,16 @@ namespace Holerite.Core.Interfaces.Services.Holerite
             return _mapper.Map<ArquivosDto>(arquivo);
         }
 
-        public async Task<ArquivosDto> Create(ArquivosDto arquivoDto)
+        public async Task<List<ArquivosDto>> Create(List<PessoasDto> listaPessoasDto, ArquivoDocumentosDto arquivoDto)
         {
-            var arquivo = _mapper.Map<Arquivos>(arquivoDto);
-            var resultArquivo = _repository.Add(arquivo);
+            List<ArquivosDto> listaHolerite = await XModelo1.ModeloHolerite(listaPessoasDto, arquivoDto);
+
+            List<Arquivos> listaArquivo = _mapper.Map<List<Arquivos>>(listaHolerite);
+            var resultArquivo = _repository.AddRange(listaArquivo);
             await _repository.UnitOfWork.Commit();
-            return _mapper.Map<ArquivosDto>(resultArquivo);
+
+
+            return _mapper.Map<List<ArquivosDto>>(resultArquivo);
         }
 
         public async Task<ArquivosDto> Update(ArquivosDto arquivoDto)

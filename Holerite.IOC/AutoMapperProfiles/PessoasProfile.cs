@@ -17,6 +17,7 @@ namespace Holerite.IOC.AutoMapperProfiles
             CreateMap<PessoasDto, UpdatePessoasRequest>().ReverseMap();
             CreateMap<PessoasDto, DeletePessoasRequest>().ReverseMap();
             CreateMap<PessoasDto, PatchPessoasRequest>().ReverseMap();
+            CreateMap<PessoasDto, FilterPessoasRequest>().ReverseMap();
         }
     }
 }

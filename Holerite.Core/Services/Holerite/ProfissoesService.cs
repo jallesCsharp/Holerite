@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Holerite.Core.Dtos;
 using Holerite.Core.Interfaces.Repositories.Holerite;
+using Holerite.Core.Interfaces.Services.Holerite;
 using Holerite.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Holerite.Core.Interfaces.Services.Holerite
+namespace Holerite.Core.Services.Holerite
 {
     public class ProfissoesService : IProfissoesService
     {
@@ -40,10 +41,15 @@ namespace Holerite.Core.Interfaces.Services.Holerite
 
         public async Task<ProfissoesDto> Create(ProfissoesDto profissaoDto)
         {
+            Profissoes? resultProfissao = new Profissoes();
             var profissao = _mapper.Map<Profissoes>(profissaoDto);
-            var ret = _repository.Add(profissao);
+
+            resultProfissao = _repository.QueryableFilter().Where(pX => pX.NomeProfissao == profissaoDto.NomeProfissao).FirstOrDefault();
+            if (resultProfissao is null)
+                resultProfissao = _repository.Add(profissao);
+
             await _repository.UnitOfWork.Commit();
-            return _mapper.Map<ProfissoesDto>(ret);
+            return _mapper.Map<ProfissoesDto>(resultProfissao);
         }
 
         public async Task<ProfissoesDto> Update(ProfissoesDto profissaoDto)

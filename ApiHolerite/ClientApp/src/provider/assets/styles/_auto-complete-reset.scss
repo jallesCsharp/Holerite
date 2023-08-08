@@ -1,0 +1,16 @@
+.p-autocomplete {
+  button {
+    background: unset!important;
+    
+    span {
+      color: #ADB5BD!important;
+    }
+    
+    border-top: 1px solid #ced4da!important;
+    border-bottom: 1px solid #ced4da!important;
+    border-right: 1px solid #ced4da!important;
+  }
+}
+.p-autocomplete-input {
+  border-right: unset!important;
+}

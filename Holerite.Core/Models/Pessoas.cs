@@ -5,11 +5,13 @@ namespace Holerite.Core.Models
 {
     public class Pessoas : BaseModel
     {
-        [ForeignKey("Empresa")]
-        public Guid EmpresaId { get; set; }
-        [ForeignKey("Profissao")]
-        public Guid ProfissaoId { get; set; }
-        public int? Codigo { get; set; }
+        [ForeignKey("Empresas")]
+        public Guid? EmpresasId { get; set; }
+        [ForeignKey("Profissoes")]
+        public Guid? ProfissoesId { get; set; }
+        public int? CodigoFolha { get; set; }
+        public string? Cpf { get; set; }
+        public string? Pis { get; set; }        
         public string? Nome { get; set; }
         public string? Email { get; set; }
 

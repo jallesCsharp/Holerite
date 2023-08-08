@@ -21,6 +21,7 @@ namespace Holerite.Infra
             _mediatorHandler = mediatorHandler;
         }
 
+        public DbSet<ArquivoDocumentos> ArquivoDocumentos { get; set; }
         public DbSet<Arquivos> Arquivos { get; set; }
         public DbSet<Pessoas> Pessoas { get; set; }
         public DbSet<Empresas> Empresas { get; set; }
@@ -33,6 +34,7 @@ namespace Holerite.Infra
 
             base.OnModelCreating(builder);
 
+            builder.ApplyConfiguration(new ArquivoDocumentosMap());
             builder.ApplyConfiguration(new ArquivosMap());
             builder.ApplyConfiguration(new PessoasMap());
             builder.ApplyConfiguration(new EmpresasMap());

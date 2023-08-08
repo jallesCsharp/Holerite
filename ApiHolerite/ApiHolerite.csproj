@@ -8,14 +8,15 @@
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <PackageIcon></PackageIcon>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="MediatR" Version="11.1.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+    <PackageReference Include="MediatR" Version="8.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.15" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -35,6 +36,127 @@
     <ProjectReference Include="..\Holerite.IOC\Holerite.IOC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\@types\model\ArquivosModel.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\DefaultPage\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\ArquivoService.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\app\router\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\services\GoogleService.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\models\DialogAlteracaoFilter.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\models\DialogDeclaracaoFilter.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\models\DialogMapFilter.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\@types\menu.ts" />    
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_auto-complete-reset.scss" />    
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_blockui-reset.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_buttons.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_calendar.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_card-reset.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_colors.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_datatable-reset.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_dropdown-reset.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_form.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_input-reset.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_menu-reset.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_modal-reset.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_reset_card.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_text.scss" />
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\_toast-reset.scss" />    
+    <TypeScriptCompile Include="ClientApp\src\provider\assets\styles\main.scss" />                       
+    <TypeScriptCompile Include="ClientApp\src\provider\components\Container\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\components\AutoComplete\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\components\Calendar\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\components\Cep\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\components\Cnpj\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\components\Cpf\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\components\CpfCnpj\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\components\Dropdown\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\components\Layouts\Default\Footer\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\components\Layouts\Default\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\components\Layouts\Default\Sidebar\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\components\Layouts\Default\Topbar\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\provider\redux\@types\auth.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\redux\@types\blockUI.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\redux\@types\breadCrumb.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\redux\auth\authActionTypes.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\redux\auth\reducer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\redux\blockui\blockUIActionTypes.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\redux\blockui\reducer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\redux\breadCrumb\breadCrumbActionTypes.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\redux\breadCrumb\reducer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\redux\reducer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\redux\store.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\services\abstractController.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\services\abstractService.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\services\authService.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\services\blockUIService.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\services\blockUIService.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\services\breadCrumbService.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\services\reduxInterface.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\services\toastService.ts" />
+    <TypeScriptCompile Include="ClientApp\src\provider\shared\locale\index.ts" />
+    <TypeScriptCompile Include="ClientApp\src\registerServiceWorker.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\" />
+    <Folder Include="ClientApp\src\app\" />
+    <Folder Include="ClientApp\src\app\@types\" />
+    <Folder Include="ClientApp\src\app\@types\enums\" />
+    <Folder Include="ClientApp\src\app\@types\filters\" />
+    <Folder Include="ClientApp\src\app\@types\model\" />
+    <Folder Include="ClientApp\src\app\assets\fontawesome\" />
+    <Folder Include="ClientApp\src\app\assets\fontawesome\css\" />
+    <Folder Include="ClientApp\src\app\assets\fontawesome\js\" />
+    <Folder Include="ClientApp\src\app\assets\fontawesome\less\" />
+    <Folder Include="ClientApp\src\app\assets\fontawesome\scss\" />
+    <Folder Include="ClientApp\src\app\assets\fontawesome\sprites\" />
+    <Folder Include="ClientApp\src\app\assets\fontawesome\svgs\" />
+    <Folder Include="ClientApp\src\app\assets\fontawesome\svgs\brands\" />
+    <Folder Include="ClientApp\src\app\assets\fontawesome\svgs\regular\" />
+    <Folder Include="ClientApp\src\app\assets\fontawesome\svgs\solid\" />
+    <Folder Include="ClientApp\src\app\assets\fontawesome\webfonts\" />
+    <Folder Include="ClientApp\src\app\components\" />
+    <Folder Include="ClientApp\src\app\components\dialog\" />
+    <Folder Include="ClientApp\src\app\components\grid\" />
+    <Folder Include="ClientApp\src\app\components\models\" />
+    <Folder Include="ClientApp\src\app\components\services\" />
+    <Folder Include="ClientApp\src\app\pages\DefaultPage\" />
+    
+    <Folder Include="ClientApp\src\app\pages\Login\" />
+    <Folder Include="ClientApp\src\app\pages\Login\controllers\" />
+    <Folder Include="ClientApp\src\app\pages\Login\models\" />
+    <Folder Include="ClientApp\src\app\pages\Login\pages\" />
+    <Folder Include="ClientApp\src\app\pages\Login\styles\" />    
+    <Folder Include="ClientApp\src\environments\" />
+    <Folder Include="ClientApp\src\provider\" />
+    <Folder Include="ClientApp\src\provider\@types\" />
+    <Folder Include="ClientApp\src\provider\assets\" />
+    <Folder Include="ClientApp\src\provider\assets\styles\" />
+    <Folder Include="ClientApp\src\provider\components\" />
+    <Folder Include="ClientApp\src\provider\components\Container\" />
+    <Folder Include="ClientApp\src\provider\components\AutoComplete\" />
+    <Folder Include="ClientApp\src\provider\components\Calendar\" />
+    <Folder Include="ClientApp\src\provider\components\Cep\" />
+    <Folder Include="ClientApp\src\provider\components\Cnpj\" />
+    <Folder Include="ClientApp\src\provider\components\Cpf\" />
+    <Folder Include="ClientApp\src\provider\components\CpfCnpj\" />
+    <Folder Include="ClientApp\src\provider\components\Dropdown\" />
+    <Folder Include="ClientApp\src\provider\components\Layouts\" />
+    <Folder Include="ClientApp\src\provider\components\Layouts\Default\" />
+    <Folder Include="ClientApp\src\provider\components\Layouts\Default\Footer\" />
+    <Folder Include="ClientApp\src\provider\components\Layouts\Default\Sidebar\" />
+    <Folder Include="ClientApp\src\provider\components\Layouts\Default\Topbar\" />
+    <Folder Include="ClientApp\src\provider\redux\" />
+    <Folder Include="ClientApp\src\provider\redux\@types\" />
+    <Folder Include="ClientApp\src\provider\redux\auth\" />
+    <Folder Include="ClientApp\src\provider\redux\blockui\" />
+    <Folder Include="ClientApp\src\provider\redux\breadCrumb\" />
+    <Folder Include="ClientApp\src\provider\services\" />
+    <Folder Include="ClientApp\src\provider\shared\" />
+    <Folder Include="ClientApp\src\provider\shared\locale\" />
+  </ItemGroup>
+
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
@@ -42,13 +164,13 @@
     </Exec>
     <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
     <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="yarn install" />
   </Target>
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="yarn install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="yarn build" />
 
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>

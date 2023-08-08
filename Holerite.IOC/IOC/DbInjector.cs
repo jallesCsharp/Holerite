@@ -16,6 +16,7 @@ public static class DbInjector
 
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
+        services.AddScoped<IArquivoDocumentosRepository, ArquivoDocumentosRepository>();
         services.AddScoped<IArquivosRepository, ArquivosRepository>();
         services.AddScoped<IEmpresasRepository, EmpresasRepository>();
         services.AddScoped<IPessoasRepository, PessoasRepository>();

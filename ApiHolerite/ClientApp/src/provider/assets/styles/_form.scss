@@ -1,0 +1,30 @@
+.form-layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  label {
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    color: #495057;
+    margin-bottom: 10px;
+  }
+}
+.no-padding {
+  padding: 0!important;
+}
+
+.form-control {
+  box-shadow: none!important;
+  border: 1px solid #ced4da!important;
+}
+
+.form-control:hover {
+  border: 1px solid #ced4da!important;
+}
+
+.form-text-decoration-none {
+  text-decoration: none!important;
+}

@@ -8,9 +8,11 @@ namespace Holerite.Core.Dtos
         public DateTime? Updated { get; set; }
         public DateTime? Deleted { get; set; }
 
-        public Guid EmpresaId { get; set; }
-        public Guid ProfissaoId { get; set; }
-        public int? Codigo { get; set; }
+        public Guid? EmpresasId { get; set; }
+        public Guid? ProfissoesId { get; set; }
+        public int? CodigoFolha { get; set; }
+        public string? Cpf { get; set; }
+        public string? Pis { get; set; }
         public string? Nome { get; set; }
         public string? Email { get; set; }
 
@@ -18,3 +20,16 @@ namespace Holerite.Core.Dtos
         public virtual EmpresasDto? Empresas { get; set; }
     }
 }
+
+
+//pessoa
+//    idLogin
+//    login
+//    cpf
+
+//login 
+//    id   
+//    senha
+//    secaoAtiva
+//    timeSpira
+//    ultimoLogin

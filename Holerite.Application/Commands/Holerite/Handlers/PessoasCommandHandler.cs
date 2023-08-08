@@ -13,7 +13,8 @@ namespace Holerite.Application.Commands.Holerite.Handlers
         IRequestHandler<CreatePessoasRequest, ValidationResultBag>,
         IRequestHandler<PatchPessoasRequest, ValidationResultBag>,
         IRequestHandler<UpdatePessoasRequest, ValidationResultBag>,
-        IRequestHandler<DeletePessoasRequest, ValidationResultBag>
+        IRequestHandler<DeletePessoasRequest, ValidationResultBag>,
+        IRequestHandler<FilterPessoasRequest, ValidationResultBag>
     {
         private readonly IMapper _mapper;
         private readonly IPessoasService _pessoasService;
@@ -23,6 +24,32 @@ namespace Holerite.Application.Commands.Holerite.Handlers
         {
             _mapper = mapper;
             _pessoasService = pessoasService;
+        }
+
+        public async Task<ValidationResultBag> Handle(FilterPessoasRequest request, CancellationToken cancellationToken)
+        {
+            List<PessoasDto?> listaPessoas = new List<PessoasDto?>();
+            IEnumerable<PessoasDto?> pessoas = await _pessoasService.GetAll();
+
+            if (listaPessoas.Count == 0)
+                listaPessoas.AddRange(pessoas.OrderBy(pX => pX?.Nome).ToList());
+
+            if (request.DataInicio.HasValue && request.DataFim.HasValue)
+                listaPessoas = listaPessoas.ToList().Where(pX => pX?.Created >= request?.DataInicio && pX?.Created <= request?.DataFim).ToList();
+
+            if (request.Id != Guid.Empty)
+                listaPessoas.Add(listaPessoas.ToList().FirstOrDefault(pX => pX?.Id == request.Id));
+
+            if (!String.IsNullOrEmpty(request.Nome) && (!request.DataInicio.HasValue && !request.DataFim.HasValue))
+                listaPessoas = listaPessoas.ToList().Where(pX => pX.Nome.ToLower().Contains(request.Nome.ToLower())).ToList();
+
+            
+            //var pessoas = _mapper.Map<PessoasDto>(request);
+
+            ValidationResult.Data = _mapper.Map<List<PessoasResponse>>(listaPessoas);
+
+            return ValidationResult;
+
         }
 
         public async Task<ValidationResultBag> Handle(CreatePessoasRequest request, CancellationToken cancellationToken)

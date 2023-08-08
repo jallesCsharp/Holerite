@@ -7,7 +7,7 @@ namespace Holerite.Core.Interfaces.Services.Holerite
     {
         Task<ArquivosDto?> GetById(Guid id);
         Task<IEnumerable<ArquivosDto?>> GetAll();
-        Task<ArquivosDto> Create(ArquivosDto pArquivo);
+        Task<List<ArquivosDto>> Create(List<PessoasDto> listaPessoasDto, ArquivoDocumentosDto arquivoDto);
         Task<ArquivosDto> Update(ArquivosDto pArquivo);
         Task<ArquivosDto?> Delete(ArquivosDto pArquivo);
 

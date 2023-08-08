@@ -1,0 +1,30 @@
+.p-card .p-card-title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 25px;
+  font-family: 'Lato';
+  color: var(--azul-primario);
+}
+
+.p-card {
+  margin-bottom: 50px;
+}
+
+.card .md\:col-6 .p-inputgroup-addon{
+  height:40px;
+  min-width:4px;
+  width:50px;
+}
+
+.card .p-fluid .p-button-icon-only{
+  padding-left:0px;
+  padding-right:0px;
+  padding-top:0px;
+  padding-bottom:0px;
+  height:27px;
+  border-top-left-radius:8px;
+  border-top-right-radius:8px;
+  border-bottom-left-radius:8px;
+  border-bottom-right-radius:8px;
+ }
