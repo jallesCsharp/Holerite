@@ -1,0 +1,28 @@
+.p-component .p-button-primary .mr-2 {
+  font-size: '3em'!important;
+}
+
+.p-inputtext:enabled:focus {
+  box-shadow: none!important;
+  border: 1px solid #ced4da!important;
+}
+.p-inputtext.p-component.p-invalid {
+  border-color: #dc3545 !important;
+}
+.p-inputtext.p-component {
+  border: 1px solid #ced4da!important;
+}
+
+.p-checkbox .p-checkbox-box.p-highlight  {
+  color: var(--default)!important;
+  background: var(--default)!important;
+  border-color: var(--default)!important;
+}
+
+.p-checkbox-box {
+  border-color: #ced4da!important;
+  box-shadow: none!important;
+}
+.p-invalid  {
+  border-color: #dc3545 !important; 
+}

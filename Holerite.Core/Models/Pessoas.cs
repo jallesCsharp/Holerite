@@ -1,17 +1,21 @@
 ﻿using Holerite.Core.Models.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Holerite.Core.Models
 {
     public class Pessoas : BaseModel
     {
-        public Guid EmpresaId { get; set; }
-        public Guid ProfissaoId { get; set; }
-        public int? Codigo { get; set; }
+        [ForeignKey("Empresas")]
+        public Guid? EmpresasId { get; set; }
+        [ForeignKey("Profissoes")]
+        public Guid? ProfissoesId { get; set; }
+        public int? CodigoFolha { get; set; }
+        public string? Cpf { get; set; }
+        public string? Pis { get; set; }        
         public string? Nome { get; set; }
+        public string? Email { get; set; }
+
+        public virtual Profissoes? Profissoes { get; set; }
+        public virtual Empresas? Empresas { get; set; }
     }
 }

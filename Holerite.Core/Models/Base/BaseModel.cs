@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 
 namespace Holerite.Core.Models.Base
 {
@@ -13,20 +10,21 @@ namespace Holerite.Core.Models.Base
             Id = Guid.NewGuid();
         }
 
-        public BaseModel(DateTime createdAt) : this()
+        public BaseModel(DateTime created) : this()
         {
-            CreatedAt = createdAt;
+            Created = created;
         }
 
-        public BaseModel(Guid id, DateTime createdAt)
+        public BaseModel(Guid id, DateTime created)
         {
             Id = id;
-            CreatedAt = createdAt;
+            Created = created;
         }
 
+        [Key]
         public Guid Id { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-        public DateTime? DeletedAt { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Updated { get; set; }
+        public DateTime? Deleted { get; set; }
     }
 }

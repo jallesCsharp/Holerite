@@ -1,0 +1,19 @@
+.p-dialog-mask {
+  z-index: 5001!important;
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-icon:focus {
+  box-shadow: unset!important;
+}
+
+.dialog-650 {
+  width: 650px;
+}
+.p-dialog-title {
+  color: var(--azul-primario);
+}
+.p-dialog-footer {
+  button {
+    color: var(--default)!important;
+  }
+}

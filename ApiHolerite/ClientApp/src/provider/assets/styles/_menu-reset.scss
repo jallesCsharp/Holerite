@@ -1,0 +1,62 @@
+.p-panelmenu {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.p-panelmenu-content {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.p-panelmenu-header {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.p-panelmenu .p-panelmenu-header > a {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:focus {
+  box-shadow: none !important;
+}
+
+.p-menuitem-text {
+  color: #19232e;
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+}
+
+.active .p-menuitem-text {
+  font-weight: 700;
+}
+
+.p-panelmenu .p-panelmenu-header > a {
+  background: unset !important;
+}
+
+.p-breadcrumb ul li .p-menuitem-link {
+  box-shadow: none !important;
+}
+.p-panelmenu .p-submenu-list {
+  padding-left: 25px !important;
+}
+.p-panelmenu .p-menuitem-link {
+  color: #19232e !important;
+  font-family: "Lato", sans-serif !important;
+  font-weight: 400 !important;
+}
+
+a .p-menuitem-link {
+  color: #19232e !important;
+  font-family: "Lato", sans-serif !important;
+  font-weight: 400 !important;
+}
+
+.p-breadcrumb {
+  border-top-left-radius:30px !important;
+  border-top-right-radius:30px !important;
+  border-bottom-left-radius:29px !important;
+  border-bottom-right-radius:30px !important;
+ }

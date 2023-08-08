@@ -1,13 +1,16 @@
 using Holerite.Infra;
+using Holerite.Infra.Data;
+using Holerite.IOC.IOC;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Reflection;
 
 namespace ApiHolerite
 {
@@ -23,14 +26,34 @@ namespace ApiHolerite
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = Configuration["ConexaoSqlite:SqliteConnectionString"];
+            var connectionString = Configuration["Connection:ConnectionString"];
             services.AddDbContext<HoleriteContext>(options =>
-                options.UseSqlite(connection)
+                options.UseNpgsql(connectionString)
             );
 
+            services.AddAutoMapper(typeof(Startup));
+            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddRazorPages();
+
+            services.AddDbInjector();
+            services.AddServicesInjector();
+            services.AddMediatorInjector();
+            services.AddAutoMapperInjector();
+            //services.AddDbContextInjector(connectionString);
+
+
             services.AddHttpClient();
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AlowsCors", options =>
+                {
+                    options.AllowAnyOrigin()
+                    .WithMethods("GET", "PUT", "POST", "DELETE")
+                    .AllowAnyHeader();
+                });
+            });
             services.AddControllersWithViews();
-            // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
@@ -40,7 +63,7 @@ namespace ApiHolerite
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -55,13 +78,19 @@ namespace ApiHolerite
                 app.UseHsts();
             }
 
+            app.EnsureMigrations();
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            
             app.UseRouting();
+
+            app.UseCors(x => x
+              .AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {
