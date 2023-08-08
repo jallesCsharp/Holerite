@@ -1,16 +1,15 @@
-import * as React from 'react';
-import { Route } from 'react-router';
-import Layout from './components/Layout';
-import Home from './components/Home';
-import Counter from './components/Counter';
-import FetchData from './components/FetchData';
+import React from 'react';
+import Routes from './app/router';
+import { addLocale, locale } from 'primereact/api';
+import { localeConfig } from './provider/shared/locale';
 
-import './custom.css'
+export default function App() {
+  addLocale('pt_BR', localeConfig);
 
-export default () => (
-    <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
-    </Layout>
-);
+  locale('pt_BR');
+  return (
+    <>
+      <Routes />
+    </>
+  );
+}
