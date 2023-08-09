@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import Container from '../../../../../provider/components/Container';
@@ -6,6 +6,7 @@ import ArquivosFilter from '../models/ArquivosFilter';
 import ArquivosHoleriteController from '../controllers/ArquivosHoleriteController';
 import PropDropdown from '../../../../../provider/components/Dropdown';
 import ProAutoComplete from '../../../../../provider/components/AutoComplete';
+import { PessoasModel } from '../../../../@types/model/PessoasModel';
 // import ToastService from '../../../../../provider/services/toastService';
 
 interface Props {
@@ -14,9 +15,28 @@ interface Props {
 }
 
 const FilterHolerite: React.FC<Props> = ({ filter, controller }) => {
-  function onLimparupload() {
-    filter.setMes(2);
+  const [pessoa, setPessoa] = useState<PessoasModel>();
+
+  function onLimparPesquisar() {
+    filter.setMes(0);
+    setPessoa(undefined);
   }
+
+  function onPesquisar() {
+    let objeto = {
+      mes: filter.mes,
+      pessoa: pessoa,
+    };
+    console.log(objeto);
+  }
+
+  const itemtemplate = (item: any) => {
+    return (
+      <div>
+        <div>{item.nome}</div>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -32,13 +52,19 @@ const FilterHolerite: React.FC<Props> = ({ filter, controller }) => {
           <div className="grid">
             <Container col={4}>
               <label htmlFor="NomePessoa">Nome Pessoa:</label>
+              {/* readOnly={showSearchUsuario ? true : false} */}
               <ProAutoComplete
-                id="NomePessoa"
-                value={filter.pessoasModel?.Nome}
-                suggestions={filter.listaEmpresaAuto}
-                completeMethod={controller.GetAllListaPessoas()}
-                onChange={(e: any) => filter.setPessoaNome(e.target.value)}
+                appendTo="self"
+                readOnly={false}
+                name="nome"
+                value={pessoa}
+                suggestions={controller.listaPessoaFilter}
+                completeMethod={controller.searchPessoa()}
+                field="nome"
+                itemTemplate={itemtemplate}
+                onChange={(e: any) => setPessoa(e.target.value)}
                 placeholder="Nome Pessoa"
+                forceSelection
               />
             </Container>
 
@@ -122,7 +148,7 @@ const FilterHolerite: React.FC<Props> = ({ filter, controller }) => {
                   className="p-button-secondary mr-2"
                   style={{ fontSize: '1em' }}
                   label="Pesquisar"
-                  onClick={() => ''}
+                  onClick={onPesquisar}
                 />
                 <Button
                   id="Volar"
@@ -135,7 +161,7 @@ const FilterHolerite: React.FC<Props> = ({ filter, controller }) => {
                   className="p-button-secondary mr-2"
                   style={{ fontSize: '1em' }}
                   label="Limpar"
-                  onClick={onLimparupload}
+                  onClick={onLimparPesquisar}
                 />
               </div>
               {/* <div>

@@ -60,11 +60,16 @@ export default class ArquivosFilter {
 
   public setEmailEnviado: any;
 
+  public pessoasFiltradas: any;
+
+  public setPessoasFiltradas: (e: any) => void;
+
   constructor() {
     [this.arquivosModel, this.setArquivosModel] = useState<ArquivosModel>();
     [this.pessoasModel, this.setPessoasModel] = useState<PessoasModel>();
     [this.listaEmpresaAuto, this.setlListaEmpresaAuto] = useState<any[]>();
     [this.listaPessoasAuto, this.setListaPessoasAuto] = useState<PessoasModel[]>();
+    [this.pessoasFiltradas, this.setPessoasFiltradas] = useState();
 
     [this.pessoasId, this.setPessoasId] = useState<any>();
     [this.pessoaNome, this.setPessoaNome] = useState<string>();
