@@ -9,24 +9,12 @@ export const Holerite = () => {
 
   useEffect(() => {
     controller.init();
-    filter.setEniar(false);
+    filter.setEnviar(false);
   }, []);
 
   return (
     <>
       <CadastrarHoleriteArquivo filter={filter} controller={controller} />
-      {/* <Card title="Cadastrar Holerite" className={'mb-3'}>
-        <div className="card flex justify-content-center">
-          <FileUpload
-            mode="basic"
-            style={{ marginRight: '.5em' }}
-            chooseLabel="Adicionar Arquivo"
-            auto={false}
-            customUpload={true}
-            uploadHandler={carregarUpload}
-          />
-        </div>
-      </Card> */}
     </>
   );
 };

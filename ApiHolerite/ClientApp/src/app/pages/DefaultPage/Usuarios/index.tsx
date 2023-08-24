@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Clientes from './pages/Clientes';
 import Perfil from './pages/Perfil';
+import ListarUsuarios from './pages/ListarUsuarios';
 
 const UsuariosPage: React.FC = () => {
   return (
     <>
       <Switch>
-        <Route path="/usuario" exact={true} component={Clientes} />
-        <Route path="/perfil" exact={true} component={Perfil} />
+        <Route path="/usuarios/perfil/:id" exact={true} component={Perfil} />
+        <Route path="/usuarios/listar" exact={true} component={ListarUsuarios} />
       </Switch>
     </>
   );

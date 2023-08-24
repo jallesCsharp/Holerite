@@ -1,7 +1,4 @@
-﻿
-
-
-using Holerite.Core.Messages;
+﻿using Holerite.Core.Messages;
 
 namespace Holerite.Application.Commands.Holerite.Requests.PessoasRequest
 {

@@ -52,7 +52,7 @@ namespace Holerite.Application.Commands.Holerite.Handlers
                 var ty = _mapper.Map<List<ArquivosResponse>>(listaArquivo);
                 ValidationResult.Data = ty;
             }
-            catch (Exception error)
+            catch (Exception)
             {
 
                 throw;

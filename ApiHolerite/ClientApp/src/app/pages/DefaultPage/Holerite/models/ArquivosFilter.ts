@@ -8,6 +8,10 @@ export default class ArquivosFilter {
 
   public setArquivosModel: any;
 
+  public listaArquivos?: ArquivosModel[];
+
+  public setListaArquivos: (e: any) => void;
+
   public empresaModel?: EmpresaModel;
 
   public setEmpresaModel: any;
@@ -36,9 +40,13 @@ export default class ArquivosFilter {
 
   public setArquivoDocumentoId: any;
 
-  public mes?: number;
+  public mes?: any;
 
   public setMes: any;
+
+  public ano?: number;
+
+  public setAno: (e: any) => void;
 
   public listaMes?: any[];
 
@@ -46,7 +54,7 @@ export default class ArquivosFilter {
 
   public listaEmpresaAuto?: any;
 
-  public setlListaEmpresaAuto: any;
+  public setListaEmpresaAuto: any;
 
   public pessoaNome?: string;
 
@@ -60,15 +68,22 @@ export default class ArquivosFilter {
 
   public setEmailEnviado: any;
 
+  public pessoasFiltradas: any;
+
+  public setPessoasFiltradas: (e: any) => void;
+
   constructor() {
     [this.arquivosModel, this.setArquivosModel] = useState<ArquivosModel>();
+    [this.listaArquivos, this.setListaArquivos] = useState<ArquivosModel[]>();
     [this.pessoasModel, this.setPessoasModel] = useState<PessoasModel>();
-    [this.listaEmpresaAuto, this.setlListaEmpresaAuto] = useState<any[]>();
+    [this.listaEmpresaAuto, this.setListaEmpresaAuto] = useState<any[]>();
     [this.listaPessoasAuto, this.setListaPessoasAuto] = useState<PessoasModel[]>();
+    [this.pessoasFiltradas, this.setPessoasFiltradas] = useState();
 
     [this.pessoasId, this.setPessoasId] = useState<any>();
     [this.pessoaNome, this.setPessoaNome] = useState<string>();
     [this.mes, this.setMes] = useState<number>();
+    [this.ano, this.setAno] = useState<number>();
     [this.listaMes, this.setListaMes] = useState<any[]>();
     [this.arquivoDocumentoId, this.setArquivoDocumentoId] = useState<any>();
     [this.arquivo, this.setArquivo] = useState<any>();

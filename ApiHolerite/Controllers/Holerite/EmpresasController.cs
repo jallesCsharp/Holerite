@@ -3,10 +3,12 @@ using Holerite.Application.Commands.Holerite.Requests.EmpresasRequest;
 using Holerite.Application.Commands.Holerite.Responses.EmpresasResponses;
 using Holerite.Core.Validation;
 using MediatR;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiHolerite.Controllers.Holerite
@@ -17,6 +19,26 @@ namespace ApiHolerite.Controllers.Holerite
     {
         public EmpresasController(IMediator mediator, IMapper mapper)
             : base(mediator, mapper) { }
+
+        [HttpGet]
+        [EnableCors("AlowsCors")]
+        [ProducesResponseType(typeof(List<EmpresasResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[Authorize]
+        public async Task<ActionResult> GetAll([FromQuery] FilterEmpresasRequest request)
+        {
+            try
+            {
+                if (request is null)
+                    return CustomResponse("Objeto inválido");
+                var resulte = await _mediator.Send(request);
+                return CustomResponse(resulte);
+            }
+            catch (Exception)
+            {
+                return CustomResponse(StatusCodes.Status400BadRequest);
+            }
+        }
 
         [HttpPost]
         //[EnableCors("AlowsCors")]

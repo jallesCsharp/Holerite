@@ -1,6 +1,8 @@
 export class Mensagem {
   public static readonly ERROR_501 = '500 Internal Server Error';
 
+  public static readonly ERROR_400 = 'Solicitação Incorreta HTTP 400';
+
   public static readonly FALHA_REQUISICAO = 'Erro na consulta';
 
   public static readonly SEM_RESULTADO_EXPORTAR = 'Nenhum resultado encontrado para exportação !';

@@ -10,6 +10,9 @@ namespace Holerite.Core.Interfaces.Services.Holerite
         Task<List<ArquivosDto>> Create(List<PessoasDto> listaPessoasDto, ArquivoDocumentosDto arquivoDto);
         Task<ArquivosDto> Update(ArquivosDto pArquivo);
         Task<ArquivosDto?> Delete(ArquivosDto pArquivo);
+        
+        Task<List<ArquivosDto>> GetPesquisarArquivos(FilterArquivosHoleriteDto filter);
+        Task<List<ArquivosDto>> GetPesquisarArquivosPendentes(FilterArquivosHoleriteDto filter);
 
         public string SaveFile(IFormFile formFile);
         public string SaveFileAs(IFormFile formFile, string fileName);

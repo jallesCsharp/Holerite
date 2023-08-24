@@ -5,6 +5,12 @@ import ArquivoService from '../../../../services/ArquivoService';
 // import { Mensagem } from '../../../../shared/mensagem/Mensagem';
 import ArquivosFilter from '../models/ArquivosFilter';
 import { MesExt } from '../../../../@types/enums/Mes';
+import PessoaService from '../../../../services/PessoaService';
+import ToastService from '../../../../../provider/services/toastService';
+import { Mensagem } from '../../../../shared/mensagem/Mensagem';
+import { useState } from 'react';
+import { FilterArquivosHolerite } from '../../../../@types/filters/FilterArquivosHolerite';
+import { PessoasModel } from '../../../../@types/model/PessoasModel';
 
 export default class ArquivosHoleriteController extends AbstractController {
   public filter: ArquivosFilter;
@@ -13,25 +19,39 @@ export default class ArquivosHoleriteController extends AbstractController {
 
   private arquivoService = new ArquivoService();
 
+  private pessoaService = new PessoaService();
+
+  public listaPessoaFilter: any;
+
+  private setListaPessoaFilter: (e: any) => void;
+
+  public listaPessoas: any[];
+
+  private setListaPessoas: (e: any) => void;
+
   constructor(filter: ArquivosFilter) {
     super();
     this.filter = filter;
     this.history = useHistory();
+    [this.listaPessoaFilter, this.setListaPessoaFilter] = useState();
+    [this.listaPessoas, this.setListaPessoas] = useState<PessoasModel[]>([]);
   }
 
-  init() {
+  async init() {
     super.init();
-    this.CarregarTela();
+    await this.PesquisarArquivos({ Mes: 0, Id: null, Nome: null });
     this.breadCrumbService.change([
       {
-        label: 'Holerite',
-        id: 'holerite-arquivo',
+        label: 'Listar Holerite',
+        id: 'listar-holerite',
       },
     ]);
   }
 
-  public CarregarTela() {
+  public async CarregarTela() {
     this.filter.setListaMes(MesExt.GetMes());
+    this.SelecionarMes(MesExt.GetMesString('0'));
+    this.GetAllListaPessoas();
   }
 
   public getArquivosHolerite() {
@@ -53,33 +73,86 @@ export default class ArquivosHoleriteController extends AbstractController {
     this.blockUIService.stop();
   }
 
-  public SelecionarMes(idMes: number) {
+  public SelecionarMes(idMes: any) {
+    console.log('idMes');
+    console.log(idMes);
     this.filter.setMes(idMes);
   }
 
-  public GetAllListaPessoas() {
+  public SelecionarAno(ano: number) {
+    console.log('SelecionarAno');
+    console.log(ano);
+    this.filter.setAno(ano);
+    console.log(this.filter.ano);
+  }
+
+  public async GetAllListaPessoas() {
     try {
-      console.log('Lista Pessoas');
-      // this.blockUIService.start();
-      // await this.arquivoService.UploadHolerite(formFile).then((result) => {
-      //   console.log(result);
-      //   if (result.success == false) {
-      //     ToastService.showError(result.errors);
-      //     return;
-      //   }
-      //   return result.data;
-      // });
-      // await this.limparFilter();
-      // this.blockUIService.stop();
+      this.blockUIService.start();
+      await this.pessoaService.getPessoas().then((result) => {
+        if (result.success == false) {
+          ToastService.showError(result.errors);
+          return;
+        }
+        this.setListaPessoas(result.data);
+        return result.data;
+      });
+      //await this.limparFilter();
+      this.blockUIService.stop();
     } catch (error) {
-      // ToastService.showError(Mensagem.ERROR_501);
+      ToastService.showError(Mensagem.ERROR_501);
       // await this.limparFilter();
-      // this.blockUIService.stop();
+      this.blockUIService.stop();
     }
   }
 
-  public selecionarEmpresa(idMes: string) {
-    this.filter.setMes(idMes);
+  public async PesquisarArquivos(filter: FilterArquivosHolerite) {
+    try {
+      this.blockUIService.start();
+      await this.arquivoService.getPesquisarArquivos(filter).then((result) => {
+        // console.log('result.data?.toString()');
+
+        // console.log('errors');
+        // console.log(result.errors.data.errors.Messagens[0]);
+
+        if (result.success == false) {
+          ToastService.showError(
+            'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
+          );
+          return;
+        }
+        if (result.data?.toString() === '400') {
+          ToastService.showError(Mensagem.ERROR_400);
+          return;
+        }
+        console.log(result.data);
+        this.filter.setListaArquivos(result.data);
+        return result.data;
+      });
+      this.blockUIService.stop();
+    } catch (error) {
+      ToastService.showError(Mensagem.ERROR_501 + error);
+      this.blockUIService.stop();
+    }
+  }
+
+  searchPessoa() {
+    const search = (event: { query: string }) => {
+      setTimeout(() => {
+        let results;
+        if (!event.query.trim().length) {
+          results = [...this.listaPessoas];
+        } else {
+          results = this.listaPessoas?.filter((item) => {
+            if (item.nome != undefined) {
+              return item?.nome.toLowerCase().startsWith(event.query.toLowerCase());
+            }
+          });
+        }
+        this.setListaPessoaFilter(results);
+      }, 250);
+    };
+    return search;
   }
 
   //   public async limparFilter() {}

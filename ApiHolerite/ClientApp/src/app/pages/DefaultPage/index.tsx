@@ -51,7 +51,7 @@ const DefaultPage = () => {
           <Switch>
             <Route path="/login" component={LoginPage} />
             <Route path="/home" component={HomePage} />
-            <Route path="/usuario" component={UsuariosPage} />
+            <Route path="/usuarios" component={UsuariosPage} />
             <Route path="/holerite" component={HoleritePage} />
             <Route path="/relatorio" component={RelatorioPage} />
             <Route path="/Configuracoes" component={ConfiguracoesPage} />

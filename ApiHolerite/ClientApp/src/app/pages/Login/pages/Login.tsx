@@ -18,8 +18,8 @@ export const Login: React.FC = () => {
   const handleLogin = async () => {
     if (cpf && password) {
       const userLogin: LoginModel = {
-        Cpf: cpf,
-        Senha: password,
+        cpf: cpf,
+        senha: password,
       };
 
       controller.logar(userLogin);
