@@ -7,7 +7,7 @@ export default class FileFilter {
 
   public onEniar?: boolean;
 
-  public setEniar: any;
+  public setEnviar: any;
 
   public onLoading?: boolean;
 
@@ -15,7 +15,7 @@ export default class FileFilter {
 
   constructor() {
     [this.file, this.setFile] = useState<FormData>();
-    [this.onEniar, this.setEniar] = useState<boolean>();
+    [this.onEniar, this.setEnviar] = useState<boolean>();
     [this.onLoading, this.setLoading] = useState<boolean>(false);
   }
 }

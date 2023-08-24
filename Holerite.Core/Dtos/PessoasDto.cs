@@ -33,3 +33,4 @@ namespace Holerite.Core.Dtos
 //    secaoAtiva
 //    timeSpira
 //    ultimoLogin
+//    jwt

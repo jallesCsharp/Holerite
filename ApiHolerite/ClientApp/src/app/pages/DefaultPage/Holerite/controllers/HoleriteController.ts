@@ -30,7 +30,7 @@ export default class HoleriteController extends AbstractController {
 
   public async limparFilter() {
     this.filter.setFile('');
-    this.filter.setEniar(false);
+    this.filter.setEnviar(false);
     this.filter.setLoading(false);
   }
 

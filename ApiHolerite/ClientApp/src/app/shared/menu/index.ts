@@ -9,11 +9,24 @@ export const menuItems: MenuItem[] = [
     id: 'home',
   },
   {
-    id: 'usuario',
-    icon: 'pi pi-user-edit',
+    id: 'usuarios',
     label: 'Usuário',
-    url: '/usuario',
+    icon: 'pi pi-user-edit',
     modulo: 'USUARIOS',
+    items: [
+      {
+        id: 'perfil_usuarios',
+        label: 'Perfil',
+        url: '/usuarios/perfil',
+        modulo: 'PERFIL_USUARIO',
+      },
+      {
+        id: 'listar-usuarios',
+        label: 'Listar Usuários',
+        url: '/usuarios/listar',
+        modulo: 'USUARIO_LISTAR',
+      },
+    ],
   },
   {
     label: 'Holerite',
@@ -22,57 +35,63 @@ export const menuItems: MenuItem[] = [
     id: 'holerite',
     items: [
       {
+        id: 'cadastrar-holerite',
         label: 'Carrega Arquivo',
         url: '/holerite/arquivo',
-        modulo: 'HOLERITE-ARQUIVO',
-        id: 'cadastrar-holerite',
+        modulo: 'HOLERITE_ARQUIVO',
       },
       {
-        id: 'listar-cadastro',
+        id: 'holerite-pendentes',
+        label: 'Pendente Notificação',
+        url: '/holerite/holeritePendenteNotificacao',
+        modulo: 'HOLERITE_PENDENTE_NOTIFICACAO',
+      },
+      {
+        id: 'listar-holerite',
         label: 'Listar Holerite',
-        url: '/holerite/holerite-lista',
-        modulo: 'HOLERITE-LISTA',
+        url: '/holerite/holeriteLista',
+        modulo: 'HOLERITE_LISTA',
       },
     ],
   },
-  {
-    label: 'Acompanhamento',
-    icon: 'pi pi-cog',
-    items: [
-      {
-        id: 'instalacao-consultar',
-        label: 'Atendimentos',
-        url: '/instalacao',
-        modulo: 'INSTALACAO',
-      },
-      {
-        id: 'instalacao-consultar',
-        label: 'Agenda',
-        url: '/instalacao',
-        modulo: 'INSTALACAO',
-      },
-    ],
-  },
-  {
-    id: 'relatorio',
-    icon: 'pi pi-cog',
-    label: 'Relatório',
-    modulo: 'RELATORIO',
-    items: [
-      {
-        id: 'relatorio_empresa',
-        label: 'Instalações por Empresa',
-        url: '/relatorio/empresa',
-        modulo: 'RELATORIO_EMPRESA',
-      },
-      {
-        id: 'historico_alteracao_instalacao',
-        label: 'Histórico de Alterações da Instalação',
-        url: '/relatorio/historico-instalacao',
-        modulo: 'RELATORIO_HISTORICO_ALTERACAO_INSTALACAO',
-      },
-    ],
-  },
+  // {
+  //   label: 'Acompanhamento',
+  //   icon: 'pi pi-cog',
+  //   items: [
+  //     {
+  //       id: 'instalacao-consultar',
+  //       label: 'Atendimentos',
+  //       url: '/instalacao',
+  //       modulo: 'INSTALACAO',
+  //     },
+  //     {
+  //       id: 'instalacao-consultar',
+  //       label: 'Agenda',
+  //       url: '/instalacao',
+  //       modulo: 'INSTALACAO',
+  //     },
+  //   ],
+  // },
+  // {
+  //   id: 'relatorio',
+  //   icon: 'pi pi-cog',
+  //   label: 'Relatório',
+  //   modulo: 'RELATORIO',
+  //   items: [
+  //     {
+  //       id: 'relatorio_empresa',
+  //       label: 'Instalações por Empresa',
+  //       url: '/relatorio/empresa',
+  //       modulo: 'RELATORIO_EMPRESA',
+  //     },
+  //     {
+  //       id: 'historico_alteracao_instalacao',
+  //       label: 'Histórico de Alterações da Instalação',
+  //       url: '/relatorio/historico-instalacao',
+  //       modulo: 'RELATORIO_HISTORICO_ALTERACAO_INSTALACAO',
+  //     },
+  //   ],
+  // },
   {
     label: 'Configurações',
     icon: 'pi pi-cog',

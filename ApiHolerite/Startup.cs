@@ -78,7 +78,7 @@ namespace ApiHolerite
                 app.UseHsts();
             }
 
-            app.EnsureMigrations();
+            await app.EnsureMigrations();
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseHttpsRedirection();

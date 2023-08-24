@@ -18,7 +18,8 @@ namespace Holerite.Application.Commands.Holerite.Handlers
         IRequestHandler<CreateEmpresasRequest, ValidationResultBag>,
         IRequestHandler<PatchEmpresasRequest, ValidationResultBag>,
         IRequestHandler<UpdateEmpresasRequest, ValidationResultBag>,
-        IRequestHandler<DeleteEmpresasRequest, ValidationResultBag>
+        IRequestHandler<DeleteEmpresasRequest, ValidationResultBag>,
+        IRequestHandler<FilterEmpresasRequest, ValidationResultBag>
     {
         private readonly IMapper _mapper;
         private readonly IEmpresasService _empresasService;
@@ -28,6 +29,16 @@ namespace Holerite.Application.Commands.Holerite.Handlers
         {
             _mapper = mapper;
             _empresasService = empresasService;
+        }
+
+        public async Task<ValidationResultBag> Handle(FilterEmpresasRequest request, CancellationToken cancellationToken)
+        {
+            IEnumerable<EmpresasDto?> listaEmpresas = await _empresasService.GetAll();
+
+            ValidationResult.Data = _mapper.Map<List<EmpresasResponse>>(listaEmpresas);
+
+            return ValidationResult;
+
         }
 
         public async Task<ValidationResultBag> Handle(CreateEmpresasRequest request, CancellationToken cancellationToken)

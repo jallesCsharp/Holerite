@@ -84,5 +84,35 @@ namespace Holerite.Core.Services.Holerite
             var resultArquivo = _repository?.Remove(arquivo);
             return await Task.FromResult(_mapper.Map<ArquivosDto>(resultArquivo));
         }
+
+        public async Task<List<ArquivosDto>> GetPesquisarArquivos(FilterArquivosHoleriteDto filter)
+        {
+            List<Arquivos> lista = new List<Arquivos>();
+
+            lista = await _repository.QueryableFilter().Include(pX => pX.ArquivoDocumento).Include(pX => pX.Pessoas).ThenInclude(pX => pX.Empresas).ToListAsync();
+
+            if (!filter.Id.Equals(Guid.Empty))
+                lista = lista.Where(p => p.PessoasId == filter.Id).ToList();
+
+            if (!filter.Mes.Equals(0))
+                lista = lista.Where(p => p.Mes == filter.Mes).ToList();
+
+                return _mapper.Map<List<ArquivosDto>>(lista);
+        }
+        
+        public async Task<List<ArquivosDto>> GetPesquisarArquivosPendentes(FilterArquivosHoleriteDto filter)
+        {
+            List<Arquivos> lista = new List<Arquivos>();
+
+            if (!filter.EmailEnviado)
+                lista = await _repository.QueryableFilter()
+                    .Include(pX => pX.ArquivoDocumento)
+                    .Include(pX => pX.Pessoas)
+                    .ThenInclude(pX => pX.Empresas)
+                    .Where(pX => pX.EmailEnviado == false)
+                    .ToListAsync();
+            
+                return _mapper.Map<List<ArquivosDto>>(lista);
+        }
     }
 }

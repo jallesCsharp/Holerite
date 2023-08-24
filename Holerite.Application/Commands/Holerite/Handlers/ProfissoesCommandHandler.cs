@@ -13,7 +13,8 @@ namespace Holerite.Application.Commands.Holerite.Handlers
         IRequestHandler<CreateProfissoesRequest, ValidationResultBag>,
         IRequestHandler<PatchProfissoesRequest, ValidationResultBag>,
         IRequestHandler<UpdateProfissoesRequest, ValidationResultBag>,
-        IRequestHandler<DeleteProfissoesRequest, ValidationResultBag>
+        IRequestHandler<DeleteProfissoesRequest, ValidationResultBag>,
+        IRequestHandler<FilterProfissoesRequest, ValidationResultBag>
     {
         private readonly IMapper _mapper;
         private readonly IProfissoesService _profissoesService;
@@ -23,6 +24,22 @@ namespace Holerite.Application.Commands.Holerite.Handlers
         {
             _mapper = mapper;
             _profissoesService = profissoesService;
+        }
+
+        public async Task<ValidationResultBag> Handle(FilterProfissoesRequest request, CancellationToken cancellationToken)
+        {
+            IEnumerable<ProfissoesDto?> listaProfissoes = await _profissoesService.GetAll();
+
+            if ((!String.IsNullOrWhiteSpace(request.NomeProfissao) && (request.Id != Guid.Empty)))
+                listaProfissoes = listaProfissoes.Where(pX => pX?.Id == request.Id).ToList();
+
+            if (!String.IsNullOrWhiteSpace(request.NomeProfissao))
+                listaProfissoes = listaProfissoes.Where(pX => pX?.NomeProfissao?.ToLower() == request.NomeProfissao?.ToLower()).ToList();
+
+            ValidationResult.Data = _mapper.Map<List<ProfissoesResponse>>(listaProfissoes);
+
+            return ValidationResult;
+
         }
 
         public async Task<ValidationResultBag> Handle(CreateProfissoesRequest request, CancellationToken cancellationToken)

@@ -38,7 +38,7 @@ namespace Holerite.Application.Commands.Holerite.Handlers
                 listaPessoas = listaPessoas.ToList().Where(pX => pX?.Created >= request?.DataInicio && pX?.Created <= request?.DataFim).ToList();
 
             if (request.Id != Guid.Empty)
-                listaPessoas.Add(listaPessoas.ToList().FirstOrDefault(pX => pX?.Id == request.Id));
+                listaPessoas = listaPessoas.ToList().Where(pX => pX?.Id == request.Id).ToList();
 
             if (!String.IsNullOrEmpty(request.Nome) && (!request.DataInicio.HasValue && !request.DataFim.HasValue))
                 listaPessoas = listaPessoas.ToList().Where(pX => pX.Nome.ToLower().Contains(request.Nome.ToLower())).ToList();

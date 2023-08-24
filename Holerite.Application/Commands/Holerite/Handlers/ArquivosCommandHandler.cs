@@ -14,11 +14,13 @@ using System.Text;
 namespace Holerite.Application.Commands.Holerite.Handlers
 {
     public class ArquivosCommandHandler : CommandHandler,
-        //IRequestHandler<CreateArquivosRequest, ValidationResultBag>,
+        IRequestHandler<CreateArquivosRequest, ValidationResultBag>,
         IRequestHandler<PatchArquivosRequest, ValidationResultBag>,
         IRequestHandler<UpdateArquivosRequest, ValidationResultBag>,
-        IRequestHandler<DeleteArquivosRequest, ValidationResultBag>
-        //IRequestHandler<UploadFileRequest, ValidationResultBag>
+        IRequestHandler<ConfirmarEnvioEmailArquivosRequest, ValidationResultBag>,
+        IRequestHandler<DeleteArquivosRequest, ValidationResultBag>,
+        IRequestHandler<FilterArquivosHoleriteRequest, ValidationResultBag>,
+        IRequestHandler<FilterArquivosPendentesHoleriteRequest, ValidationResultBag>
     {
         private readonly IMapper _mapper;
         private readonly IArquivosService _arquivosService;
@@ -57,23 +59,45 @@ namespace Holerite.Application.Commands.Holerite.Handlers
 
         //    return ValidationResult;
         //}
-        
-        //public async Task<ValidationResultBag> Handle(CreateArquivosRequest request, CancellationToken cancellationToken)
-        //{
-        //    if (!request.IsValid())
-        //    {
-        //        ValidationResult.Errors.AddRange(request.ValidationResult.Errors);
-        //        return ValidationResult;
-        //    }
 
-        //    ArquivosDto? arquivo = _mapper.Map<ArquivosDto>(request);
+        public async Task<ValidationResultBag> Handle(CreateArquivosRequest request, CancellationToken cancellationToken)
+        {
+            if (!request.IsValid())
+            {
+                ValidationResult.Errors.AddRange(request.ValidationResult.Errors);
+                return ValidationResult;
+            }
 
-        //    var resultArquivo = await _arquivosService.Create(arquivo);
+            ArquivosDto? arquivo = _mapper.Map<ArquivosDto>(request);
 
-        //    ValidationResult.Data = _mapper.Map<ArquivosResponse>(resultArquivo);
+            //var resultArquivo = await _arquivosService.Create(request.PessoasId, request);
 
-        //    return ValidationResult;
-        //}
+            ValidationResult.Data = _mapper.Map<ArquivosResponse>(arquivo);
+
+            return ValidationResult;
+        }
+
+        public async Task<ValidationResultBag> Handle(FilterArquivosHoleriteRequest request, CancellationToken cancellationToken)
+        {
+            FilterArquivosHoleriteDto? filter = _mapper.Map<FilterArquivosHoleriteDto>(request);
+
+            var resultArquivo = await _arquivosService.GetPesquisarArquivos(filter);
+
+            ValidationResult.Data = _mapper.Map<List<ArquivosResponse>>(resultArquivo);
+
+            return ValidationResult;
+        }
+
+        public async Task<ValidationResultBag> Handle(FilterArquivosPendentesHoleriteRequest request, CancellationToken cancellationToken)
+        {
+            FilterArquivosHoleriteDto? filter = _mapper.Map<FilterArquivosHoleriteDto>(request);
+
+            var resultArquivo = await _arquivosService.GetPesquisarArquivosPendentes(filter);
+
+            ValidationResult.Data = _mapper.Map<List<ArquivosResponse>>(resultArquivo);
+
+            return ValidationResult;
+        }
 
         public async Task<ValidationResultBag> Handle(UpdateArquivosRequest request, CancellationToken cancellationToken)
         {
@@ -123,6 +147,11 @@ namespace Holerite.Application.Commands.Holerite.Handlers
             ValidationResult.Data = await _arquivosService.Delete(arquivo);
 
             return ValidationResult;
+        }
+
+        public Task<ValidationResultBag> Handle(ConfirmarEnvioEmailArquivosRequest request, CancellationToken cancellationToken)
+        {
+            
         }
     }
 }
