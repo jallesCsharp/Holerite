@@ -1,4 +1,5 @@
 export enum Mes {
+  Todos = 0,
   Janeiro = 1,
   Fevereiro = 2,
   Março = 3,
@@ -16,6 +17,7 @@ export enum Mes {
 export class MesExt {
   public static GetMes(): any[] {
     return [
+      { name: 'Todos', id: Mes.Todos },
       { name: 'Janeiro', id: Mes.Janeiro },
       { name: 'Fevereiro', id: Mes.Fevereiro },
       { name: 'Março', id: Mes.Março },
@@ -35,7 +37,9 @@ export class MesExt {
     let status = this.GetMes();
     let StatusString = status.filter(function (s) {
       if (s.id === code) {
-        return s.name;
+        console.log('s');
+        console.log(s);
+        return s;
       }
     });
 

@@ -12,8 +12,6 @@ export const HoleriteLista = () => {
     controller.init();
   }, []);
 
-  // const dt = useRef(null);
-
   return (
     <>
       <FilterHolerite filter={filter} controller={controller} />

@@ -11,7 +11,9 @@ namespace Holerite.Application.Commands.Holerite.Responses.PessoasResponses
 
         public Guid? EmpresasId { get; set; }
         public Guid? ProfissoesId { get; set; }
-        public int? Codigo { get; set; }
+        public int? CodigoFolha { get; set; }
+        public string? Cpf { get; set; }
+        public string? Pis { get; set; }
         public string? Nome { get; set; }
         public string? Email { get; set; }
 

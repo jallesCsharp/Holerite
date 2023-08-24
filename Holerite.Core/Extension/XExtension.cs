@@ -23,4 +23,15 @@ public static class XExtension
         entrada = AsRetornarSomenteNumeros(entrada);
         return entrada.PadLeft(11, '0');
     }
+
+    public static int AsInt(this object entrada)
+    {
+        return Convert.ToInt16(entrada);
+    }
+
+    public static string GetMes(this object entrada)
+    {
+        var teste = new DateTimeFormatInfo().GetMonthName(entrada.AsInt());
+        return Convert.ToString(teste);
+    }
 }

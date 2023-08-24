@@ -24,7 +24,7 @@ export default class LoginController extends AbstractController {
   }
 
   async logar(data: LoginModel) {
-    if (!data.Cpf || data.Cpf.length == 0 || !data.Senha || data.Senha.length == 0) {
+    if (!data.cpf || data.cpf.length == 0 || !data.senha || data.senha.length == 0) {
       return 'Informe o Login da rede e a Senha';
     }
     try {

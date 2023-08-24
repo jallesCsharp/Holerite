@@ -8,9 +8,9 @@ export class LoginService {
       const loginApiUrl =
         process.env.REACT_APP_API_URL +
         '/Login/LoginAuth?Cpf=' +
-        loginData.Cpf +
+        loginData.cpf +
         '&Senha=' +
-        loginData.Senha;
+        loginData.senha;
       const response = await axios.post(loginApiUrl);
 
       const arrLogin: Array<LoginModel> = response.data;

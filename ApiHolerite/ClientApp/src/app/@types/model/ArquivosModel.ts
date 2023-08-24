@@ -1,15 +1,15 @@
 import { PessoasModel } from './PessoasModel';
 
 export interface ArquivosModel {
-  Id: string;
-  Created: Date;
-  Updated: Date;
-  Deleted: Date;
-  PessoasId: string;
-  ArquivoDocumentoId: string;
-  Mes: number | null;
-  NomeArquivo: string;
-  Arquivo: BinaryType;
-  EmailEnviado: boolean;
-  Pessoas: PessoasModel;
+  id: string;
+  created: Date;
+  updated: Date;
+  deleted: Date;
+  pessoasId: string;
+  arquivoDocumentoId: string;
+  mes: string | null;
+  nomeArquivo: string;
+  arquivo: BinaryType;
+  emailEnviado: boolean;
+  pessoas: PessoasModel;
 }

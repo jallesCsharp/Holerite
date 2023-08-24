@@ -14,12 +14,12 @@ interface Props {
 
 const CadastrarHoleriteArquivo: React.FC<Props> = ({ filter, controller }) => {
   function onLimparupload() {
-    filter.setEniar(false);
+    filter.setEnviar(false);
     filter.setLoading(false);
   }
 
   async function onAdicionarArquivo(event: FormData) {
-    filter.setEniar(true);
+    filter.setEnviar(true);
     filter.setFile(event);
     ToastService.showSuccess('Arquivo adicionado com Sucesso!.');
   }
@@ -33,7 +33,7 @@ const CadastrarHoleriteArquivo: React.FC<Props> = ({ filter, controller }) => {
       return result;
     });
     filter.setLoading(false);
-    filter.setEniar(false);
+    filter.setEnviar(false);
   }
 
   return (

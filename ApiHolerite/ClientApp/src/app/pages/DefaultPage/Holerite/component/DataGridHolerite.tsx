@@ -1,19 +1,61 @@
-import React, { useEffect, useRef } from 'react';
+import React, { Fragment, useRef } from 'react';
 import { Card } from 'primereact/card';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
+import ArquivosFilter from '../models/ArquivosFilter';
+import ArquivosHoleriteController from '../controllers/ArquivosHoleriteController';
+import { TriStateCheckbox } from 'primereact/tristatecheckbox';
+import { classNames } from 'primereact/utils';
 
 interface Props {
-  filter: any;
-  controller: any;
+  filter: ArquivosFilter;
+  controller: ArquivosHoleriteController;
 }
 
-const DataGridHolerite: React.FC<Props> = ({ filter, controller }) => {
-  useEffect(() => {
-    controller.init();
-  }, []);
-
+const DataGridHolerite: React.FC<Props> = ({ filter }) => {
   const dt = useRef(null);
+
+  // const pdfBodyTemplate = (rowData: any) => {
+  //   // let blob = new Blob([rowData.arquivo], { type: 'application/pdf' });
+  //   // let url = URL.createObjectURL(blob);
+  //   // return <img src={url} width="100" height="100" />;
+  //   return <iframe width="100%" height="330px" src={rowData.arquivo}></iframe>;
+  // };
+
+  const pdfBodyTemplate = (rowData: any) => {
+    const rowPDF = rowData;
+    return (
+      <React.Fragment>
+        {/* <iframe width="400px" height="230px" src={rowPDF.arquivo}></iframe> */}
+        <object
+          width="600px"
+          height="230px"
+          type="application/pdf"
+          data={'data:application/pdf;base64,' + `${rowPDF.arquivo}`}
+        ></object>
+      </React.Fragment>
+    );
+  };
+
+  const verifiedFilterTemplate = (options: any) => {
+    return (
+      <TriStateCheckbox
+        value={options.value}
+        onChange={(e: any) => options.filterCallback(e.value)}
+      />
+    );
+  };
+
+  const verifiedBodyTemplate = (rowData: any) => {
+    return (
+      <i
+        className={classNames('pi', {
+          'true-icon pi-check-circle': rowData.emailEnviado,
+          'false-icon pi-times-circle': !rowData.emailEnviado,
+        })}
+      ></i>
+    );
+  };
 
   const footerGrid = () => {
     return (
@@ -53,7 +95,7 @@ const DataGridHolerite: React.FC<Props> = ({ filter, controller }) => {
           ref={dt}
           dataKey="id"
           footer={footerGrid}
-          value={filter.grid}
+          value={filter.listaArquivos}
           paginator
           rows={10}
           rowsPerPageOptions={[10, 20, 30]}
@@ -63,29 +105,41 @@ const DataGridHolerite: React.FC<Props> = ({ filter, controller }) => {
           emptyMessage="Nenhum resultado encontrado!"
           responsiveLayout="scroll"
         >
-          <Column field="NomeInstalacao" header="Nome" style={{ textAlign: 'left' }} sortable />
           <Column
-            field="UFInstalacao"
-            header="UF da Instalação"
-            style={{ textAlign: 'left' }}
-            sortable
+            field="pessoas.nome"
+            header="Nome"
+            align={'center'}
+            style={{ textAlign: 'center' }}
           />
-
-          <Column field="Usuario" header="Usuário" style={{ textAlign: 'left' }} sortable />
           <Column
-            field="PerfilUsuario"
-            header="Perfil Usuário"
-            style={{ textAlign: 'left' }}
-            sortable
+            field="pessoas.empresas.nomeEmpresa"
+            header="Nome Empresa"
+            align={'center'}
+            style={{ textAlign: 'center' }}
           />
-          <Column field="Campo" header="Campo" style={{ textAlign: 'left' }} sortable />
+          {/* <Column header="Image" body={pdfBodyTemplate}></Column> */}
           <Column
-            field="ValorAntigo"
-            header="Valor Antigo"
-            style={{ textAlign: 'left' }}
-            sortable
+            header="Holerite"
+            align={'center'}
+            style={{ textAlign: 'center' }}
+            sortField="arquivo"
+            filterField="arquivo"
+            showFilterMatchModes={true}
+            body={pdfBodyTemplate}
+            filterElement={pdfBodyTemplate}
           />
-          <Column field="ValorAtual" header="Valor Atual" style={{ textAlign: 'left' }} sortable />
+          <Column
+            header="E-mail Enviado"
+            field="emailEnviado"
+            dataType="boolean"
+            bodyClassName="p-text-center"
+            align={'center'}
+            style={{ minWidth: '8rem' }}
+            body={verifiedBodyTemplate}
+            filterElement={verifiedFilterTemplate}
+          />
+          {/* <Column field="mes" header="Mês" style={{ textAlign: 'left' }} sortable /> */}
+          <Column field="Acoes" header="Ações" align={'center'} style={{ textAlign: 'center' }} />
         </DataTable>
       </Card>
     </>

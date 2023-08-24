@@ -9,6 +9,8 @@ import PessoaService from '../../../../services/PessoaService';
 import ToastService from '../../../../../provider/services/toastService';
 import { Mensagem } from '../../../../shared/mensagem/Mensagem';
 import { useState } from 'react';
+import { FilterArquivosHolerite } from '../../../../@types/filters/FilterArquivosHolerite';
+import { PessoasModel } from '../../../../@types/model/PessoasModel';
 
 export default class ArquivosHoleriteController extends AbstractController {
   public filter: ArquivosFilter;
@@ -31,14 +33,13 @@ export default class ArquivosHoleriteController extends AbstractController {
     super();
     this.filter = filter;
     this.history = useHistory();
-
     [this.listaPessoaFilter, this.setListaPessoaFilter] = useState();
-    [this.listaPessoas, this.setListaPessoas] = useState([]);
+    [this.listaPessoas, this.setListaPessoas] = useState<PessoasModel[]>([]);
   }
 
-  init() {
+  async init() {
     super.init();
-    this.CarregarTela();
+    await this.PesquisarArquivos({ Mes: 0, Id: null, Nome: null });
     this.breadCrumbService.change([
       {
         label: 'Listar Holerite',
@@ -47,8 +48,9 @@ export default class ArquivosHoleriteController extends AbstractController {
     ]);
   }
 
-  public CarregarTela() {
+  public async CarregarTela() {
     this.filter.setListaMes(MesExt.GetMes());
+    this.SelecionarMes(MesExt.GetMesString('0'));
     this.GetAllListaPessoas();
   }
 
@@ -71,16 +73,23 @@ export default class ArquivosHoleriteController extends AbstractController {
     this.blockUIService.stop();
   }
 
-  public SelecionarMes(idMes: number) {
+  public SelecionarMes(idMes: any) {
+    console.log('idMes');
+    console.log(idMes);
     this.filter.setMes(idMes);
+  }
+
+  public SelecionarAno(ano: number) {
+    console.log('SelecionarAno');
+    console.log(ano);
+    this.filter.setAno(ano);
+    console.log(this.filter.ano);
   }
 
   public async GetAllListaPessoas() {
     try {
-      console.log('Lista Pessoas');
       this.blockUIService.start();
       await this.pessoaService.getPessoas().then((result) => {
-        console.log(result);
         if (result.success == false) {
           ToastService.showError(result.errors);
           return;
@@ -97,30 +106,34 @@ export default class ArquivosHoleriteController extends AbstractController {
     }
   }
 
-  public async Pes() {
+  public async PesquisarArquivos(filter: FilterArquivosHolerite) {
     try {
-      console.log('Lista Pessoas');
       this.blockUIService.start();
-      await this.pessoaService.getPessoas().then((result) => {
-        console.log(result);
+      await this.arquivoService.getPesquisarArquivos(filter).then((result) => {
+        // console.log('result.data?.toString()');
+
+        // console.log('errors');
+        // console.log(result.errors.data.errors.Messagens[0]);
+
         if (result.success == false) {
-          ToastService.showError(result.errors);
+          ToastService.showError(
+            'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
+          );
           return;
         }
-        this.setListaPessoas(result.data);
+        if (result.data?.toString() === '400') {
+          ToastService.showError(Mensagem.ERROR_400);
+          return;
+        }
+        console.log(result.data);
+        this.filter.setListaArquivos(result.data);
         return result.data;
       });
-      //await this.limparFilter();
       this.blockUIService.stop();
     } catch (error) {
-      ToastService.showError(Mensagem.ERROR_501);
-      // await this.limparFilter();
+      ToastService.showError(Mensagem.ERROR_501 + error);
       this.blockUIService.stop();
     }
-  }
-
-  public selecionarMes(idMes: string) {
-    this.filter.setMes(idMes);
   }
 
   searchPessoa() {
