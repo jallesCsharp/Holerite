@@ -99,6 +99,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Holerite\" />
     <Folder Include="ClientApp\src\" />
     <Folder Include="ClientApp\src\app\" />
     <Folder Include="ClientApp\src\app\@types\" />
@@ -154,7 +155,7 @@
     <Folder Include="ClientApp\src\provider\redux\breadCrumb\" />
     <Folder Include="ClientApp\src\provider\services\" />
     <Folder Include="ClientApp\src\provider\shared\" />
-    <Folder Include="ClientApp\src\provider\shared\locale\" />
+    <Folder Include="ClientApp\src\provider\shared\locale\" />    
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

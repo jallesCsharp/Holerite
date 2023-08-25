@@ -9,6 +9,7 @@ namespace Holerite.Core.Interfaces.Services.Holerite
         Task<IEnumerable<ArquivosDto?>> GetAll();
         Task<List<ArquivosDto>> Create(List<PessoasDto> listaPessoasDto, ArquivoDocumentosDto arquivoDto);
         Task<ArquivosDto> Update(ArquivosDto pArquivo);
+        Task<List<ArquivosDto>> ConfirmarEnvioEmail(List<ArquivosDto> arquivosDto);
         Task<ArquivosDto?> Delete(ArquivosDto pArquivo);
         
         Task<List<ArquivosDto>> GetPesquisarArquivos(FilterArquivosHoleriteDto filter);

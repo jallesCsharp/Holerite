@@ -3,6 +3,7 @@ using System;
 using Holerite.Infra;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Holerite.Infra.Migrations
 {
     [DbContext(typeof(HoleriteContext))]
-    partial class HoleriteContextModelSnapshot : ModelSnapshot
+    [Migration("20230824181225_CreateEmailSettings")]
+    partial class CreateEmailSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,9 +108,6 @@ namespace Holerite.Infra.Migrations
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("EmpresasId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Password")
                         .HasColumnType("text");
 
@@ -130,8 +130,6 @@ namespace Holerite.Infra.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmpresasId");
 
                     b.ToTable("EmailSettings", (string)null);
                 });
@@ -246,15 +244,6 @@ namespace Holerite.Infra.Migrations
                     b.Navigation("ArquivoDocumento");
 
                     b.Navigation("Pessoas");
-                });
-
-            modelBuilder.Entity("Holerite.Core.Models.EmailSettings", b =>
-                {
-                    b.HasOne("Holerite.Core.Models.Empresas", "Empresas")
-                        .WithMany()
-                        .HasForeignKey("EmpresasId");
-
-                    b.Navigation("Empresas");
                 });
 
             modelBuilder.Entity("Holerite.Core.Models.Pessoas", b =>

@@ -10,6 +10,8 @@ using Holerite.Application.Commands.Holerite.Requests.ArquivosRequest;
 using Holerite.Application.Commands.Holerite.Requests.EmpresasRequest;
 using Holerite.Application.Commands.Holerite.Requests.LoginRequest;
 using Holerite.Application.Commands.Holerite.Requests.ArquivoDocumentosRequest;
+using Holerite.Application.Commands.Email.Handlers;
+using Holerite.Application.Commands.Email.Requests;
 
 namespace Holerite.IOC.IOC;
 
@@ -20,6 +22,9 @@ public static class MediatorInjector
         services.AddScoped<IMediatorHandler, MediatorHandler>();
 
         services.AddScoped<IRequestHandler<LoginAuthRequest, ValidationResultBag>, LoginAuthCommandHandler>();
+
+        services.AddScoped<IRequestHandler<CreateEmailSettingsRequest, ValidationResultBag>, EmailSettingsCommandHandler>();
+        services.AddScoped<IRequestHandler<UpdateEmailSettingsRequest, ValidationResultBag>, EmailSettingsCommandHandler>();
 
         services.AddScoped<IRequestHandler<CreateArquivosRequest, ValidationResultBag>, ArquivosCommandHandler>();
         services.AddScoped<IRequestHandler<PatchArquivosRequest, ValidationResultBag>, ArquivosCommandHandler>();

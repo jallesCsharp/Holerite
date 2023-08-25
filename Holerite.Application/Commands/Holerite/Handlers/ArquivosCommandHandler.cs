@@ -149,9 +149,15 @@ namespace Holerite.Application.Commands.Holerite.Handlers
             return ValidationResult;
         }
 
-        public Task<ValidationResultBag> Handle(ConfirmarEnvioEmailArquivosRequest request, CancellationToken cancellationToken)
+        public async Task<ValidationResultBag> Handle(ConfirmarEnvioEmailArquivosRequest request, CancellationToken cancellationToken)
         {
-            
+            List<ArquivosDto>? arquivo = _mapper.Map<List<ArquivosDto>>(request.Arquivos);
+
+            var resultArquivo = await _arquivosService.ConfirmarEnvioEmail(arquivo);
+
+            ValidationResult.Data = _mapper.Map<List<ArquivosResponse>>(resultArquivo);
+
+            return ValidationResult;
         }
     }
 }

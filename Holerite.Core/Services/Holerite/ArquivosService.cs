@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using Holerite.Core.Dtos;
 using Holerite.Core.Extension.ModeloHolerite;
+using Holerite.Core.Interfaces.Repositories.Email;
 using Holerite.Core.Interfaces.Repositories.Holerite;
+using Holerite.Core.Interfaces.Services.EmailSMTP;
 using Holerite.Core.Interfaces.Services.Holerite;
 using Holerite.Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace Holerite.Core.Services.Holerite
 {
@@ -13,10 +16,14 @@ namespace Holerite.Core.Services.Holerite
     {
         private readonly IMapper _mapper;
         private readonly IArquivosRepository _repository;
+        private readonly IEmailSettingsRepository _emailSettingsRepository;
+        private readonly IEmailSMTPService _emailSMTPService;
 
-        public ArquivosService(IArquivosRepository repository, IMapper mapper)
+        public ArquivosService(IArquivosRepository repository, IEmailSettingsRepository emailSettingsRepository, IEmailSMTPService emailSMTPService, IMapper mapper)
         {
             _repository = repository;
+            _emailSettingsRepository = emailSettingsRepository;
+            _emailSMTPService = emailSMTPService;
             _mapper = mapper;
         }
 
@@ -113,6 +120,47 @@ namespace Holerite.Core.Services.Holerite
                     .ToListAsync();
             
                 return _mapper.Map<List<ArquivosDto>>(lista);
+        }
+
+        public async Task<List<ArquivosDto>> ConfirmarEnvioEmail(List<ArquivosDto> arquivosDto)
+        {
+            try
+            {
+                List<ArquivosDto> listaAtualizada = new List<ArquivosDto>();
+
+                //arquivosDto.AsParallel().ForAll(async arquivo =>
+                arquivosDto.ForEach(async arquivo =>
+                {
+                    var idEmpresa = arquivo?.Pessoas?.EmpresasId;
+
+                    EmailSettingsDto? emailSettingsDto = _mapper.Map<EmailSettingsDto>(_emailSettingsRepository.QueryableFor(pX => pX.EmpresasId == idEmpresa).FirstOrDefault());
+
+                    var extensoMes = new DateTime(DateTime.Now.Year, (int)arquivo.Mes, DateTime.Now.Day).ToString("MMMM").ToUpper();
+
+                    string Assunto = $"ENC: Contracheque do mês de {extensoMes} - {arquivo?.Pessoas?.Nome}";
+
+                    string displayName = "Departamento Pessoal";
+
+                    string body = $"Segue anexo do contracheque competência {arquivo?.Mes.Value.ToString("00")}/{DateTime.Now.Year}.";
+
+                    var emailEnviado = await _emailSMTPService.EnvioEmail(emailSettingsDto, displayName, arquivo?.Pessoas?.Empresas?.Email, arquivo?.Pessoas?.Email, Convert.ToBase64String(arquivo.Arquivo), Assunto, body);
+                    if (emailEnviado)
+                    {
+                        var arquivoModel = _mapper.Map<Arquivos>(arquivo);
+                        arquivoModel.Pessoas = null;
+                        arquivoModel.EmailEnviado = emailEnviado;
+                        var resultArquivo = _repository.Update(arquivoModel);
+                        _repository?.UnitOfWork.Commit();
+                        listaAtualizada.Add(_mapper.Map<ArquivosDto>(resultArquivo));
+                    }
+                });
+
+                return _mapper.Map<List<ArquivosDto>>(listaAtualizada);
+            }
+            catch (Exception eX)
+            {
+                throw new Exception(eX.Message);
+            }
         }
     }
 }
