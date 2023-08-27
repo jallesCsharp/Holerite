@@ -5,6 +5,10 @@ export class Mensagem {
 
   public static readonly FALHA_REQUISICAO = 'Erro na consulta';
 
+  public static readonly SUCESSO_ALTERACAO = 'Alteração realizado com sucesso!!';
+
+  public static readonly SUCESSO_CADASTRO = 'Cadastro realizado com sucesso!!';
+
   public static readonly SEM_RESULTADO_EXPORTAR = 'Nenhum resultado encontrado para exportação !';
 
   public static readonly PARAMETRO_NAO_INFORMADO = 'Sem parametro do para a alteracao';

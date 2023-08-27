@@ -18,7 +18,6 @@ export default class PessoaService extends AbstractService {
 
   public async Update(data?: PessoasModel): Promise<TResponse<PessoasModel>> {
     console.log('Salvar Ficha Pessoa');
-    console.log(data);
     const response = await apiUrl.put('/Pessoas', data);
     return response.data;
   }
@@ -56,7 +55,7 @@ export default class PessoaService extends AbstractService {
     try {
       const response = await apiUrl.get(`/Pessoas?Id=${id}`);
 
-      const data = response.data[0];
+      const data: PessoasModel = response.data[0];
       const resultTrue = Object.values(response)[1];
 
       if (resultTrue) {

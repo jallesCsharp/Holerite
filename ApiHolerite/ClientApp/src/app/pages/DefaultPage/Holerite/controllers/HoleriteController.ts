@@ -55,15 +55,29 @@ export default class HoleriteController extends AbstractController {
 
   public async UploadHolerite(formFile?: FormData) {
     try {
-      console.log('UploadHolerite');
       this.blockUIService.start();
       await this.arquivoService.UploadHolerite(formFile).then((result) => {
+        console.log('result');
         console.log(result);
-        if (result.success == false) {
-          ToastService.showError(result.errors);
-          return;
+        if (result.success === false) {
+          console.log('result - false');
+          console.log(result.success);
+          let msgResult = result.errors.split(';');
+          ToastService.showError('Erro - Validar retorno!!');
+          this.filter.setMsgError([...msgResult]);
+          this.filter.setSucessoStatus(false);
+          this.filter.setErrorStatus(true);
         }
-        return result.data;
+        if (result.success === true) {
+          console.log('result - true');
+          console.log(result.success);
+          console.log(result.data);
+          ToastService.showSuccess('Arquivo importado com Sucesso!!');
+          this.filter.setMsgSucesso([...result.data]);
+          this.filter.setErrorStatus(false);
+          this.filter.setSucessoStatus(true);
+        }
+        return;
       });
       await this.limparFilter();
       this.blockUIService.stop();

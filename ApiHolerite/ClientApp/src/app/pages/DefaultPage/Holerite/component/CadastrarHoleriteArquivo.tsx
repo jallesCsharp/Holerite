@@ -29,9 +29,7 @@ const CadastrarHoleriteArquivo: React.FC<Props> = ({ filter, controller }) => {
   }
 
   async function enviarSolicitacao() {
-    await controller.UploadHolerite(filter.file).then((result) => {
-      return result;
-    });
+    await controller.UploadHolerite(filter.file);
     filter.setLoading(false);
     filter.setEnviar(false);
   }
@@ -79,29 +77,36 @@ const CadastrarHoleriteArquivo: React.FC<Props> = ({ filter, controller }) => {
                     disabled={!filter.onEniar}
                   />
                 }
-
-                {/* <Button
-                  id="limpar"
-                  className="p-button-secondary mr-2"
-                  style={{ fontSize: '1em' }}
-                  label="Limpar"
-                  onClick={onLimparSolicitacao}
-                /> */}
-
-                <Button
-                  id="Volar"
-                  className="p-button-secondary mr-2"
-                  style={{ fontSize: '1em' }}
-                  label="Volar"
-                />
               </div>
-              {/* <div>
-                <embed src={`data:application/pdf;base64,${base64STR}`} />
-              </div> */}
             </Container>
           </div>
         </form>
       </Card>
+      <br />
+      {filter.errorStatus && (
+        <Card title="Error Validar (Código Folha Holerite) ou (Empresa)" className={'mb-3'}>
+          {filter.msgerror?.map((item, index) => {
+            return (
+              <div key={index}>
+                <hr />
+                <h2>{item}</h2>
+              </div>
+            );
+          })}
+        </Card>
+      )}
+      {filter.sucessoStatus && (
+        <Card title="Sucesso!!" className={'mb-3'}>
+          {filter.msgSucesso?.map((item, index) => {
+            return (
+              <div key={index}>
+                <h2>{item}</h2>
+                <hr />
+              </div>
+            );
+          })}
+        </Card>
+      )}
     </>
   );
 };

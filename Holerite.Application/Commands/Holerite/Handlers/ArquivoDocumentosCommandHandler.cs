@@ -38,30 +38,20 @@ namespace Holerite.Application.Commands.Holerite.Handlers
 
         public async Task<ValidationResultBag> Handle(CreateArquivoDocumentosRequest request, CancellationToken cancellationToken)
         {
-            try
+            List<string> listaResult = new List<string>();
+            if (!request.IsValid())
             {
-                if (!request.IsValid())
-                {
-                    ValidationResult.Errors.AddRange(request.ValidationResult.Errors);
-                    return ValidationResult;
-                }
-
-                ArquivoDocumentosDto resultArquivo = await _arquivoDocumentosService.Create(request.FormFile);
-                List<PessoasDto> listaPessoasDto = (List<PessoasDto>)await _pessoasService.GetAll();
-                List<ArquivosDto> listaArquivo = await _arquivosService.Create(listaPessoasDto, resultArquivo);
-                var ty = _mapper.Map<List<ArquivosResponse>>(listaArquivo);
-                ValidationResult.Data = ty;
+                ValidationResult.Errors.AddRange(request.ValidationResult.Errors);
+                return ValidationResult;
             }
-            catch (Exception)
-            {
 
-                throw;
-            }
-            
+            ArquivoDocumentosDto resultArquivo = await _arquivoDocumentosService.Create(request.FormFile);
+            List<PessoasDto> listaPessoasDto = (List<PessoasDto>)await _pessoasService.GetAll();
+            List<ArquivosDto> listaArquivo = await _arquivosService.Create(listaPessoasDto, resultArquivo);
 
-            
-
-
+            foreach (var item in listaArquivo)
+                listaResult.Add($"Arquivo: {item?.NomeArquivo}");
+            ValidationResult.Data = listaResult;
             return ValidationResult;
         }
 

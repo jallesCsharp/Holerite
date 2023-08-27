@@ -61,7 +61,7 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
                 <i className="pi pi-user"></i>
               </span>
               <InputText
-                disabled={filter.editarPerfil}
+                disabled={!filter.editarPerfil}
                 placeholder="Nome"
                 value={filter.pessoa?.nome || undefined}
                 onChange={async (e) => {
@@ -84,7 +84,7 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
                 <i className="pi pi-at"></i>
               </span>
               <InputText
-                disabled={filter.editarPerfil}
+                disabled={!filter.editarPerfil}
                 placeholder="E-Mail"
                 value={filter.pessoa?.email || undefined}
                 onChange={(e) => {
@@ -107,7 +107,7 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
                 <i className="pi pi-id-card"></i>
               </span>
               <InputText
-                disabled={filter.editarPerfil}
+                disabled={!filter.editarPerfil}
                 placeholder="CPF"
                 value={filter.pessoa?.cpf || undefined}
                 onChange={(e) => {
@@ -130,7 +130,7 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
                 <i className="pi pi-id-card"></i>
               </span>
               <InputText
-                disabled={filter.editarPerfil}
+                disabled={!filter.editarPerfil}
                 placeholder="PIS"
                 value={filter.pessoa?.pis || undefined}
                 onChange={(e) => {
@@ -153,7 +153,7 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
                 <i className="pi pi-id-card"></i>
               </span>
               <InputText
-                disabled={filter.editarPerfil}
+                disabled={!filter.editarPerfil}
                 placeholder="Código Folha"
                 value={filter.pessoa?.codigoFolha || undefined}
                 onChange={(e) => {
@@ -174,20 +174,20 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
             <div className="p-inputgroup">
               <span className="p-inputgroup-addon">
                 <Button
-                  disabled={filter.editarPerfil}
+                  disabled={!filter.editarPerfil}
                   className="p-button-sucess"
                   icon="pi pi-plus-circle"
                   onClick={() => controller.CadastrarEmpresa()}
                 />
               </span>
               <PropDropdown
-                disabled={filter.editarPerfil}
+                disabled={!filter.editarPerfil}
                 optionLabel={'nomeEmpresa'}
                 optionValue={'nomeEmpresa'}
                 showClear={false}
                 filter={false}
                 options={filter.listaEmpresas}
-                value={filter.pessoa?.empresas.nomeEmpresa || undefined}
+                value={filter.pessoa?.empresas.nomeEmpresa}
                 onChange={(e: any) => controller.onSelecionarEmpresa(e.target.value)}
               />
               {filter.submitted && !filter.empresaSelecionado?.nomeEmpresa && (
@@ -278,7 +278,7 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
             <div className="p-inputgroup">
               <span className="p-inputgroup-addon">
                 <Button
-                  disabled={filter.editarPerfil}
+                  disabled={!filter.editarPerfil}
                   className="p-button-sucess"
                   icon="pi pi-plus-circle"
                   loading={filter.loading}
@@ -286,7 +286,7 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
                 />
               </span>
               <PropDropdown
-                disabled={filter.editarPerfil}
+                disabled={!filter.editarPerfil}
                 optionLabel={'nomeProfissao'}
                 optionValue={'nomeProfissao'}
                 showClear={false}
@@ -339,6 +339,15 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
       </div>
       <div className="flex justify-content-end flex-wrap card-container  export-buttons">
         <Button
+          disabled={!filter.editarPerfil}
+          type="button"
+          icon="pi pi-file"
+          className="mr-2"
+          data-pr-tooltip="Editar"
+          label={'Cancelar'}
+          onClick={() => controller.onCancelarEdicao(filter.pessoa?.id)}
+        />
+        <Button
           type="button"
           icon="pi pi-file"
           className="mr-2"
@@ -347,6 +356,7 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
           onClick={() => controller.onEditarPerfil()}
         />
         <Button
+          disabled={!filter.editarPerfil}
           type="button"
           icon="pi pi-file"
           className="mr-2"

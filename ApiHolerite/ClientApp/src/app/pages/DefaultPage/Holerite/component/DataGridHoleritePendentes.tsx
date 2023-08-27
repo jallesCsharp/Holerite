@@ -5,7 +5,6 @@ import { DataTable } from 'primereact/datatable';
 import ArquivosFilter from '../models/ArquivosFilter';
 import { classNames } from 'primereact/utils';
 import { TriStateCheckbox } from 'primereact/tristatecheckbox';
-import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
 import PendenteNotificacaoHoleriteController from '../controllers/PendenteNotificacaoHoleriteController';
 
@@ -54,13 +53,16 @@ const DataGridHoleritePendentes: React.FC<Props> = ({ filter, controller }) => {
   const leftToolbarTemplate = () => {
     return (
       <React.Fragment>
-        <Button
-          label="Confirmar Envio do E-mail"
-          icon="pi pi-envelope"
-          className="p-button-success mr-2"
-          style={{ marginRight: '.5em' }}
-          onClick={() => controller.ConfirmarEnvioEmail()}
-        />
+        <div className="flex justify-content-end flex-wrap card-container  export-buttons">
+          <Button
+            disabled={filter.listaArquivos?.length === 0}
+            label="Confirmar Envio do E-mail"
+            icon="pi pi-envelope"
+            className="p-button-success mr-2"
+            style={{ marginRight: '.5em' }}
+            onClick={() => controller.ConfirmarEnvioEmail()}
+          />
+        </div>
       </React.Fragment>
     );
   };
@@ -68,21 +70,19 @@ const DataGridHoleritePendentes: React.FC<Props> = ({ filter, controller }) => {
   return (
     <>
       <Card>
-        <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
         <DataTable
           ref={dt}
           dataKey="id"
           value={filter.listaArquivos}
-          paginator
-          className="datatable-responsive"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          header="stack"
+          responsiveLayout="stack"
           currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords}"
-          paginatorClassName="p-jc-end"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           rowsPerPageOptions={[10, 20, 30, 50]}
           rows={50}
+          paginator
           sortOrder={-1}
           emptyMessage="Nenhum resultado encontrado!"
-          responsiveLayout="scroll"
           footer={leftToolbarTemplate}
         >
           <Column

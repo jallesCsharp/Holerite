@@ -46,8 +46,13 @@ export default class PerfilController extends AbstractController {
     ]);
   }
 
-  public onEditarPerfil = () => {
+  public onCancelarEdicao = (id: any) => {
+    this.getPesquisarPerfilUsuario(id);
     this.filter.setEditarPerfil(false);
+  };
+
+  public onEditarPerfil = () => {
+    this.filter.setEditarPerfil(true);
   };
 
   public onSalvarFicha = async () => {
@@ -67,23 +72,22 @@ export default class PerfilController extends AbstractController {
             return;
           }
           this.filter.setPessoa(result.data);
+          this.filter.setEditarPerfil(false);
+          ToastService.showSuccess(Mensagem.SUCESSO_CADASTRO);
           return result.data;
         });
       } else {
         await this.pessoaService.Update(this.filter.pessoa).then((result) => {
-          if (result.success == false) {
-            ToastService.showError(
-              'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
-            );
-            return;
-          }
+          console.log('response.data - Update');
+          console.log(result);
           if (result.data?.toString() === '400') {
             ToastService.showError(Mensagem.ERROR_400);
             return;
           }
-          this.filter.setPessoa(result.data);
-          return result.data;
+          this.filter.setPessoa(result);
         });
+        this.filter.setEditarPerfil(false);
+        ToastService.showSuccess(Mensagem.SUCESSO_ALTERACAO);
       }
       this.blockUIService.stop();
       this.fecharModal();

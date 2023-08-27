@@ -141,7 +141,7 @@ namespace Holerite.Core.Services.Holerite
 
                     string displayName = "Departamento Pessoal";
 
-                    string body = $"Segue anexo do contracheque competência {arquivo?.Mes.Value.ToString("00")}/{DateTime.Now.Year}.";
+                    string body = $"Segue anexo o contracheque de competência o mês de {arquivo?.Mes.Value.ToString("00")}/{DateTime.Now.Year}.";
 
                     var emailEnviado = await _emailSMTPService.EnvioEmail(emailSettingsDto, displayName, arquivo?.Pessoas?.Empresas?.Email, arquivo?.Pessoas?.Email, Convert.ToBase64String(arquivo.Arquivo), Assunto, body);
                     if (emailEnviado)
