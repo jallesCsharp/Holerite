@@ -25,11 +25,4 @@ namespace Holerite.Core.Models
         public virtual Pessoas? Pessoas { get; set; }
         public virtual ControleAcessos? ControleAcessos { get; set; }
     }
-
-    //    id   
-    //    senha
-    //    secaoAtiva
-    //    timeSpira
-    //    ultimoLogin
-    //    jwt
 }

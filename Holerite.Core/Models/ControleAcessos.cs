@@ -10,9 +10,12 @@ namespace Holerite.Core.Models
 {
     public class ControleAcessos : BaseModel
     {
-        [ForeignKey("Grupos")]
-        public Guid? GruposId { get; set; }
-        public virtual Grupos? Grupos { get; set; }
+        public ControleAcessos()
+        {
+            this.Funcionalidades = new HashSet<Funcionalidades>();
+        }
+
+        public ICollection<Funcionalidades>? Funcionalidades { get; set; }
 
     }
 }

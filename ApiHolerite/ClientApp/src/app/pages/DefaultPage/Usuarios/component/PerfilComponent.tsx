@@ -339,18 +339,17 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
       </div>
       <div className="flex justify-content-end flex-wrap card-container  export-buttons">
         <Button
-          disabled={!filter.editarPerfil}
           type="button"
-          icon="pi pi-file"
-          className="mr-2"
-          data-pr-tooltip="Editar"
-          label={'Cancelar'}
-          onClick={() => controller.onCancelarEdicao(filter.pessoa?.id)}
+          icon="pi pi-replay"
+          className="p-button-secondary mr-2"
+          data-pr-tooltip="Voltar"
+          label={'Voltar'}
+          onClick={() => controller.volta()}
         />
         <Button
           type="button"
-          icon="pi pi-file"
-          className="mr-2"
+          icon="pi pi-pencil"
+          className="p-button-warning mr-2"
           data-pr-tooltip="Editar"
           label={'Editar'}
           onClick={() => controller.onEditarPerfil()}
@@ -358,8 +357,17 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
         <Button
           disabled={!filter.editarPerfil}
           type="button"
-          icon="pi pi-file"
-          className="mr-2"
+          icon="pi pi-trash"
+          className="p-button-danger mr-2"
+          data-pr-tooltip="Excluir"
+          label={'Excluir'}
+          onClick={() => controller.onCancelarEdicao(filter.pessoa?.id)}
+        />
+        <Button
+          disabled={!filter.editarPerfil}
+          type="button"
+          icon="pi pi-save"
+          className="p-button-success mr-2"
           data-pr-tooltip="Salvar"
           label={'Salvar'}
           onClick={() => controller.onSalvarFicha()}

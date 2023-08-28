@@ -47,7 +47,8 @@ namespace Holerite.Core.Services.EmailSMTP
 
                 mailSend.IsBodyHtml = true;
 
-                mailSend.Attachments.Add(new Attachment(new MemoryStream(Convert.FromBase64String(pAttachments)), $"Contracheque{mailSend.Attachments.Count() + 1}.pdf"));
+                if (!string.IsNullOrEmpty(pAttachments))
+                    mailSend.Attachments.Add(new Attachment(new MemoryStream(Convert.FromBase64String(pAttachments)), $"Contracheque{mailSend.Attachments.Count() + 1}.pdf"));
 
                 using (SmtpClient smtp = new SmtpClient(emailSettingsDto.ServidorSMTP ?? "", emailSettingsDto.Porta))
                 {

@@ -4,9 +4,14 @@ namespace Holerite.Core.Models
 {
     public class Grupos : BaseModel
     {
+        public Grupos()
+        {
+            this.Funcionalidades = new HashSet<Funcionalidades>();
+        }
+
         public string? NomeGrupo { get; set; }
         public bool Ativo { get; set; }
 
-        public ICollection<NivelAcessos>? NivelAcessos { get; set; }
+        public ICollection<Funcionalidades>? Funcionalidades { get; set; }
     }
 }

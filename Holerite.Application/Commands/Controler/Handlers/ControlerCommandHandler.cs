@@ -66,7 +66,7 @@ namespace Holerite.Application.Commands.Controler.Handlers
 
             //var pessoaDto = _mapper.Map<PessoasDto>(request);
             ////Criar regra de validação da senha
-            //var resultPessoas = await _pessoasService.GetLogin(pessoaDto);
+            var resultPessoas = await _pessoasService.GetLogin(pessoa);
 
             ValidationResult.Data = _mapper.Map<LoginAutResponse>(pessoa);
 
