@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Holerite.Core.Interfaces.Services.Controler
 {
-    public class IControlerService
+    public interface IControlerService
     {
-        Task<LoginAuthDto> LoginAuth(LoginAuthDto loginAuthDto);
-        Task<EmailSettingsDto> LoginCreate(EmailSettingsDto emailSettingsDto);
+        //Task<LoginAuthDto> LoginAuth(LoginAuthDto loginAuthDto);
+        //Task<EmailSettingsDto> LoginCreate(EmailSettingsDto emailSettingsDto);
     }
 }

@@ -1,5 +1,10 @@
 ﻿using AutoMapper;
 using Holerite.Application.Commands.Controler.Requests;
+using Holerite.Application.Commands.Controler.Responses;
+using Holerite.Application.Commands.Email.Responses;
+using Holerite.Core.Dtos;
+using Holerite.Core.Interfaces.Services.EmailSMTP;
+using Holerite.Core.Interfaces.Services.Holerite;
 using Holerite.Core.Messages;
 using Holerite.Core.Validation;
 using MediatR;
@@ -16,13 +21,13 @@ namespace Holerite.Application.Commands.Controler.Handlers
         IRequestHandler<CreateLoginAuthRequest, ValidationResultBag>
     {
         private readonly IMapper _mapper;
-        private readonly IEmailSMTPService _emailSMTPService;
+        private readonly IPessoasService _pessoasService;
 
         public ControlerCommandHandler(IMapper mapper,
-            IEmailSMTPService emailSMTPService)
+            IPessoasService pessoasService)
         {
             _mapper = mapper;
-            _emailSMTPService = emailSMTPService;
+            _pessoasService = pessoasService;
         }
 
         public async Task<ValidationResultBag> Handle(CreateLoginAuthRequest request, CancellationToken cancellationToken)
@@ -33,22 +38,37 @@ namespace Holerite.Application.Commands.Controler.Handlers
                 return ValidationResult;
             }
 
-            var emailSettings = _mapper.Map<EmailSettingsDto>(request);
+            var pessoasDto = _mapper.Map<PessoasDto>(request);
 
-            var resultEmailSettings = await _emailSMTPService.Create(emailSettings);
+            var resultEmailSettings = await _pessoasService.Create(pessoasDto);
 
-            ValidationResult.Data = _mapper.Map<EmailSettingsResponse>(resultEmailSettings);
+            ValidationResult.Data = _mapper.Map<LoginAutResponse>(resultEmailSettings);
 
             return ValidationResult;
         }
 
         public async Task<ValidationResultBag> Handle(LoginAuthRequest request, CancellationToken cancellationToken)
         {
-            EmailSettingsDto emailSettings = _mapper.Map<EmailSettingsDto>(request);
+            if (!request.IsValid())
+            {
+                AddError("Campos obrigatorios.");
+                return ValidationResult;
+            }
 
-            var result = await _emailSMTPService.Update(emailSettings);
+            PessoasDto pessoa = await _pessoasService.GetLogin(request.Cpf ?? "");
 
-            ValidationResult.Data = _mapper.Map<EmailSettingsResponse>(result);
+            if (pessoa is null)
+            {
+                AddError("Login não Encontrado!!!");
+                return ValidationResult;
+            }
+
+
+            //var pessoaDto = _mapper.Map<PessoasDto>(request);
+            ////Criar regra de validação da senha
+            //var resultPessoas = await _pessoasService.GetLogin(pessoaDto);
+
+            ValidationResult.Data = _mapper.Map<LoginAutResponse>(pessoa);
 
             return ValidationResult;
         }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Holerite.Core.Interfaces.Repositories.Email;
 using Holerite.Core.Interfaces.Services.Controler;
 
 namespace Holerite.Core.Services.Controler

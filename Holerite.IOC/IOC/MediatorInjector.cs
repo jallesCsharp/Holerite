@@ -8,10 +8,11 @@ using Holerite.Application.Commands.Holerite.Handlers;
 using Holerite.Application.Commands.Holerite.Requests.PessoasRequest;
 using Holerite.Application.Commands.Holerite.Requests.ArquivosRequest;
 using Holerite.Application.Commands.Holerite.Requests.EmpresasRequest;
-using Holerite.Application.Commands.Holerite.Requests.LoginRequest;
 using Holerite.Application.Commands.Holerite.Requests.ArquivoDocumentosRequest;
 using Holerite.Application.Commands.Email.Handlers;
 using Holerite.Application.Commands.Email.Requests;
+using Holerite.Application.Commands.Controler.Handlers;
+using Holerite.Application.Commands.Controler.Requests;
 
 namespace Holerite.IOC.IOC;
 
@@ -20,8 +21,6 @@ public static class MediatorInjector
     public static IServiceCollection AddMediatorInjector(this IServiceCollection services)
     {   
         services.AddScoped<IMediatorHandler, MediatorHandler>();
-
-        services.AddScoped<IRequestHandler<LoginAuthRequest, ValidationResultBag>, LoginAuthCommandHandler>();
 
         services.AddScoped<IRequestHandler<CreateEmailSettingsRequest, ValidationResultBag>, EmailSettingsCommandHandler>();
         services.AddScoped<IRequestHandler<UpdateEmailSettingsRequest, ValidationResultBag>, EmailSettingsCommandHandler>();
@@ -57,6 +56,9 @@ public static class MediatorInjector
         services.AddScoped<IRequestHandler<CreateArquivoDocumentosRequest, ValidationResultBag>, ArquivoDocumentosCommandHandler>();
         services.AddScoped<IRequestHandler<UpdateArquivoDocumentosRequest, ValidationResultBag>, ArquivoDocumentosCommandHandler>();
         services.AddScoped<IRequestHandler<DeleteArquivoDocumentosRequest, ValidationResultBag>, ArquivoDocumentosCommandHandler>();
+
+        services.AddScoped<IRequestHandler<LoginAuthRequest, ValidationResultBag>, ControlerCommandHandler>();
+        services.AddScoped<IRequestHandler<CreateLoginAuthRequest, ValidationResultBag>, ControlerCommandHandler>();
 
         return services;
     }

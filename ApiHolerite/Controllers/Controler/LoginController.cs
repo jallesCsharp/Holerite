@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Holerite.Application.Commands.Controler.Requests;
+using Holerite.Application.Commands.Controler.Responses;
 using Holerite.Application.Commands.Holerite.Responses.PessoasResponses;
 using Holerite.Core.Interfaces.Repositories.Holerite;
 using MediatR;
@@ -70,10 +72,10 @@ namespace ApiHolerite.Controllers.Controler
 
         [HttpPost("LoginCreate")]
         [EnableCors("AlowsCors")]
-        [ProducesResponseType(typeof(PostLoginUserRequest), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(LoginAutResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> LoginCreate([FromQuery] PostLoginUserRequest request)
+        public async Task<ActionResult> LoginCreate([FromQuery] CreateLoginAuthRequest request)
         {
             try
             {
@@ -100,8 +102,8 @@ namespace ApiHolerite.Controllers.Controler
             {
                 if (access_token.Equals("null"))
                     return BadRequest("Token inválido ou Nulo.");
-                bool userValidate = TokenServices.ValidateToken(access_token);
-                return Ok(userValidate);
+                //bool userValidate = TokenServices.ValidateToken(access_token);
+                return Ok("userValidate");
             }
             catch (Exception ex)
             {
