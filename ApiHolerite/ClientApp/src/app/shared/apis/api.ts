@@ -5,12 +5,11 @@ import { Interceptors } from './Interceptors';
 export const apiUrl = axios.create({
   baseURL: Environment.getUrl(),
   headers: {
-    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Credentials': 'true',
+    Authorization: `Bearer ${Environment.getJwt() === undefined ? '' : Environment.getJwt()}`,
   },
-});
-
-export const scaApi = axios.create({
-  baseURL: Environment.getScaUrl(),
 });
 
 apiUrl.interceptors.response.use(

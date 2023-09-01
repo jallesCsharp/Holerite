@@ -1,13 +1,13 @@
-import { GrupoModel } from './GrupoModel';
+import { FuncionalidadesModel } from './FuncionalidadesModel';
 
 export interface LoginModel {
   id?: string;
   nome?: string;
   cpf?: string;
   email?: string;
-  senha?: string;
+  password?: string;
   dtnascimento?: Date;
   ativo?: boolean;
-  access_token?: string;
-  grupos?: GrupoModel[];
+  jwt?: string;
+  funcionalidades?: FuncionalidadesModel[];
 }

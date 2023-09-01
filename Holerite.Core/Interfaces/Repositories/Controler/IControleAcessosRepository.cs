@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Holerite.Core.Interfaces.Repositories.Controler
 {
-    public interface ILoginAuthRepository : IBaseRepository<Login>
+    public interface IControleAcessosRepository : IBaseRepository<ControleAcessos>
     {
     }
 }

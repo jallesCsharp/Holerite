@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ApiHolerite.Controllers.Controler
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class LoginController : CustomController
     {
@@ -25,7 +25,7 @@ namespace ApiHolerite.Controllers.Controler
 
         [HttpPost("LoginAuth")]
         [EnableCors("AlowsCors")]
-        [ProducesResponseType(typeof(PessoasResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(LoginAutResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> LoginAuth([FromQuery] LoginAuthRequest request)
@@ -33,14 +33,14 @@ namespace ApiHolerite.Controllers.Controler
             try
             {
                 if (request is null)
-                    return BadRequest("Usuário inválido");
+                    return BadRequest("Obrigatório preencher os campos!!");
 
                 var resulte = await _mediator.Send(request);
                 return CustomResponse(resulte);
             }
-            catch (Exception)
+            catch (Exception eX)
             {
-                return CustomResponse(StatusCodes.Status400BadRequest);
+                return BadRequest(eX.Message);
             }
         }
 

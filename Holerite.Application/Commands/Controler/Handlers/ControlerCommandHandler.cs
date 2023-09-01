@@ -3,6 +3,7 @@ using Holerite.Application.Commands.Controler.Requests;
 using Holerite.Application.Commands.Controler.Responses;
 using Holerite.Application.Commands.Email.Responses;
 using Holerite.Core.Dtos;
+using Holerite.Core.Interfaces.Services.Controler;
 using Holerite.Core.Interfaces.Services.EmailSMTP;
 using Holerite.Core.Interfaces.Services.Holerite;
 using Holerite.Core.Messages;
@@ -22,12 +23,15 @@ namespace Holerite.Application.Commands.Controler.Handlers
     {
         private readonly IMapper _mapper;
         private readonly IPessoasService _pessoasService;
+        private readonly IControlerService _controlerService;
 
         public ControlerCommandHandler(IMapper mapper,
-            IPessoasService pessoasService)
+            IPessoasService pessoasService,
+            IControlerService controlerService)
         {
             _mapper = mapper;
             _pessoasService = pessoasService;
+            _controlerService = controlerService;
         }
 
         public async Task<ValidationResultBag> Handle(CreateLoginAuthRequest request, CancellationToken cancellationToken)
@@ -55,20 +59,17 @@ namespace Holerite.Application.Commands.Controler.Handlers
                 return ValidationResult;
             }
 
-            PessoasDto pessoa = await _pessoasService.GetLogin(request.Cpf ?? "");
+            var loginAuthDto = await _controlerService.LoginAuth(request.Cpf ?? "", request.Password);
 
-            if (pessoa is null)
+            if (loginAuthDto is null)
             {
                 AddError("Login não Encontrado!!!");
                 return ValidationResult;
             }
 
+            var loginAutResponse = _mapper.Map<LoginAutResponse>(loginAuthDto);
 
-            //var pessoaDto = _mapper.Map<PessoasDto>(request);
-            ////Criar regra de validação da senha
-            var resultPessoas = await _pessoasService.GetLogin(pessoa);
-
-            ValidationResult.Data = _mapper.Map<LoginAutResponse>(pessoa);
+            ValidationResult.Data = loginAutResponse;
 
             return ValidationResult;
         }

@@ -26,7 +26,10 @@ namespace Holerite.Infra
         public DbSet<Pessoas> Pessoas { get; set; }
         public DbSet<Empresas> Empresas { get; set; }
         public DbSet<Profissoes> Profissoes { get; set; }
-        public DbSet<EmailSettings> EmailSettings { get; set; }
+        public DbSet<Login> Login { get; set; }
+        public DbSet<ControleAcessos> ControleAcessos { get; set; }
+        public DbSet<Perfil> Perfil { get; set; }
+        public DbSet<Funcionalidades> Funcionalidades { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -41,6 +44,10 @@ namespace Holerite.Infra
             builder.ApplyConfiguration(new EmpresasMap());
             builder.ApplyConfiguration(new ProfissoesMap());
             builder.ApplyConfiguration(new EmailSettingsMap());
+            builder.ApplyConfiguration(new LoginMap());
+            builder.ApplyConfiguration(new ControleAcessosMap());
+            builder.ApplyConfiguration(new PerfilMap());
+            builder.ApplyConfiguration(new FuncionalidadesMap());
 
           
         }

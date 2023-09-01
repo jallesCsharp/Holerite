@@ -16,6 +16,10 @@ namespace Holerite.IOC.IOC
                 mc.AddProfile(new PessoasProfile());
                 mc.AddProfile(new ProfissoesProfile());
                 mc.AddProfile(new EmailSettingsProfile());
+                mc.AddProfile(new LoginAuthProfile());
+                mc.AddProfile(new PerfilProfile());
+                mc.AddProfile(new ControleAcessosProfile());
+                mc.AddProfile(new FuncionalidadesProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();

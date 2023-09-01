@@ -1,8 +1,10 @@
 ﻿using Holerite.Core.Interfaces.Repositories;
+using Holerite.Core.Interfaces.Repositories.Controler;
 using Holerite.Core.Interfaces.Repositories.Email;
 using Holerite.Core.Interfaces.Repositories.Holerite;
 using Holerite.Infra;
 using Holerite.Infra.Repositories;
+using Holerite.Infra.Repositories.Controler;
 using Holerite.Infra.Repositories.Email;
 using Holerite.Infra.Repositories.Holerite;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +26,10 @@ public static class DbInjector
         services.AddScoped<IPessoasRepository, PessoasRepository>();
         services.AddScoped<IProfissoesRepository, ProfissoesRepository>();
         services.AddScoped<IEmailSettingsRepository, EmailSettingsRepository>();
+        services.AddScoped<ILoginRepository, LoginRepository>();
+        services.AddScoped<IControleAcessosRepository, ControleAcessosRepository>();
+        services.AddScoped<IFuncionalidadesRepository, FuncionalidadesRepository>();
+        services.AddScoped<IPerfilRepository, PerfilRepository>();
 
 
         return services;

@@ -1,21 +1,19 @@
 ﻿using Holerite.Core.Models.Base;
-using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Holerite.Core.Models
 {
     public class ControleAcessos : BaseModel
     {
-        public ControleAcessos()
-        {
-            this.Funcionalidades = new HashSet<Funcionalidades>();
-        }
+        [Key]
+        public Guid? PerfilId { get; set; }
+        [Key]
+        public Guid? FuncionalidadesId { get; set; }
+        public bool Ativar { get; set; }
 
-        public ICollection<Funcionalidades>? Funcionalidades { get; set; }
+        public virtual Funcionalidades? Funcionalidades { get; set; }
+        public virtual Perfil? Perfil { get; set; }
 
     }
 }

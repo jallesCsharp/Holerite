@@ -12,8 +12,8 @@ namespace Holerite.Core.Models
     {
         [ForeignKey("Pessoas")]
         public Guid? PessoasId { get; set; }
-        [ForeignKey("ControleAcessos")]
-        public Guid? ControleAcessosId { get; set; }
+        [ForeignKey("Perfil")]
+        public Guid? PerfilId { get; set; }
 
         public string? LoginAuth { get; set; }
         public string? Senha { get; set; }
@@ -23,6 +23,7 @@ namespace Holerite.Core.Models
         public string? Jwt { get; set; }
 
         public virtual Pessoas? Pessoas { get; set; }
-        public virtual ControleAcessos? ControleAcessos { get; set; }
+
+        public virtual Perfil? Perfil { get; set; }
     }
 }

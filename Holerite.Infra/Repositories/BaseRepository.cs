@@ -11,7 +11,7 @@ namespace Holerite.Infra.Repositories
         public HoleriteContext Context { get; }
         public IUnitOfWork UnitOfWork { get; set; }
         protected readonly DbSet<TEntity> DbSet;
-        private readonly IMapper _mapper;
+        protected readonly IMapper _mapper;
 
         public BaseRepository(HoleriteContext context, IMapper mapper)
         {

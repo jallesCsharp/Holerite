@@ -5,6 +5,7 @@ using Holerite.Application.Commands.Holerite.Responses.ArquivoDocumentosResponse
 using Holerite.Application.Commands.Holerite.Responses.ArquivosResponses;
 using Holerite.Core.Validation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ namespace ApiHolerite.Controllers.Holerite
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ArquivoDocumentosController : CustomController
     {
         public ArquivoDocumentosController(IMediator mediator, IMapper mapper)
@@ -24,8 +26,7 @@ namespace ApiHolerite.Controllers.Holerite
         [HttpPost("Holerite")]
         [EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ArquivosResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]        
         public async Task<ActionResult> Create([FromForm] CreateArquivoDocumentosRequest request)
         {
             try

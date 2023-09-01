@@ -8,17 +8,17 @@ import { InputSwitch } from 'primereact/inputswitch';
 import { Column } from 'primereact/column';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
-import { GrupoModel } from '../../../../../@types/model/GrupoModel';
-import GrupoController from '../../controllers/grupos/grupoController';
+import PerfilController from '../../controllers/Perfil/PerfilController';
+import { PerfilModel } from '../../../../../@types/model/PerfilModel';
 
-const Grupos: React.FC = () => {
+const Perfil: React.FC = () => {
   const auth = new AuthService();
-  const controller = new GrupoController();
+  const controller = new PerfilController();
   const [loading, setLoading] = useState(false);
   const [modalDialog, setModalDialog] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [deleteTemplateDialog, setDeleteTemplateDialog] = useState(false);
-  const [grupoModel, setGrupoModel] = useState<GrupoModel>();
+  const [perfilModel, setPerfilModel] = useState<PerfilModel>();
   const [userModel, setUserModel] = useState<User>();
   const [deleteDialog, setDeleteDialog] = useState(false);
 
@@ -48,18 +48,18 @@ const Grupos: React.FC = () => {
   //   }, 2000);
   // };
 
-  const onSalvarGrupo = async () => {
+  const onSalvarPerfil = async () => {
     debugger;
     setLoading(true);
     // setUserModel(controller?.selecionarPessoa);
-    setGrupoModel({ ...grupoModel });
-    if (!grupoModel?.id) {
-      console.log('onInsertGrupo');
-      const resultSalva = await controller.onInsertGrupo(grupoModel);
+    setPerfilModel({ ...perfilModel });
+    if (!perfilModel?.id) {
+      console.log('onInsertPerfil');
+      const resultSalva = await controller.onInsertPerfil(perfilModel);
       console.log(resultSalva);
     } else {
-      console.log('onUpdateGrupo');
-      const resultAltera = await controller.onUpdateGrupo(grupoModel);
+      console.log('onUpdatePerfil');
+      const resultAltera = await controller.onUpdatePerfil(perfilModel);
       console.log(resultAltera);
     }
 
@@ -104,20 +104,20 @@ const Grupos: React.FC = () => {
     );
   };
 
-  const editarTemplate = async (grupo?: GrupoModel) => {
+  const editarTemplate = async (perfil?: PerfilModel) => {
     setTimeout(async () => {
-      setGrupoModel(grupo);
-      controller.onSelecionarChenge(grupo?.pessoa);
+      setPerfilModel(perfil);
+      // controller.onSelecionarChenge(modal?.modulo);
     }, 2000);
     console.log('editarTemplate');
-    console.log(grupoModel);
+    console.log(perfilModel);
     // controller.onTipoBancosChange(lancamento.bancos);
     // controller.onTipoLancamentoChange(lancamento.tipoLancamento);
     setModalDialog(true);
   };
 
-  const confirmDeleteTemplate = (grupo: GrupoModel) => {
-    setGrupoModel(grupo);
+  const confirmDeleteTemplate = (perfil: PerfilModel) => {
+    setPerfilModel(perfil);
     setDeleteTemplateDialog(true);
   };
 
@@ -133,7 +133,7 @@ const Grupos: React.FC = () => {
     //   detail: 'Lançamentos excluidos com sucesso',
     //   life: 3000,
     // });
-    await controller.onDeleteGrupo(grupoModel);
+    await controller.onDeletePerfil(perfilModel);
   };
 
   const actionBodyTemplate = (rowData: any) => {
@@ -155,8 +155,8 @@ const Grupos: React.FC = () => {
     );
   };
 
-  const nomeGrupoTemplate = (rowData: any) => {
-    return <>{rowData.nomeGrupo}</>;
+  const nomePerfilTemplate = (rowData: any) => {
+    return <>{rowData.nomePerfil}</>;
   };
 
   const statusTemplate = (rowData: any) => {
@@ -182,7 +182,7 @@ const Grupos: React.FC = () => {
         label="Gravar"
         icon="pi pi-check"
         className="p-button-text"
-        onClick={onSalvarGrupo}
+        onClick={onSalvarPerfil}
       />
     </>
   );
@@ -202,7 +202,7 @@ const Grupos: React.FC = () => {
 
           <DataTable
             ref={dt}
-            value={controller.listaGrupoModel}
+            value={controller.listaPerfilModel}
             selection={controller.selected}
             onSelectionChange={(e) => controller.setSelected(e.value)}
             dataKey="id"
@@ -211,18 +211,18 @@ const Grupos: React.FC = () => {
             rowsPerPageOptions={[5, 10, 25]}
             className="datatable-responsive"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} Grupos"
-            emptyMessage="Nenhum Grupos encontrado."
+            currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} Perfil"
+            emptyMessage="Nenhum Perfil encontrado."
           >
             {/* <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column> */}
-            <Column header="Grupo" sortable body={nomeGrupoTemplate}></Column>
+            <Column header="Perfil" sortable body={nomePerfilTemplate}></Column>
             <Column header="Status" sortable body={statusTemplate}></Column>
             <Column body={actionBodyTemplate}></Column>
           </DataTable>
 
           <Dialog
             visible={modalDialog}
-            header="Grupo"
+            header="Perfil"
             modal
             className="p-fluid"
             footer={modalDialogFooter}
@@ -234,13 +234,13 @@ const Grupos: React.FC = () => {
                   <i className="pi pi-compass"></i>
                 </span>
                 <InputText
-                  placeholder="Descrição do Grupo"
-                  value={grupoModel?.nomeGrupo}
+                  placeholder="Descrição do Perfil"
+                  value={perfilModel?.nomePerfil}
                   onChange={(e) => {
-                    setGrupoModel({ ...grupoModel, nomeGrupo: e.target.value });
+                    setPerfilModel({ ...perfilModel, nomePerfil: e.target.value });
                   }}
                 />
-                {submitted && !grupoModel?.nomeGrupo && (
+                {submitted && !perfilModel?.nomePerfil && (
                   <small className="p-invalid">Descrição é obrigatório.</small>
                 )}
               </div>
@@ -249,15 +249,15 @@ const Grupos: React.FC = () => {
             <div className="col-12 md:col-12">
               <div className="p-inputgroup">
                 <InputSwitch
-                  name={grupoModel?.status ? 'Ativo:' : 'Inativo:'}
+                  name={perfilModel?.ativo ? 'Ativo:' : 'Inativo:'}
                   trueValue={true}
                   falseValue={false}
-                  checked={grupoModel?.status}
+                  checked={perfilModel?.ativo}
                   onChange={(e) => {
-                    setGrupoModel({ ...grupoModel, status: e.target.value });
+                    setPerfilModel({ ...perfilModel, ativo: e.target.value });
                   }}
                 />
-                {submitted && !grupoModel?.status && (
+                {submitted && !perfilModel?.ativo && (
                   <small className="p-invalid">Status é obrigatório.</small>
                 )}
               </div>
@@ -297,9 +297,9 @@ const Grupos: React.FC = () => {
           >
             <div className="flex align-items-center justify-content-center">
               <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-              {grupoModel && (
+              {perfilModel && (
                 <span>
-                  Tem certeza que deseja excluir o lançamento <b>{grupoModel?.nomeGrupo}</b>?
+                  Tem certeza que deseja excluir o lançamento <b>{perfilModel?.nomePerfil}</b>?
                 </span>
               )}
             </div>
@@ -315,9 +315,9 @@ const Grupos: React.FC = () => {
           >
             <div className="flex align-items-center justify-content-center">
               <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-              {grupoModel && (
+              {perfilModel && (
                 <span>
-                  Tem certeza que deseja excluir o lançamento <b>{grupoModel?.nomeGrupo}</b>?
+                  Tem certeza que deseja excluir o lançamento <b>{perfilModel?.nomePerfil}</b>?
                 </span>
               )}
             </div>
@@ -327,4 +327,4 @@ const Grupos: React.FC = () => {
     </div>
   );
 };
-export default Grupos;
+export default Perfil;
