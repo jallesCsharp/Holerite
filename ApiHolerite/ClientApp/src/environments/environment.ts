@@ -27,6 +27,14 @@ export default class Environment {
   private static login_unico_user_confiabilidade_validas =
     process.env.REACT_APP_LOGIN_UNICO_USER_CONFIABILIDADES_VALIDAS!;
 
+  public static getUser() {
+    const userStr = sessionStorage.getItem('user');
+    if (!userStr || userStr === '') {
+      return undefined;
+    }
+    return JSON.parse(userStr);
+  }
+
   public static getEnv() {
     return this.env;
   }
@@ -35,8 +43,12 @@ export default class Environment {
     return this.url;
   }
 
-  public static getScaUrl() {
-    return this.sca_url;
+  public static getJwt() {
+    const user = this.getUser();
+    if (!user || user === '') {
+      return undefined;
+    }
+    return user.jwt;
   }
 
   public static getScaClientId() {

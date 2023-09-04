@@ -3,6 +3,7 @@ using Holerite.Application.Commands.Holerite.Requests.PessoasRequest;
 using Holerite.Application.Commands.Holerite.Responses.PessoasResponses;
 using Holerite.Core.Validation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -15,6 +16,7 @@ namespace ApiHolerite.Controllers.Holerite
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PessoasController : CustomController
     {
         public PessoasController(IMediator mediator, IMapper mapper)
@@ -41,9 +43,9 @@ namespace ApiHolerite.Controllers.Holerite
         }
 
         [HttpPost]
-        //[EnableCors("AlowsCors")]
+        [EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(PessoasResponse), StatusCodes.Status200OK)]
-        //[ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //[Authorize]
         public async Task<ActionResult> Create([FromBody] CreatePessoasRequest request)

@@ -1,5 +1,7 @@
-﻿using Holerite.Core.Interfaces.Services.EmailSMTP;
+﻿using Holerite.Core.Interfaces.Services.Controler;
+using Holerite.Core.Interfaces.Services.EmailSMTP;
 using Holerite.Core.Interfaces.Services.Holerite;
+using Holerite.Core.Services.Controler;
 using Holerite.Core.Services.EmailSMTP;
 using Holerite.Core.Services.Holerite;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +19,7 @@ public static class ServicesInjector
         services.AddScoped<IPessoasService, PessoasService>();
         services.AddScoped<IProfissoesService, ProfissoesService>();
         services.AddScoped<IUploadCreateRegistrationService, UploadCreateRegistrationService>();
-
+        services.AddScoped<IControlerService, ControlerService>();
 
         return services;
 

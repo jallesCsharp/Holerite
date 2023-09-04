@@ -19,7 +19,7 @@ export const Login: React.FC = () => {
     if (cpf && password) {
       const userLogin: LoginModel = {
         cpf: cpf,
-        senha: password,
+        password: password,
       };
 
       controller.logar(userLogin);

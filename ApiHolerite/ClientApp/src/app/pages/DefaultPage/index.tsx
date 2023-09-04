@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import HomePage from './Home';
 import { BlockUI } from 'primereact/blockui';
@@ -12,30 +12,67 @@ import { menuItems } from '../../shared/menu';
 import LoginPage from '../Login';
 import ConfiguracoesPage from './Configuracoes';
 import HoleritePage from './Holerite';
+import AuthService from '../../../provider/services/authService';
+import { MenuItem } from '../../../provider/@types/menu';
 
 const DefaultPage = () => {
   const blockUI: BlockUIState = new BlockUIService().getCurrentState();
-  // const authService = new AuthService();
-  // const [lista, setLista]: any = useState<any>([]);
+  const authService = new AuthService();
+  const [lista, setLista]: any = useState<any>([]);
 
   // const history = useHistory();
   const localion = useLocation();
 
-  // function filtraMenu(menu: MenuItem[]) {
-  //   let novoMenu = [...menu];
-  //   novoMenu = novoMenu.filter((f: MenuItem) => authService.temPermissao(f.modulo));
-  //   return novoMenu;
-  // }
+  // const decodedJwt = jsonWebTokenService.decode(jwt)
+
+  function filtraMenu(menu: MenuItem[]) {
+    let novoMenu = [...menu];
+    novoMenu = novoMenu.filter((f: MenuItem) => authService.temPermissao(f.modulo));
+
+    console.log('Primeiro');
+    console.log([...novoMenu]);
+
+    // novoMenu.forEach(() => {
+    //   novoMenu = novoMenu.filter((filterMenu) => {
+    //     authService.temPermissaoItens(filterMenu.items);
+    //   });
+    // });
+
+    let teste: MenuItem[] | undefined = [];
+
+    // novoMenu = novoMenu.filter((filterMenu: MenuItem) => {
+    //   teste = filterMenu.items = filterMenu.items?.filter((filterSubMenu) =>
+    //     authService.temPermissaoItens(filterSubMenu.modulo),
+    //   );
+    // });
+
+    novoMenu.forEach((item) => {
+      item.items = item.items?.filter((filterSubMenu) =>
+        authService.temPermissaoItens(filterSubMenu.modulo),
+      );
+    });
+
+    console.log('novoMenu - novoMenu');
+    console.log(teste);
+
+    return novoMenu;
+  }
 
   useEffect(() => {
+    blockUI.blocked = true;
     // } else if(window.location.href.indexOf('login') < 0){
     //   authService.save(authService.getUser());
     // }
-    // const temp = [...menuItems];
-    // const pathNameList = localion.pathname.split('/');
-    // const pathName = pathNameList.length > 1 ? pathNameList[1] : '';
-    // temp.forEach((x) => (x.className = x.id === pathName ? 'active' : ''));
-    // setLista([...filtraMenu(temp)]);
+    const temp = [...menuItems];
+    // console.log('menu');
+    // console.log(temp);
+    const pathNameList = localion.pathname.split('/');
+    const pathName = pathNameList.length > 1 ? pathNameList[1] : '';
+    temp.forEach((x) => (x.className = x.id === pathName ? 'active' : ''));
+    setLista([...filtraMenu(temp)]);
+    console.log('lista - menu');
+    console.log(lista);
+    blockUI.blocked = false;
   }, [localion]);
 
   return (
@@ -47,7 +84,7 @@ const DefaultPage = () => {
         baseZIndex={6000}
         fullScreen
       >
-        <Default menuItems={menuItems}>
+        <Default menuItems={lista}>
           <Switch>
             <Route path="/login" component={LoginPage} />
             <Route path="/home" component={HomePage} />

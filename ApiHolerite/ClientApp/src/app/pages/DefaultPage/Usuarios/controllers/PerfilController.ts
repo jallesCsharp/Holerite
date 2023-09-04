@@ -46,6 +46,10 @@ export default class PerfilController extends AbstractController {
     ]);
   }
 
+  public volta() {
+    this.history.goBack();
+  }
+
   public onCancelarEdicao = (id: any) => {
     this.getPesquisarPerfilUsuario(id);
     this.filter.setEditarPerfil(false);

@@ -53,13 +53,16 @@ namespace ApiHolerite
             services.AddHttpClient();
             services.AddEndpointsApiExplorer();
 
-            services.AddCors(options =>
+            services.AddCors(c =>
             {
-                options.AddPolicy("Development",
-                    b =>
-                        b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
-                );
+                c.AddPolicy("AlowsCors", options =>
+                {
+                    options.AllowAnyOrigin()
+                    .WithMethods("GET", "PUT", "POST", "DELETE")
+                    .AllowAnyHeader();
+                });
             });
+
 
             services.AddSpaStaticFiles(configuration =>
             {
@@ -134,16 +137,18 @@ namespace ApiHolerite
             }
 
             await app.EnsureMigrations();
-            app.UseSwagger();
+
             app.UseSwaggerUI();
+            app.UseSwagger();
+            app.UseSwagger(v => v.SerializeAsV2 = true);
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseRouting();
 
             app.UseCors(x => x
               .AllowAnyOrigin()

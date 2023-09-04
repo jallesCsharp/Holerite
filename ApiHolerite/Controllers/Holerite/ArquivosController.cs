@@ -4,6 +4,7 @@ using Holerite.Application.Commands.Holerite.Requests.ArquivosRequest;
 using Holerite.Application.Commands.Holerite.Responses.ArquivosResponses;
 using Holerite.Core.Validation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -16,6 +17,7 @@ namespace ApiHolerite.Controllers.Holerite
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ArquivosController : CustomController
     {
         public ArquivosController(IMediator mediator, IMapper mapper)

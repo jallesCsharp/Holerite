@@ -29,6 +29,16 @@ export default class PendenteNotificacaoHoleriteController extends AbstractContr
     ]);
   }
 
+  public visulizarHol = (arquivo?: any) => {
+    this.filter.setOnVisualizar(true);
+    this.filter.setArquivosModel(arquivo);
+  };
+
+  public modalOnFechar = () => {
+    this.filter.setOnVisualizar(false);
+    this.filter.setArquivosModel(null);
+  };
+
   public async ConfirmarEnvioEmail() {
     try {
       this.blockUIService.start();

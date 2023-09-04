@@ -14,17 +14,17 @@ export const menuItems: MenuItem[] = [
     icon: 'pi pi-user-edit',
     modulo: 'USUARIOS',
     items: [
-      // {
-      //   id: 'perfil_usuarios',
-      //   label: 'Perfil',
-      //   url: '/usuarios/perfil',
-      //   modulo: 'PERFIL_USUARIO',
-      // },
+      {
+        id: 'perfil_usuarios',
+        label: 'Perfil',
+        url: '/usuarios/perfil',
+        modulo: 'USUARIOS_PERFIL',
+      },
       {
         id: 'listar-usuarios',
         label: 'Listar Usuários',
         url: '/usuarios/listar',
-        modulo: 'USUARIO_LISTAR',
+        modulo: 'USUARIOS_LISTAR',
       },
     ],
   },
@@ -95,18 +95,19 @@ export const menuItems: MenuItem[] = [
   {
     label: 'Configurações',
     icon: 'pi pi-cog',
+    modulo: 'CONFIGURACAO',
     items: [
       {
-        id: 'configuracoes-grupos',
+        id: 'configuracoes-arquivos',
         label: 'Arquivos',
         url: '/Configuracoes/Arquivos',
-        modulo: 'CONFIGURACAO',
+        modulo: 'CONFIGURACAO_ARQUIVOS',
       },
       {
-        id: 'configuracoes-grupos',
-        label: 'Grupos',
-        url: '/Configuracoes/Grupos',
-        modulo: 'CONFIGURACAO',
+        id: 'configuracoes-perfil',
+        label: 'Perfil de Grupos',
+        url: '/Configuracoes/Perfil',
+        modulo: 'CONFIGURACAO_PERFIL_GRUPOS',
       },
     ],
   },

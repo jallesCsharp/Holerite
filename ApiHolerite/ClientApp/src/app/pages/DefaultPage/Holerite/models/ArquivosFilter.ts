@@ -4,6 +4,10 @@ import { EmpresaModel } from '../../../../@types/model/EmpresaModel';
 import { PessoasModel } from '../../../../@types/model/PessoasModel';
 
 export default class ArquivosFilter {
+  public onVisualizar?: boolean;
+
+  public setOnVisualizar: any;
+
   public arquivosModel?: ArquivosModel;
 
   public setArquivosModel: any;
@@ -73,6 +77,7 @@ export default class ArquivosFilter {
   public setPessoasFiltradas: (e: any) => void;
 
   constructor() {
+    [this.onVisualizar, this.setOnVisualizar] = useState<boolean>(false);
     [this.arquivosModel, this.setArquivosModel] = useState<ArquivosModel>();
     [this.listaArquivos, this.setListaArquivos] = useState<ArquivosModel[]>();
     [this.pessoasModel, this.setPessoasModel] = useState<PessoasModel>();

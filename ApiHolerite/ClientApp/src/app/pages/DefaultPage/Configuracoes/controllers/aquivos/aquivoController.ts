@@ -4,9 +4,9 @@ import AbstractController from '../../../../../../provider/services/abstractCont
 import AuthService from '../../../../../../provider/services/authService';
 import ToastService from '../../../../../../provider/services/toastService';
 import { FormFileModel } from '../../../../../@types/model/FormFileModel';
-import { GrupoModel } from '../../../../../@types/model/GrupoModel';
 import ArquivoService from '../../../../../services/ArquivoService';
 import PessoaService from '../../../../../services/PessoaService';
+import { PerfilModel } from '../../../../../@types/model/PerfilModel';
 
 export default class AquivoController extends AbstractController {
   private authService = new AuthService();
@@ -31,11 +31,11 @@ export default class AquivoController extends AbstractController {
 
   private setSelecionarPessoa: (e: any) => void;
 
-  public grupoModel?: GrupoModel;
+  public perfilModel?: PerfilModel;
 
-  private setGrupoModel: (e: any) => void;
+  private setPerfilModel: (e: any) => void;
 
-  public selected?: GrupoModel;
+  public selected?: PerfilModel;
 
   public setSelected: (e: any) => void;
 
@@ -50,7 +50,7 @@ export default class AquivoController extends AbstractController {
     [this.selecionarPessoa, this.setSelecionarPessoa] = useState<User>();
     [this.formFileModel, this.setFormFileModel] = useState<FormFileModel[]>([]);
     [this.listaPessoasModel, this.setListaPessoasModel] = useState<User[]>([]);
-    [this.grupoModel, this.setGrupoModel] = useState<GrupoModel>();
+    [this.perfilModel, this.setPerfilModel] = useState<PerfilModel>();
     [this.selected, this.setSelected] = useState();
   }
 

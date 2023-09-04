@@ -15,7 +15,7 @@ namespace Holerite.Core.Interfaces.Services.EmailSMTP
         /// <param name="emailSettingsDto">Configuracoes do servico</param>
         /// <param name="pFrom">origem do e-mail</param>
         /// <param name="pTo">destino do e-mail</param>
-        /// <param name="pAttachments">Anexar arquivos</param>
+        /// <param name="pAttachments">Anexar byte arquivos</param>
         /// <param name="pSubject">Assunto</param>
         /// <param name="pBody">Corpo do e-mail</param>
         /// <returns></returns>
