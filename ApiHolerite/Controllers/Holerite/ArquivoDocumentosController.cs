@@ -9,12 +9,13 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiHolerite.Controllers.Holerite
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
+    [Route("api/[controller]")]
+    [ApiController]
     public class ArquivoDocumentosController : CustomController
     {
         public ArquivoDocumentosController(IMediator mediator, IMapper mapper)
@@ -32,13 +33,20 @@ namespace ApiHolerite.Controllers.Holerite
                 if (request is null)
                     return CustomResponse("Objeto inválido");
                 var resulte = await _mediator.Send(request);
-                return CustomResponse(resulte);
+                return CustomResponse(new Dictionary<string, object>
+                {
+                    {"data", resulte.Data },
+                    {"success", true }
+                });
             }
             catch (Exception eX)
             {
-                var bag = new ValidationResultBag();
-                bag.Errors.Add(new ValidationFailure(StatusCodes.Status400BadRequest.ToString(), $"Error Ler Arquivo PDF: {eX.Message}"));
-                return CustomResponse(bag);
+                return CustomResponse(new Dictionary<string, object>
+                {
+                    {"errors", eX.Message },
+                    {"success", false }
+                });
+                //return BadRequest(
             }
         }
 

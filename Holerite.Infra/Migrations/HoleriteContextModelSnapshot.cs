@@ -90,6 +90,52 @@ namespace Holerite.Infra.Migrations
                     b.ToTable("Arquivos", (string)null);
                 });
 
+            modelBuilder.Entity("Holerite.Core.Models.EmailSettings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool?>("Autenticao")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("EmpresasId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Porta")
+                        .HasColumnType("integer");
+
+                    b.Property<bool?>("RequerSSL")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("RequerTLS")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("SenderNome")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ServidorSMTP")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmpresasId");
+
+                    b.ToTable("EmailSettings", (string)null);
+                });
+
             modelBuilder.Entity("Holerite.Core.Models.Empresas", b =>
                 {
                     b.Property<Guid>("Id")
@@ -200,6 +246,15 @@ namespace Holerite.Infra.Migrations
                     b.Navigation("ArquivoDocumento");
 
                     b.Navigation("Pessoas");
+                });
+
+            modelBuilder.Entity("Holerite.Core.Models.EmailSettings", b =>
+                {
+                    b.HasOne("Holerite.Core.Models.Empresas", "Empresas")
+                        .WithMany()
+                        .HasForeignKey("EmpresasId");
+
+                    b.Navigation("Empresas");
                 });
 
             modelBuilder.Entity("Holerite.Core.Models.Pessoas", b =>

@@ -1,4 +1,6 @@
-﻿using Holerite.Core.Interfaces.Services.Holerite;
+﻿using Holerite.Core.Interfaces.Services.EmailSMTP;
+using Holerite.Core.Interfaces.Services.Holerite;
+using Holerite.Core.Services.EmailSMTP;
 using Holerite.Core.Services.Holerite;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,6 +10,7 @@ public static class ServicesInjector
 {
     public static IServiceCollection AddServicesInjector(this IServiceCollection services)
     {
+        services.AddScoped<IEmailSMTPService, EmailSMTPService>();
         services.AddScoped<IArquivoDocumentosService, ArquivoDocumentosService>();
         services.AddScoped<IArquivosService, ArquivosService>();
         services.AddScoped<IEmpresasService, EmpresasService>();

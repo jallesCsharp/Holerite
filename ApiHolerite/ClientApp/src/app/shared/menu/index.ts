@@ -14,12 +14,12 @@ export const menuItems: MenuItem[] = [
     icon: 'pi pi-user-edit',
     modulo: 'USUARIOS',
     items: [
-      {
-        id: 'perfil_usuarios',
-        label: 'Perfil',
-        url: '/usuarios/perfil',
-        modulo: 'PERFIL_USUARIO',
-      },
+      // {
+      //   id: 'perfil_usuarios',
+      //   label: 'Perfil',
+      //   url: '/usuarios/perfil',
+      //   modulo: 'PERFIL_USUARIO',
+      // },
       {
         id: 'listar-usuarios',
         label: 'Listar Usuários',
