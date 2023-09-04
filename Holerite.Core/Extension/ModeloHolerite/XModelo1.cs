@@ -18,6 +18,7 @@ namespace Holerite.Core.Extension.ModeloHolerite
         public async static Task<List<ArquivosDto>> ModeloHolerite(this List<PessoasDto> listaPessoasDto, ArquivoDocumentosDto? documentosDto)
         {
             List<ArquivosDto> listaHolerites = new List<ArquivosDto>();
+            List<string> listaUsuariosError = new List<string>();
             Stream stream = new MemoryStream(documentosDto.Arquivo);
 
             var empresa = listaPessoasDto.Select(pX => pX.Empresas);
@@ -41,8 +42,8 @@ namespace Holerite.Core.Extension.ModeloHolerite
 
                             PessoasDto? pessoa = null;
                             int? codigoFuncionario = null;
-                            int? mesArquivo = 0;
-
+                            string mesArquivo = "";
+                            //ENGEGRAPH ENGENHARIA DE SISTEMAS LTDA. Demonstrativo de Pagamento de Salário
                             using (StringReader reader = new StringReader(textPdf))
                             {
                                 string linha;
@@ -55,15 +56,18 @@ namespace Holerite.Core.Extension.ModeloHolerite
                                         empresa.DistinctBy(p => p.NomeEmpresa).ToList().ForEach(pX =>
                                         {
                                             var textoEmpresa = linha.Substring(0, pX.NomeEmpresa.Length);
-                                            if (textoEmpresa == pX.NomeEmpresa)
+                                            if (textoEmpresa.ToLower() == pX.NomeEmpresa.ToLower())
                                             {
                                                 nomeEmpresa = pX;
+                                                listaPessoasDto = listaPessoasDto.GroupBy(p => p.Empresas.NomeEmpresa)
+                                                            .Where(p => p.Key.ToLower() == nomeEmpresa.NomeEmpresa.ToLower())
+                                                            .ToDictionary(pR => pR.ToList()).ToList()[0].Key;
                                             }
                                         });
                                     }
                                     if (count == 3)
                                     {
-                                        mesArquivo = (int?)Convert.ToInt64(linha.Substring(3, 2).ToString());
+                                        mesArquivo = Convert.ToInt64(linha.Substring(3, 2)).ToString("00");
                                     }
                                     if (count == 4)
                                     {
@@ -71,7 +75,11 @@ namespace Holerite.Core.Extension.ModeloHolerite
                                         {
                                             codigoFuncionario = (int?)Convert.ToInt64(linha.Substring(0, 6).ToString());
                                             pessoa = listaPessoasDto.FirstOrDefault(pX => pX.CodigoFolha == codigoFuncionario && pX.EmpresasId == nomeEmpresa.Id);
-                                            if (pessoa is null) throw new Exception($"Pessoa não Cadastrado! - {linha}");
+                                            if (pessoa is null)
+                                            {
+                                                listaUsuariosError.Add($"Validar ou Cadastrar! - {linha} - Empressa: {nomeEmpresa.NomeEmpresa};");
+                                                break;
+                                            }
                                             var removerCodigoFuncionario = linha.Substring(7);
                                             Console.WriteLine(pessoa.Nome);
                                         }
@@ -81,57 +89,65 @@ namespace Holerite.Core.Extension.ModeloHolerite
                                 }
                             }
 
-                            if (!Directory.Exists("TEMP"))
-                                Directory.CreateDirectory("TEMP");
-
-                            var caminhoSistema = Directory.GetCurrentDirectory() + "\\TEMP\\" + pessoa?.CodigoFolha + "_" + pessoa?.Nome + ".pdf";
-
-                            var directory = Directory.GetCurrentDirectory();
-
-                            try
+                            if (pessoa != null)
                             {
-                                using (var pdfNovo = new PdfWriter(caminhoSistema))
+                                if (!Directory.Exists("TEMP"))
+                                    Directory.CreateDirectory("TEMP");
+
+                                var caminhoSistema = Directory.GetCurrentDirectory() + "\\TEMP\\" + pessoa?.CodigoFolha + "_" + pessoa?.Nome + ".pdf";
+
+                                var directory = Directory.GetCurrentDirectory();
+
+                                try
                                 {
-                                    using (var docNovo = new PdfDocument(pdfNovo))
+                                    using (var pdfNovo = new PdfWriter(caminhoSistema))
                                     {
-                                        doc.CopyPagesTo(i, i, docNovo);
-
-
-                                    }
-                                    List<FileInfo> arquivos = new List<FileInfo>();
-
-                                    var arquivosPdf = Directory.GetFiles(Path.Combine(directory, "TEMP"), "*.PDF", SearchOption.AllDirectories).ToArray();
-                                    arquivosPdf.ToList().ForEach(pX => arquivos.Add(new FileInfo(pX)));
-
-                                    var item = arquivos.FirstOrDefault(pX => pX.FullName == caminhoSistema);
-
-                                    if (item != null)
-                                    {
-                                        //Byte[] fileBytes = File.ReadAllBytes(item.FullName);
-                                        //Convert.ToBase64String(fileBytes),
-                                        listaHolerites.Add(new ArquivosDto()
+                                        using (var docNovo = new PdfDocument(pdfNovo))
                                         {
-                                            Arquivo = File.ReadAllBytes(item.FullName),
-                                            ArquivoDocumentoId = documentosDto.Id,
-                                            Mes = mesArquivo,
-                                            EmailEnviado = false,
-                                            NomeArquivo = item.Name,
-                                            PessoasId = pessoa?.Id,
-                                        });
-                                        File.Delete(caminhoSistema);
+                                            doc.CopyPagesTo(i, i, docNovo);
+
+
+                                        }
+                                        List<FileInfo> arquivos = new List<FileInfo>();
+
+                                        var arquivosPdf = Directory.GetFiles(Path.Combine(directory, "TEMP"), "*.PDF", SearchOption.AllDirectories).ToArray();
+                                        arquivosPdf.ToList().ForEach(pX => arquivos.Add(new FileInfo(pX)));
+
+                                        var item = arquivos.FirstOrDefault(pX => pX.FullName == caminhoSistema);
+
+                                        if (item != null)
+                                        {
+                                            //Byte[] fileBytes = File.ReadAllBytes(item.FullName);
+                                            //Convert.ToBase64String(fileBytes),
+                                            listaHolerites.Add(new ArquivosDto()
+                                            {
+                                                Arquivo = File.ReadAllBytes(item.FullName),
+                                                ArquivoDocumentoId = documentosDto.Id,
+                                                Mes = Convert.ToInt32(mesArquivo),
+                                                EmailEnviado = false,
+                                                NomeArquivo = item.Name,
+                                                PessoasId = pessoa?.Id,
+                                            });
+                                            File.Delete(caminhoSistema);
+                                        }
                                     }
                                 }
-                            }
-                            catch (Exception error)
-                            {
+                                catch (Exception error)
+                                {
 
-                                throw new Exception(error.Message);
-                            }
-                            
-
+                                    throw new Exception(error.Message);
+                                }
+                            }                            
                         }
                     }
                 }
+            }
+            if (listaUsuariosError.Any())
+            {
+                string mensagem = "";
+                for (int i = 0; i < listaUsuariosError.Count; i++)
+                    mensagem += listaUsuariosError[i].ToString() + "\n";
+                    throw new Exception(mensagem);
             }
             return listaHolerites;
         }

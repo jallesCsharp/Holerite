@@ -12,7 +12,7 @@ export default class ArquivoService extends AbstractService {
     return `${process.env.REACT_APP_API_URL + 'UploadCreateRegistration'}`;
   }
 
-  public async UploadHolerite(data?: FormData): Promise<TResponse<FormData>> {
+  public async UploadHolerite(data?: FormData): Promise<TResponse<any>> {
     const response = await apiUrl.post('/ArquivoDocumentos/Holerite', data);
     return response.data;
   }

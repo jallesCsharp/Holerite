@@ -15,6 +15,7 @@ namespace Holerite.IOC.AutoMapperProfiles
             CreateMap<EmpresasDto, EmpresasResponse>().ReverseMap();
             CreateMap<EmpresasDto, FilterEmpresasRequest>().ReverseMap();
             CreateMap<EmpresasDto, CreateEmpresasRequest>().ReverseMap();
+            CreateMap<EmpresasDto, UpdateEmpresasRequest>().ReverseMap();
         }
     }
 }

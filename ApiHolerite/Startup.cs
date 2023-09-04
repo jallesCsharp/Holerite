@@ -1,7 +1,9 @@
+using Holerite.Core.Config;
 using Holerite.Infra;
 using Holerite.Infra.Data;
 using Holerite.IOC.IOC;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -9,8 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 
 namespace ApiHolerite
 {
@@ -26,6 +32,7 @@ namespace ApiHolerite
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
             var connectionString = Configuration["Connection:ConnectionString"];
             services.AddDbContext<HoleriteContext>(options =>
                 options.UseNpgsql(connectionString)
@@ -36,30 +43,78 @@ namespace ApiHolerite
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddRazorPages();
 
+            services.AddControllersWithViews();
             services.AddDbInjector();
             services.AddServicesInjector();
             services.AddMediatorInjector();
             services.AddAutoMapperInjector();
             //services.AddDbContextInjector(connectionString);
 
-
             services.AddHttpClient();
-            services.AddCors(c =>
+            services.AddEndpointsApiExplorer();
+
+            services.AddCors(options =>
             {
-                c.AddPolicy("AlowsCors", options =>
-                {
-                    options.AllowAnyOrigin()
-                    .WithMethods("GET", "PUT", "POST", "DELETE")
-                    .AllowAnyHeader();
-                });
+                options.AddPolicy("Development",
+                    b =>
+                        b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+                );
             });
-            services.AddControllersWithViews();
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+
+            var key = Encoding.ASCII.GetBytes(Token.Secret);
+
+            services.AddAuthentication(Authentication =>
+            {
+                Authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                Authentication.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(pX =>
+            {
+                pX.RequireHttpsMetadata = false;
+                pX.SaveToken = true;
+                pX.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Holerite", Version = "v1" });
+                c.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+                        }, new List<string>() }
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,7 +139,10 @@ namespace ApiHolerite
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-            
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseRouting();
 
             app.UseCors(x => x

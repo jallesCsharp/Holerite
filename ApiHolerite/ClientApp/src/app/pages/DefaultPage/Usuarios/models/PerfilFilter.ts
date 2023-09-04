@@ -32,7 +32,7 @@ export default class PerfilFilter {
 
   public setSubmitted: (e: any) => void;
 
-  public empresaSelecionado?: EmpresaModel | undefined;
+  public empresaSelecionado?: EmpresaModel;
 
   public setEmpresaSelecionado: (e: any) => void;
 
@@ -64,7 +64,7 @@ export default class PerfilFilter {
     [this.submitted, this.setSubmitted] = useState<boolean>(false);
     [this.loading, this.setLoading] = useState<boolean>(false);
     [this.modalDialog, this.setModalDialog] = useState<boolean>(false);
-    [this.editarPerfil, this.setEditarPerfil] = useState<boolean>(true);
+    [this.editarPerfil, this.setEditarPerfil] = useState<boolean>(false);
     [this.modalEmpresaDialog, this.setModalEmpresaDialog] = useState<boolean>(false);
     [this.modalProfissaoDialog, this.setModalProfissaoDialog] = useState<boolean>(false);
     [this.deleteTemplateDialog, this.setDeleteTemplateDialog] = useState<boolean>(false);

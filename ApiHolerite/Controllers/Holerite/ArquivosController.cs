@@ -26,7 +26,7 @@ namespace ApiHolerite.Controllers.Holerite
         [ProducesResponseType(typeof(List<ArquivosResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //[Authorize]
-        public async Task<ActionResult> GetPesqusarArquivos([FromQuery] FilterArquivosHoleriteRequest request)
+        public async Task<ActionResult> GetPesquisarArquivos([FromQuery] FilterArquivosHoleriteRequest request)
         {
             try
             {
