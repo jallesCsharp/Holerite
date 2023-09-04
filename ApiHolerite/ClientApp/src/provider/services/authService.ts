@@ -52,26 +52,46 @@ export default class AuthService implements ReduxInterface {
     return useSelector((state: AppStore) => state.auth, shallowEqual);
   }
 
-  public temPermissao(permissao: any) {
-    console.log('Permissao');
-    console.log(permissao);
-    if (!permissao) {
+  public temPermissao(funcionalidades: any) {
+    console.log('temPermissao');
+    console.log(funcionalidades);
+    if (!funcionalidades) {
       return false;
     }
     const user = this.getUser();
-    if (!user || !user.permissoes || user.permissoes.length === 0) {
+    if (!user || !user.funcionalidades || user.funcionalidades.length === 0) {
       return false;
     }
     return (
-      user.permissoes.filter((f: any) => {
-        if (!f) {
+      user.funcionalidades.filter((filter: any) => {
+        if (!filter) {
           return false;
         }
-        const split = f.split(':');
+        return filter.menu === funcionalidades;
+      }).length > 0
+    );
+  }
+
+  public temPermissaoItens(items: any) {
+    console.log('temPermissaoItens');
+    console.log(items);
+    if (!items) {
+      return false;
+    }
+    const user = this.getUser();
+    if (!user || !user.funcionalidades || user.funcionalidades.length === 0) {
+      return false;
+    }
+    return (
+      user.funcionalidades.filter((filter: any) => {
+        if (!filter) {
+          return false;
+        }
+        const split = filter;
         if (split.length < 2) {
           return false;
         }
-        return split[1] === permissao;
+        return filter.modulo === items;
       }).length > 0
     );
   }

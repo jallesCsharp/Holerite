@@ -1,15 +1,15 @@
 import AbstractService from '../../provider/services/abstractService';
 import { apiUrl } from '../shared/apis/api';
 import { TResponse } from '../../provider/@types/http';
-import { GrupoModel } from '../@types/model/GrupoModel';
+import { PerfilModel } from '../@types/model/PerfilModel';
 
-export default class CepService extends AbstractService {
+export default class PerfilService extends AbstractService {
   constructor() {
     super(apiUrl, '');
   }
 
-  public async UpdateGrupos(grupo?: GrupoModel): Promise<TResponse<GrupoModel>> {
-    const response = await apiUrl.put('/Grupos', grupo);
+  public async UpdatePerfil(model?: PerfilModel): Promise<TResponse<PerfilModel>> {
+    const response = await apiUrl.put('/Perfil', model);
     console.log(response);
     return {
       success: response.data,
@@ -18,11 +18,11 @@ export default class CepService extends AbstractService {
     };
   }
 
-  public async GetGrupos(): Promise<TResponse<GrupoModel[]>> {
+  public async GetPerfil(): Promise<TResponse<PerfilModel[]>> {
     try {
-      const response = await apiUrl.get('/Grupos/GetGrupos');
+      const response = await apiUrl.get('/Perfil/GetPerfil');
 
-      const data: Array<GrupoModel> = response.data;
+      const data: Array<PerfilModel> = response.data;
       const resultTrue = Object.values(response)[1];
 
       if (resultTrue) {
@@ -47,14 +47,14 @@ export default class CepService extends AbstractService {
     }
   }
 
-  public async InsertGrupo(data?: GrupoModel): Promise<TResponse<GrupoModel>> {
+  public async InsertPerfil(data?: PerfilModel): Promise<TResponse<PerfilModel>> {
     debugger;
-    const response = await apiUrl.post('/Grupos', data);
+    const response = await apiUrl.post('/Perfil', data);
     return response.data;
   }
 
-  public async DeleteGrupos(grupo?: GrupoModel): Promise<TResponse<GrupoModel>> {
-    const response = await apiUrl.delete(`Grupos/id:length(24)?id=${grupo?.id}`);
+  public async DeletePerfil(model?: PerfilModel): Promise<TResponse<PerfilModel>> {
+    const response = await apiUrl.delete(`Perfil/id:length(24)?id=${model?.id}`);
     return {
       success: response.data,
       data: null,

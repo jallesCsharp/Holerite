@@ -4,17 +4,17 @@ import AbstractController from '../../../../../../provider/services/abstractCont
 import AuthService from '../../../../../../provider/services/authService';
 import ToastService from '../../../../../../provider/services/toastService';
 import { CepModel } from '../../../../../@types/model/CepModel';
-import { GrupoModel } from '../../../../../@types/model/GrupoModel';
 import CepService from '../../../../../services/CepService';
-import GrupoService from '../../../../../services/GrupoService';
 import PessoaService from '../../../../../services/PessoaService';
+import { PerfilModel } from '../../../../../@types/model/PerfilModel';
+import PerfilService from '../../../../../services/PerfilService';
 
-export default class GrupoController extends AbstractController {
+export default class PerfilController extends AbstractController {
   private cepService = new CepService();
 
   private authService = new AuthService();
 
-  private grupoService = new GrupoService();
+  private perfilService = new PerfilService();
 
   private pessoaService = new PessoaService();
 
@@ -26,9 +26,9 @@ export default class GrupoController extends AbstractController {
 
   private setCepModel: (e: any) => void;
 
-  public listaGrupoModel?: GrupoModel[];
+  public listaPerfilModel?: PerfilModel[];
 
-  private setListaGrupoModel: (e: any) => void;
+  private setListaPerfilModel: (e: any) => void;
 
   public listaPessoasModel: User[];
 
@@ -38,11 +38,11 @@ export default class GrupoController extends AbstractController {
 
   private setSelecionarPessoa: (e: any) => void;
 
-  public grupoModel?: GrupoModel;
+  public perfilModel?: PerfilModel;
 
-  private setGrupoModel: (e: any) => void;
+  private setPerfilModel: (e: any) => void;
 
-  public selected?: GrupoModel;
+  public selected?: PerfilModel;
 
   public setSelected: (e: any) => void;
 
@@ -51,22 +51,22 @@ export default class GrupoController extends AbstractController {
     [this.user, this.setUser] = useState<User>();
     [this.cepModel, this.setCepModel] = useState<CepModel>();
     [this.selecionarPessoa, this.setSelecionarPessoa] = useState<User>();
-    [this.listaGrupoModel, this.setListaGrupoModel] = useState<GrupoModel[]>([]);
+    [this.listaPerfilModel, this.setListaPerfilModel] = useState<PerfilModel[]>([]);
     [this.listaPessoasModel, this.setListaPessoasModel] = useState<User[]>([]);
-    [this.grupoModel, this.setGrupoModel] = useState<GrupoModel>();
+    [this.perfilModel, this.setPerfilModel] = useState<PerfilModel>();
     [this.selected, this.setSelected] = useState();
   }
 
   init() {
     super.init();
     let obterUser = this.obterUsuario();
-    this.ObterGrupos();
+    this.ObterPerfil();
     this.ObterPessoas();
     console.log('obterUser');
     console.log(obterUser);
     this.setUser(obterUser);
     this.breadCrumbService.change([
-      { label: 'Histórico de Alterações da Instalação', id: 'configuracoes-grupos' },
+      { label: 'Histórico de Alterações da Instalação', id: 'configuracoes-perfil' },
     ]);
   }
 
@@ -86,11 +86,11 @@ export default class GrupoController extends AbstractController {
     // }
   };
 
-  public async onInsertGrupo(grupo?: GrupoModel) {
+  public async onInsertPerfil(perfil?: PerfilModel) {
     debugger;
     try {
       this.blockUIService.start();
-      const teste = await this.grupoService.InsertGrupo(grupo);
+      const teste = await this.perfilService.InsertPerfil(perfil);
       console.log('teste');
       console.log(teste);
       this.blockUIService.stop();
@@ -100,17 +100,17 @@ export default class GrupoController extends AbstractController {
     }
   }
 
-  async onUpdateGrupo(grupo?: GrupoModel) {
+  async onUpdatePerfil(perfil?: PerfilModel) {
     this.blockUIService.start();
-    const teste = await this.grupoService.UpdateGrupos(grupo);
+    const teste = await this.perfilService.UpdatePerfil(perfil);
     this.blockUIService.stop();
     return teste;
   }
 
-  async onDeleteGrupo(grupo?: GrupoModel) {
+  async onDeletePerfil(perfil?: PerfilModel) {
     debugger;
     this.blockUIService.start();
-    const teste = await this.grupoService.DeleteGrupos(grupo);
+    const teste = await this.perfilService.DeletePerfil(perfil);
     this.blockUIService.stop();
     return teste;
   }
@@ -166,15 +166,15 @@ export default class GrupoController extends AbstractController {
     return teste;
   }
 
-  public async ObterGrupos() {
+  public async ObterPerfil() {
     try {
       this.blockUIService.start();
-      const response = await this.grupoService.GetGrupos();
+      const response = await this.perfilService.GetPerfil();
       const data: Array<any> = response.errors;
 
       const resultTrue = Object.values(response)[1];
       if (resultTrue) {
-        this.setListaGrupoModel(response.data);
+        this.setListaPerfilModel(response.data);
         console.log(response.data);
         ToastService.showInfo('Busca realizada !!');
       }

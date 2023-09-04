@@ -90,6 +90,41 @@ namespace Holerite.Infra.Migrations
                     b.ToTable("Arquivos", (string)null);
                 });
 
+            modelBuilder.Entity("Holerite.Core.Models.ControleAcessos", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Ativar")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("FuncionalidadesId")
+                        .IsRequired()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("PerfilId")
+                        .IsRequired()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FuncionalidadesId");
+
+                    b.HasIndex("PerfilId");
+
+                    b.ToTable("ControleAcessos", (string)null);
+                });
+
             modelBuilder.Entity("Holerite.Core.Models.EmailSettings", b =>
                 {
                     b.Property<Guid>("Id")
@@ -163,6 +198,109 @@ namespace Holerite.Infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Empresas", (string)null);
+                });
+
+            modelBuilder.Entity("Holerite.Core.Models.Funcionalidades", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Menu")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Modulo")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Funcionalidades", (string)null);
+                });
+
+            modelBuilder.Entity("Holerite.Core.Models.Login", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Jwt")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LoginAuth")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("PerfilId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("PessoasId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("SecaoAtiva")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Senha")
+                        .HasColumnType("text");
+
+                    b.Property<TimeSpan?>("TimeSpira")
+                        .HasColumnType("interval");
+
+                    b.Property<DateTime?>("UltimoLogin")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PerfilId");
+
+                    b.HasIndex("PessoasId");
+
+                    b.ToTable("Login", (string)null);
+                });
+
+            modelBuilder.Entity("Holerite.Core.Models.Perfil", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NomePerfil")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Perfil", (string)null);
                 });
 
             modelBuilder.Entity("Holerite.Core.Models.Pessoas", b =>
@@ -248,6 +386,25 @@ namespace Holerite.Infra.Migrations
                     b.Navigation("Pessoas");
                 });
 
+            modelBuilder.Entity("Holerite.Core.Models.ControleAcessos", b =>
+                {
+                    b.HasOne("Holerite.Core.Models.Funcionalidades", "Funcionalidades")
+                        .WithMany()
+                        .HasForeignKey("FuncionalidadesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Holerite.Core.Models.Perfil", "Perfil")
+                        .WithMany("ControleAcessos")
+                        .HasForeignKey("PerfilId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Funcionalidades");
+
+                    b.Navigation("Perfil");
+                });
+
             modelBuilder.Entity("Holerite.Core.Models.EmailSettings", b =>
                 {
                     b.HasOne("Holerite.Core.Models.Empresas", "Empresas")
@@ -255,6 +412,21 @@ namespace Holerite.Infra.Migrations
                         .HasForeignKey("EmpresasId");
 
                     b.Navigation("Empresas");
+                });
+
+            modelBuilder.Entity("Holerite.Core.Models.Login", b =>
+                {
+                    b.HasOne("Holerite.Core.Models.Perfil", "Perfil")
+                        .WithMany()
+                        .HasForeignKey("PerfilId");
+
+                    b.HasOne("Holerite.Core.Models.Pessoas", "Pessoas")
+                        .WithMany()
+                        .HasForeignKey("PessoasId");
+
+                    b.Navigation("Perfil");
+
+                    b.Navigation("Pessoas");
                 });
 
             modelBuilder.Entity("Holerite.Core.Models.Pessoas", b =>
@@ -275,6 +447,11 @@ namespace Holerite.Infra.Migrations
             modelBuilder.Entity("Holerite.Core.Models.ArquivoDocumentos", b =>
                 {
                     b.Navigation("Arquivos");
+                });
+
+            modelBuilder.Entity("Holerite.Core.Models.Perfil", b =>
+                {
+                    b.Navigation("ControleAcessos");
                 });
 #pragma warning restore 612, 618
         }

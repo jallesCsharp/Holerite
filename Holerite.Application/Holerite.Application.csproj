@@ -25,4 +25,10 @@
     <Folder Include="Commands\Holerite\Requests\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Utilities.NetCore6">
+      <HintPath>..\..\Recursos\Comum\Utilities.NetCore6\bin\Debug\net6.0\Utilities.NetCore6.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

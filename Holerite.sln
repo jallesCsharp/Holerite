@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Holerite.Infra", "Holerite.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Holerite.Core", "Holerite.Core\Holerite.Core.csproj", "{F7608AED-76F3-466D-A51E-8EEE5FBACBD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holerite.Application", "Holerite.Application\Holerite.Application.csproj", "{C6EACB3E-E559-4DEB-8331-EE377E8806EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Holerite.Application", "Holerite.Application\Holerite.Application.csproj", "{C6EACB3E-E559-4DEB-8331-EE377E8806EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holerite.IOC", "Holerite.IOC\Holerite.IOC.csproj", "{B6DD6D43-1288-450F-A2B8-C6B59DD761C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Holerite.IOC", "Holerite.IOC\Holerite.IOC.csproj", "{B6DD6D43-1288-450F-A2B8-C6B59DD761C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilitarios", "Utilitarios\Utilitarios.csproj", "{515CBBEE-306A-423D-9731-5BE21EBD9032}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{B6DD6D43-1288-450F-A2B8-C6B59DD761C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6DD6D43-1288-450F-A2B8-C6B59DD761C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6DD6D43-1288-450F-A2B8-C6B59DD761C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{515CBBEE-306A-423D-9731-5BE21EBD9032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{515CBBEE-306A-423D-9731-5BE21EBD9032}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{515CBBEE-306A-423D-9731-5BE21EBD9032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{515CBBEE-306A-423D-9731-5BE21EBD9032}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

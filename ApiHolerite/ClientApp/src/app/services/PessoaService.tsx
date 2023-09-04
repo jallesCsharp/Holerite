@@ -1,7 +1,6 @@
 import AbstractService from '../../provider/services/abstractService';
 import { apiUrl } from '../shared/apis/api';
 import { TResponse } from '../../provider/@types/http';
-// import { User } from '../../provider/redux/@types/auth';
 import { PessoasModel } from '../@types/model/PessoasModel';
 
 export default class PessoaService extends AbstractService {
@@ -24,6 +23,8 @@ export default class PessoaService extends AbstractService {
 
   public async getPessoas(): Promise<TResponse<PessoasModel[]>> {
     try {
+      console.log('jwt');
+      console.log(apiUrl);
       const response = await apiUrl.get('/Pessoas');
 
       const data: Array<PessoasModel> = response.data;

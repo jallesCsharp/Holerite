@@ -7,6 +7,7 @@ import { classNames } from 'primereact/utils';
 import { TriStateCheckbox } from 'primereact/tristatecheckbox';
 import { Button } from 'primereact/button';
 import PendenteNotificacaoHoleriteController from '../controllers/PendenteNotificacaoHoleriteController';
+import { Dialog } from 'primereact/dialog';
 
 interface Props {
   filter: ArquivosFilter;
@@ -16,19 +17,19 @@ interface Props {
 const DataGridHoleritePendentes: React.FC<Props> = ({ filter, controller }) => {
   const dt = useRef(null);
 
-  const pdfBodyTemplate = (rowData: any) => {
-    const rowPDF = rowData;
-    return (
-      <React.Fragment>
-        <object
-          width="600px"
-          height="230px"
-          type="application/pdf"
-          data={'data:application/pdf;base64,' + `${rowPDF.arquivo}`}
-        ></object>
-      </React.Fragment>
-    );
-  };
+  // const pdfBodyTemplate = (rowData: any) => {
+  //   const rowPDF = rowData;
+  //   return (
+  //     <React.Fragment>
+  //       <object
+  //         width="600px"
+  //         height="230px"
+  //         type="application/pdf"
+  //         data={'data:application/pdf;base64,' + `${rowPDF.arquivo}`}
+  //       ></object>
+  //     </React.Fragment>
+  //   );
+  // };
 
   const verifiedBodyTemplate = (rowData: any) => {
     return (
@@ -67,6 +68,31 @@ const DataGridHoleritePendentes: React.FC<Props> = ({ filter, controller }) => {
     );
   };
 
+  const modalDialogFooter = (
+    <>
+      <Button
+        type="button"
+        label="Fechar"
+        icon="pi pi-check"
+        className="p-button-danger mr-2"
+        onClick={controller.modalOnFechar}
+      />
+    </>
+  );
+
+  const visualizarHolerite = (rowData: any) => {
+    return (
+      <div className="actions">
+        <Button
+          icon="pi pi-eye"
+          className="p-button-rounded p-button-info mr-2"
+          style={{ marginRight: '.8em' }}
+          onClick={() => controller.visulizarHol(rowData)}
+        />
+      </div>
+    );
+  };
+
   return (
     <>
       <Card>
@@ -74,7 +100,6 @@ const DataGridHoleritePendentes: React.FC<Props> = ({ filter, controller }) => {
           ref={dt}
           dataKey="id"
           value={filter.listaArquivos}
-          header="stack"
           responsiveLayout="stack"
           currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
@@ -103,7 +128,7 @@ const DataGridHoleritePendentes: React.FC<Props> = ({ filter, controller }) => {
             align={'center'}
             style={{ textAlign: 'center' }}
           />
-          <Column
+          {/* <Column
             header="Holerite"
             align={'center'}
             style={{ textAlign: 'center' }}
@@ -112,19 +137,48 @@ const DataGridHoleritePendentes: React.FC<Props> = ({ filter, controller }) => {
             showFilterMatchModes={true}
             body={pdfBodyTemplate}
             filterElement={pdfBodyTemplate}
-          />
+          /> */}
+          <Column
+            header="Ações"
+            align={'center'}
+            style={{ width: '15%', height: '10%', textAlign: 'center' }}
+            body={visualizarHolerite}
+          ></Column>
           <Column
             field="emailEnviado"
             header="E-mail Enviado"
             dataType="boolean"
             bodyClassName="p-text-center"
             align={'center'}
-            style={{ minWidth: '8rem' }}
+            style={{ minWidth: '.8em' }}
             body={verifiedBodyTemplate}
             filterElement={verifiedFilterTemplate}
           />
         </DataTable>
       </Card>
+
+      <Dialog
+        visible={filter.onVisualizar}
+        modal
+        header="Holerite"
+        maximizable={true}
+        style={{ width: '40%', height: '95%', whiteSpace: 'nowrap' }}
+        footer={modalDialogFooter}
+        onHide={controller.modalOnFechar}
+      >
+        <div className="card">
+          <div className="grid p-fluid">
+            <div className="col-12 md:col-12">
+              <object
+                width="100%"
+                height="800px"
+                type="application/pdf"
+                data={'data:application/pdf;base64,' + `${filter.arquivosModel?.arquivo}`}
+              ></object>
+            </div>
+          </div>
+        </div>
+      </Dialog>
     </>
   );
 };

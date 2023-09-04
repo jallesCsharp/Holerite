@@ -1,21 +1,27 @@
 import axios from 'axios';
 import { TResponse } from '../../provider/@types/http';
 import { LoginModel } from '../@types/model/LoginModel';
+import AbstractService from '../../provider/services/abstractService';
+import { apiUrl } from '../shared/apis/api';
 
-export class LoginService {
+export default class LoginService extends AbstractService {
+  constructor() {
+    super(apiUrl, '');
+  }
+
   public async authLogin(loginData: LoginModel): Promise<TResponse<LoginModel[]>> {
     try {
       const loginApiUrl =
         process.env.REACT_APP_API_URL +
-        '/Login/LoginAuth?Cpf=' +
+        'Login/LoginAuth?Cpf=' +
         loginData.cpf +
-        '&Senha=' +
-        loginData.senha;
+        '&Password=' +
+        loginData.password;
       const response = await axios.post(loginApiUrl);
 
       const arrLogin: Array<LoginModel> = response.data;
       // Usuário lodago
-      const logado = Object.values(response)[5];
+      const logado = Object.values(response)[1];
       if (logado) {
         return {
           success: true,
