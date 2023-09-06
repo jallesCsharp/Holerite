@@ -10,7 +10,8 @@ import { EmpresaModel } from '../../../../@types/model/EmpresaModel';
 import PerfilFilter from '../models/PerfilFilter';
 import { ProfissoesModel } from '../../../../@types/model/ProfissoesModel';
 import ProfissoesService from '../../../../services/ProfissoesService';
-import { useState } from 'react';
+import ArquivoService from '../../../../services/ArquivoService';
+import { FilterArquivosHolerite } from '../../../../@types/filters/FilterArquivosHolerite';
 
 export default class PerfilController extends AbstractController {
   public filter: PerfilFilter;
@@ -19,19 +20,16 @@ export default class PerfilController extends AbstractController {
 
   private pessoaService = new PessoaService();
 
+  private arquivoService = new ArquivoService();
+
   private empresasService = new EmpresasService();
 
   private profissoesService = new ProfissoesService();
-
-  private teste?: PessoasModel;
-
-  private setTeste: (e: any) => void;
 
   constructor(filter: PerfilFilter) {
     super();
     this.filter = filter;
     this.history = useHistory();
-    [this.teste, this.setTeste] = useState<PessoasModel>();
   }
 
   async init() {
@@ -46,8 +44,18 @@ export default class PerfilController extends AbstractController {
     ]);
   }
 
-  public volta() {
-    this.history.goBack();
+  public modalVisualizarHoleriteOnFechar = () => {
+    this.filter.setOnVisualizarHolerite(false);
+  };
+
+  public visulizarHolerite = (arquivo?: any) => {
+    this.filter.setOnVisualizarHolerite(true);
+    this.filter.setArquivosModel(arquivo);
+  };
+
+  public volta(isVisible: boolean) {
+    this.filter.setIsVisibleVoltar(isVisible);
+    this.history.push('/usuarios/listar');
   }
 
   public onCancelarEdicao = (id: any) => {
@@ -259,6 +267,7 @@ export default class PerfilController extends AbstractController {
   public async getPesquisarPerfilUsuario(id?: any) {
     this.blockUIService.start();
     try {
+      this.getPesquisarArquivoUsuario(id);
       let pessoa = await this.pessoaService
         .getPerfil(id)
         .then((result) => {
@@ -275,6 +284,44 @@ export default class PerfilController extends AbstractController {
           console.log(error);
         });
       this.filter.setPessoa(pessoa);
+      this.blockUIService.stop();
+    } catch (error) {
+      ToastService.showError(Mensagem.ERROR_501 + error);
+      this.blockUIService.stop();
+    }
+  }
+
+  public async getPesquisarArquivoUsuario(id?: any) {
+    console.log('getPesquisarArquivoUsuario');
+    this.blockUIService.start();
+    try {
+      let filterArquivo: FilterArquivosHolerite = {
+        Id: null,
+        PessoaId: id,
+        Mes: 0,
+        EmailEnviado: undefined,
+        Nome: null,
+      };
+      console.log(filterArquivo);
+      let listaArq = await this.arquivoService
+        .getPesquisarArquivos(filterArquivo)
+        .then((result) => {
+          console.log(result);
+          if (result.success === false) {
+            ToastService.showError(
+              'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
+            );
+            return;
+          }
+          return result.data;
+        })
+        .catch((error) => {
+          console.log('catch - getPesquisarArquivoUsuario');
+          console.log(error);
+        });
+      console.log('listaArq');
+      console.log(listaArq);
+      this.filter.setListaArquivos(listaArq);
       this.blockUIService.stop();
     } catch (error) {
       ToastService.showError(Mensagem.ERROR_501 + error);

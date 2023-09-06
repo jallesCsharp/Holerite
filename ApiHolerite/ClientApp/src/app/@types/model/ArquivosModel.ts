@@ -2,6 +2,7 @@ import { PessoasModel } from './PessoasModel';
 
 export interface ArquivosModel {
   id: string;
+  pessoaId: string;
   created: Date;
   updated: Date;
   deleted: Date;

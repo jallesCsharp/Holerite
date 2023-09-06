@@ -7,6 +7,7 @@ const UsuariosPage: React.FC = () => {
   return (
     <>
       <Switch>
+        <Route path="/usuarios/perfil" exact={true} component={Perfil} />
         <Route path="/usuarios/perfil/:id" exact={true} component={Perfil} />
         <Route path="/usuarios/listar" exact={true} component={ListarUsuarios} />
       </Switch>

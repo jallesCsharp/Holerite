@@ -2,8 +2,14 @@ import { useState } from 'react';
 import { PessoasModel } from '../../../../@types/model/PessoasModel';
 import { EmpresaModel } from '../../../../@types/model/EmpresaModel';
 import { ProfissoesModel } from '../../../../@types/model/ProfissoesModel';
+import { ArquivosModel } from '../../../../@types/model/ArquivosModel';
 
 export default class PerfilFilter {
+  //Habilitar Campo do Perfil
+  public isVisibleVoltar: boolean;
+
+  public setIsVisibleVoltar: (e: any) => void;
+
   public modalEmpresaDialog?: boolean;
 
   public setModalEmpresaDialog: (e: any) => void;
@@ -32,6 +38,7 @@ export default class PerfilFilter {
 
   public setSubmitted: (e: any) => void;
 
+  //Carregar dados da Empresa
   public empresaSelecionado?: EmpresaModel;
 
   public setEmpresaSelecionado: (e: any) => void;
@@ -40,6 +47,7 @@ export default class PerfilFilter {
 
   public setEmpresa: (e: any) => void;
 
+  //Carregar dados da Profissao
   public profissoesSelecionado?: ProfissoesModel | undefined;
 
   public setProfissoesSelecionado: (e: any) => void;
@@ -48,6 +56,7 @@ export default class PerfilFilter {
 
   public setProfissoes: (e: any) => void;
 
+  //Carregar dados do Usuario
   public pessoa?: PessoasModel | undefined;
 
   public setPessoa: (e: any) => void;
@@ -60,8 +69,22 @@ export default class PerfilFilter {
 
   public setListaProfissoes: (e: any) => void;
 
+  //Carregar TabView ->
+  public onVisualizarHolerite?: boolean | undefined;
+
+  public setOnVisualizarHolerite: (e: any) => void;
+
+  public arquivosModel?: ArquivosModel | undefined;
+
+  public setArquivosModel: (e: any) => void;
+
+  public listaArquivos?: ArquivosModel[] | undefined;
+
+  public setListaArquivos: (e: any) => void;
+
   constructor() {
     [this.submitted, this.setSubmitted] = useState<boolean>(false);
+    [this.isVisibleVoltar, this.setIsVisibleVoltar] = useState<boolean>(false);
     [this.loading, this.setLoading] = useState<boolean>(false);
     [this.modalDialog, this.setModalDialog] = useState<boolean>(false);
     [this.editarPerfil, this.setEditarPerfil] = useState<boolean>(false);
@@ -75,5 +98,9 @@ export default class PerfilFilter {
     [this.pessoa, this.setPessoa] = useState<PessoasModel | undefined>(undefined);
     [this.listaEmpresas, this.setListaEmpresas] = useState<EmpresaModel[]>();
     [this.listaProfissoes, this.setListaProfissoes] = useState<ProfissoesModel[]>();
+
+    [this.onVisualizarHolerite, this.setOnVisualizarHolerite] = useState<boolean>(false);
+    [this.arquivosModel, this.setArquivosModel] = useState<ArquivosModel | undefined>(undefined);
+    [this.listaArquivos, this.setListaArquivos] = useState<ArquivosModel[] | undefined>(undefined);
   }
 }

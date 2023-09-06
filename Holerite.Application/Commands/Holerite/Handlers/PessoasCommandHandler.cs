@@ -18,12 +18,15 @@ namespace Holerite.Application.Commands.Holerite.Handlers
     {
         private readonly IMapper _mapper;
         private readonly IPessoasService _pessoasService;
+        private readonly IArquivosService _arquivosService;
 
         public PessoasCommandHandler(IMapper mapper,
-            IPessoasService pessoasService)
+            IPessoasService pessoasService,
+            IArquivosService arquivosService)
         {
             _mapper = mapper;
             _pessoasService = pessoasService;
+            _arquivosService = arquivosService;
         }
 
         public async Task<ValidationResultBag> Handle(FilterPessoasRequest request, CancellationToken cancellationToken)
@@ -42,8 +45,7 @@ namespace Holerite.Application.Commands.Holerite.Handlers
 
             if (!String.IsNullOrEmpty(request.Nome) && (!request.DataInicio.HasValue && !request.DataFim.HasValue))
                 listaPessoas = listaPessoas.ToList().Where(pX => pX.Nome.ToLower().Contains(request.Nome.ToLower())).ToList();
-
-            
+                        
             //var pessoas = _mapper.Map<PessoasDto>(request);
 
             ValidationResult.Data = _mapper.Map<List<PessoasResponse>>(listaPessoas);

@@ -53,8 +53,6 @@ export default class AuthService implements ReduxInterface {
   }
 
   public temPermissao(funcionalidades: any) {
-    console.log('temPermissao');
-    console.log(funcionalidades);
     if (!funcionalidades) {
       return false;
     }
@@ -73,8 +71,6 @@ export default class AuthService implements ReduxInterface {
   }
 
   public temPermissaoItens(items: any) {
-    console.log('temPermissaoItens');
-    console.log(items);
     if (!items) {
       return false;
     }

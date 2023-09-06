@@ -29,31 +29,11 @@ const DefaultPage = () => {
     let novoMenu = [...menu];
     novoMenu = novoMenu.filter((f: MenuItem) => authService.temPermissao(f.modulo));
 
-    console.log('Primeiro');
-    console.log([...novoMenu]);
-
-    // novoMenu.forEach(() => {
-    //   novoMenu = novoMenu.filter((filterMenu) => {
-    //     authService.temPermissaoItens(filterMenu.items);
-    //   });
-    // });
-
-    let teste: MenuItem[] | undefined = [];
-
-    // novoMenu = novoMenu.filter((filterMenu: MenuItem) => {
-    //   teste = filterMenu.items = filterMenu.items?.filter((filterSubMenu) =>
-    //     authService.temPermissaoItens(filterSubMenu.modulo),
-    //   );
-    // });
-
     novoMenu.forEach((item) => {
       item.items = item.items?.filter((filterSubMenu) =>
         authService.temPermissaoItens(filterSubMenu.modulo),
       );
     });
-
-    console.log('novoMenu - novoMenu');
-    console.log(teste);
 
     return novoMenu;
   }

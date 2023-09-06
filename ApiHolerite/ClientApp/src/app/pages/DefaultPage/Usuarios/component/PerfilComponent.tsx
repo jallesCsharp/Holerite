@@ -5,6 +5,7 @@ import PerfilController from '../controllers/PerfilController';
 import PerfilFilter from '../models/PerfilFilter';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import TabViewPerfilHolerite from './TabViewPerfilHolerite';
 
 interface Props {
   filter: PerfilFilter;
@@ -338,14 +339,18 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
         </div>
       </div>
       <div className="flex justify-content-end flex-wrap card-container  export-buttons">
-        <Button
-          type="button"
-          icon="pi pi-replay"
-          className="p-button-secondary mr-2"
-          data-pr-tooltip="Voltar"
-          label={'Voltar'}
-          onClick={() => controller.volta()}
-        />
+        {filter.isVisibleVoltar ? (
+          <Button
+            type="button"
+            icon="pi pi-replay"
+            className="p-button-secondary mr-2"
+            data-pr-tooltip="Voltar"
+            label={'Voltar'}
+            onClick={() => controller.volta(filter.isVisibleVoltar)}
+          />
+        ) : (
+          <></>
+        )}
         <Button
           type="button"
           icon="pi pi-pencil"
@@ -354,15 +359,19 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
           label={'Editar'}
           onClick={() => controller.onEditarPerfil()}
         />
-        <Button
-          disabled={!filter.editarPerfil}
-          type="button"
-          icon="pi pi-trash"
-          className="p-button-danger mr-2"
-          data-pr-tooltip="Excluir"
-          label={'Excluir'}
-          onClick={() => controller.onCancelarEdicao(filter.pessoa?.id)}
-        />
+        {filter.isVisibleVoltar ? (
+          <Button
+            disabled={!filter.editarPerfil}
+            type="button"
+            icon="pi pi-trash"
+            className="p-button-danger mr-2"
+            data-pr-tooltip="Excluir"
+            label={'Excluir'}
+            onClick={() => controller.onCancelarEdicao(filter.pessoa?.id)}
+          />
+        ) : (
+          <></>
+        )}
         <Button
           disabled={!filter.editarPerfil}
           type="button"
@@ -373,7 +382,14 @@ const PerfilComponent: React.FC<Props> = ({ filter, controller }) => {
           onClick={() => controller.onSalvarFicha()}
         />
       </div>
-      <hr />
+
+      <br />
+
+      {filter.listaArquivos?.length ? (
+        <TabViewPerfilHolerite filter={filter} controller={controller} />
+      ) : (
+        <></>
+      )}
     </>
   );
 };
