@@ -39,7 +39,7 @@ jobs:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: Holerite
-        environment_name: Holerite-Environment
+        environment_name: Holerite-Env
         version_label: 2023.9.0
         region: us-west-2
         deployment_package: ${{ github.workspace }}/out.zip
