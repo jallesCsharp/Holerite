@@ -35,13 +35,16 @@ export default class ArquivoService extends AbstractService {
     try {
       let param = '';
 
-      if (filter.Mes !== undefined) {
+      if (filter.Mes === 0 && filter.Id === null && filter.Nome === null) {
+        param = `?PessoaId=${filter.PessoaId}`;
+      }
+      if (filter.Mes !== 0) {
         param = `?Mes=${filter.Mes}`;
       }
-      if (filter.Mes === undefined && filter.Id !== null && filter.Nome !== null) {
+      if (filter.Mes === 0 && filter.Id !== null && filter.Nome !== null) {
         param = `?Id=${filter.Id}&Nome=${filter.Nome}`;
       }
-      if (filter.Mes !== undefined && filter.Id !== null && filter.Nome !== null) {
+      if (filter.Mes !== 0 && filter.Id !== null && filter.Nome !== null) {
         param = `?Mes=${filter.Mes}&Id=${filter.Id}&Nome=${filter.Nome}`;
       }
       if (
@@ -52,6 +55,8 @@ export default class ArquivoService extends AbstractService {
       ) {
         param = `?EmailEnviado=${filter.EmailEnviado}`;
       }
+
+      console.log(param);
 
       const response = await apiUrl.get('/Arquivos/GetPesquisarArquivos' + param);
 

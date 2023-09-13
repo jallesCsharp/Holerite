@@ -17,18 +17,13 @@ export const Perfil = () => {
     let perfilID = Object.values(id);
 
     if (perfilID.length === 0) {
-      console.log('getUser if ');
-      console.log(auth.getUser());
+      filter.setIsVisibleVoltar(perfilID.length);
+      const user = auth.getUser();
+      controller.getPesquisarPerfilUsuario(user.pessoasId);
     } else {
+      filter.setIsVisibleVoltar(perfilID.length);
       controller.getPesquisarPerfilUsuario(perfilID[0]);
     }
-    // console.log('Perfil');
-    // console.log({ id: [id][0] });
-    // console.log('Perfil');
-    // console.log(auth.getUser());
-    // console.log(auth.isAuthenticated());
-    // console.log(auth.temPermissao);
-    // console.log(auth.verificaPermissaoAcessoPagina);
   }, []);
   return (
     <>

@@ -17,20 +17,6 @@ interface Props {
 const DataGridHoleritePendentes: React.FC<Props> = ({ filter, controller }) => {
   const dt = useRef(null);
 
-  // const pdfBodyTemplate = (rowData: any) => {
-  //   const rowPDF = rowData;
-  //   return (
-  //     <React.Fragment>
-  //       <object
-  //         width="600px"
-  //         height="230px"
-  //         type="application/pdf"
-  //         data={'data:application/pdf;base64,' + `${rowPDF.arquivo}`}
-  //       ></object>
-  //     </React.Fragment>
-  //   );
-  // };
-
   const verifiedBodyTemplate = (rowData: any) => {
     return (
       <i
@@ -139,7 +125,7 @@ const DataGridHoleritePendentes: React.FC<Props> = ({ filter, controller }) => {
             filterElement={pdfBodyTemplate}
           /> */}
           <Column
-            header="Ações"
+            header="Holerite"
             align={'center'}
             style={{ width: '15%', height: '10%', textAlign: 'center' }}
             body={visualizarHolerite}

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { OverlayPanel } from 'primereact/overlaypanel';
+import AuthService from '../../../../services/authService';
 import './index.scss';
 
 interface Props {
@@ -9,7 +10,10 @@ interface Props {
 
 const Topbar: React.FC<Props> = ({ onClick }) => {
   const op: any = useRef(null);
-
+  const authService = new AuthService();
+  const auth = authService.getUser();
+  console.log(' - perfil');
+  console.log(auth);
   const history = useHistory();
 
   return (
@@ -56,23 +60,7 @@ const Topbar: React.FC<Props> = ({ onClick }) => {
           </OverlayPanel> */}
           <OverlayPanel appendTo="self" ref={op}>
             <div className="topbar-user-info">
-              {/* {auth && auth.user && auth.user.name && (
-                <h2>
-                  <b>Nome: </b>
-                  {auth.user.name}
-                </h2>
-              )} */}
-              {/* {auth && auth.user && auth.user.name && (
-                <h2>
-                  {auth.user.perfisUnificados && auth.user.perfisUnificados.length <= 1 && (
-                    <b>Perfil: </b>
-                  )}
-                  {auth.user.perfisUnificados && auth.user.perfisUnificados.length > 1 && (
-                    <b>Perfis: {auth.user.cnpjsRepresentados}</b>
-                  )}
-                  {auth.user.perfisUnificados.join(',')}
-                </h2>
-              )} */}
+              <h2>{auth.nomeUsuario}</h2>
               <h2>Teste</h2>
               <h2 className="topbar-exit" onClick={() => history.push('/logout')}>
                 Sair

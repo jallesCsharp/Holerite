@@ -155,6 +155,13 @@ namespace ApiHolerite
               .AllowAnyMethod()
               .AllowAnyHeader());
 
+            var webSocketOptions = new WebSocketOptions
+            {
+                KeepAliveInterval = TimeSpan.FromMinutes(2)
+            };
+
+            app.UseWebSockets(webSocketOptions);
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
