@@ -38,5 +38,5 @@ jobs:
         application_name: Holerite
         environment_name: Holerite-Env
         version_label: 2023.9.0
-        region: us-west-2
+        region: us-east-1c
         deployment_package: deploy.zip
