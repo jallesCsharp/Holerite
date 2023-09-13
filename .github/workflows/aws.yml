@@ -36,5 +36,5 @@ jobs:
         application_name: Holerite
         environment_name: Holerite-Env
         version_label: 2023.9.0
-        region: elasticbeanstalk.us-east-1c.amazonaws.com
+        region: us-east-1
         deployment_package: deploy.zip
