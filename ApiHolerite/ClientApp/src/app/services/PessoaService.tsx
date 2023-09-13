@@ -23,8 +23,6 @@ export default class PessoaService extends AbstractService {
 
   public async getPessoas(): Promise<TResponse<PessoasModel[]>> {
     try {
-      console.log('jwt');
-      console.log(apiUrl);
       const response = await apiUrl.get('/Pessoas');
 
       const data: Array<PessoasModel> = response.data;

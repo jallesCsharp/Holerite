@@ -1,3 +1,4 @@
+import { ArquivosModel } from './ArquivosModel';
 import { EmpresaModel } from './EmpresaModel';
 import { ProfissoesModel } from './ProfissoesModel';
 
@@ -15,4 +16,5 @@ export interface PessoasModel {
   email: string;
   profissoes: ProfissoesModel;
   empresas: EmpresaModel;
+  arquivos: ArquivosModel[];
 }

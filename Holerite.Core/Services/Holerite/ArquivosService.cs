@@ -96,15 +96,29 @@ namespace Holerite.Core.Services.Holerite
         {
             List<Arquivos> lista = new List<Arquivos>();
 
-            lista = await _repository.QueryableFilter().Include(pX => pX.ArquivoDocumento).Include(pX => pX.Pessoas).ThenInclude(pX => pX.Empresas).ToListAsync();
-
             if (!filter.Id.Equals(Guid.Empty))
-                lista = lista.Where(p => p.PessoasId == filter.Id).ToList();
+                lista.AddRange(await _repository.QueryableFilter()
+                    .Where(p => p.PessoasId == filter.Id)
+                    .Include(pX => pX.ArquivoDocumento)
+                    .Include(pX => pX.Pessoas)
+                    .ThenInclude(pX => pX.Empresas)
+                    .ToListAsync());
 
             if (!filter.Mes.Equals(0))
                 lista = lista.Where(p => p.Mes == filter.Mes).ToList();
 
-                return _mapper.Map<List<ArquivosDto>>(lista);
+            if (!filter.PessoaId.Equals(Guid.Empty))
+            {
+                lista = new List<Arquivos>();
+                lista.AddRange(await _repository.QueryableFilter()
+                    .Where(p => p.PessoasId == filter.PessoaId)
+                    .Include(pX => pX.ArquivoDocumento)
+                    .Include(pX => pX.Pessoas)
+                    .ThenInclude(pX => pX.Empresas)
+                    .ToListAsync());
+            }
+
+            return _mapper.Map<List<ArquivosDto>>(lista);
         }
         
         public async Task<List<ArquivosDto>> GetPesquisarArquivosPendentes(FilterArquivosHoleriteDto filter)

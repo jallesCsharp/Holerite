@@ -10,6 +10,8 @@ namespace Holerite.Application.Commands.Controler.Responses
     public class LoginAutResponse
     {
         public Guid Id { get; set; }
+        public Guid PessoasId { get; set; }
+        public string? NomeUsuario { get; set; }
         public string? Jwt { get; set; }
         public IList<FuncionalidadesResponseDto>? Funcionalidades { get; set; }
     }

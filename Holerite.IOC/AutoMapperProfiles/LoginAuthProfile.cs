@@ -10,7 +10,9 @@ namespace Holerite.IOC.AutoMapperProfiles
         public LoginAuthProfile()
         {
             CreateMap<Login, LoginAuthDto>().ReverseMap();
-            CreateMap<LoginAutResponse, LoginAuthDto>().ReverseMap();
+            CreateMap<LoginAuthDto, LoginAutResponse>()
+                .ForMember(pX => pX.NomeUsuario, rX => rX.MapFrom(pX => pX.Pessoas.Nome))
+                .ReverseMap();
         }
     }
 }

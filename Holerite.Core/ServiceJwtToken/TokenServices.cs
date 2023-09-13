@@ -22,7 +22,7 @@ namespace Holerite.Core.ServiceJwtToken
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                   new Claim(ClaimTypes.Hash, user.Id.AsString()),
+                   new Claim(ClaimTypes.Hash, user.Pessoas.Id.AsString()),
                    new Claim(ClaimTypes.Name, user.Pessoas.Nome.AsString()),
                    new Claim(ClaimTypes.NameIdentifier, user.Id.AsString()),
                    new Claim(ClaimTypes.Role, user.Perfil.NomePerfil.AsString()),
