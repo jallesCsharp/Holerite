@@ -22,8 +22,8 @@ const TabViewPerfilHolerite: React.FC<Props> = ({ filter, controller }) => {
     return (
       <i
         className={classNames('pi', {
-          'true-icon pi-check-circle': rowData.verified,
-          'false-icon pi-times-circle': !rowData.verified,
+          'true-icon pi-check-circle': rowData.emailEnviado,
+          'false-icon pi-times-circle': !rowData.emailEnviado,
         })}
       ></i>
     );
@@ -63,6 +63,19 @@ const TabViewPerfilHolerite: React.FC<Props> = ({ filter, controller }) => {
     );
   };
 
+  const reenviarEmail = (rowData: any) => {
+    return (
+      <div className="actions">
+        <Button
+          icon="pi pi-send"
+          className="p-button-rounded p-button-info mr-2"
+          style={{ marginRight: '.8em' }}
+          onClick={() => controller.reenviarEmail(rowData)}
+        />
+      </div>
+    );
+  };
+
   return (
     <>
       <TabView className="tabview-custom">
@@ -72,7 +85,7 @@ const TabViewPerfilHolerite: React.FC<Props> = ({ filter, controller }) => {
               <DataTable
                 ref={dt}
                 dataKey="id"
-                value={filter.listaArquivos}
+                value={filter.listaArquivos?.filter((pX) => pX.emailEnviado === true)}
                 responsiveLayout="stack"
                 currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords}"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
@@ -94,7 +107,12 @@ const TabViewPerfilHolerite: React.FC<Props> = ({ filter, controller }) => {
                   align={'center'}
                   style={{ textAlign: 'center' }}
                 />
-                <Column field="mes" header="Mês" align={'center'} style={{ textAlign: 'center' }} />
+                <Column
+                  field="mesExtenso"
+                  header="Mês"
+                  align={'center'}
+                  style={{ textAlign: 'center' }}
+                />
                 <Column
                   header="Holerite"
                   align={'center'}
@@ -110,6 +128,12 @@ const TabViewPerfilHolerite: React.FC<Props> = ({ filter, controller }) => {
                   style={{ minWidth: '.8em' }}
                   body={verifiedBodyTemplate}
                   filterElement={verifiedFilterTemplate}
+                />
+                <Column
+                  header="Reenviar E-mail"
+                  align={'center'}
+                  style={{ width: '15%', height: '10%', textAlign: 'center' }}
+                  body={reenviarEmail}
                 />
               </DataTable>
             </Card>

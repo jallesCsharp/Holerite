@@ -17,7 +17,9 @@ namespace Holerite.Application.Commands.Holerite.Handlers
         IRequestHandler<CreateArquivosRequest, ValidationResultBag>,
         IRequestHandler<PatchArquivosRequest, ValidationResultBag>,
         IRequestHandler<UpdateArquivosRequest, ValidationResultBag>,
+        IRequestHandler<UploadFileRequest, ValidationResultBag>,
         IRequestHandler<ConfirmarEnvioEmailArquivosRequest, ValidationResultBag>,
+        IRequestHandler<ReenviarEmailRequest, ValidationResultBag>,
         IRequestHandler<DeleteArquivosRequest, ValidationResultBag>,
         IRequestHandler<FilterArquivosHoleriteRequest, ValidationResultBag>,
         IRequestHandler<FilterArquivosPendentesHoleriteRequest, ValidationResultBag>
@@ -35,30 +37,20 @@ namespace Holerite.Application.Commands.Holerite.Handlers
             _uploadCreateRegistrationService = uploadCreateRegistrationService;
         }
 
-        //public async Task<ValidationResultBag> Handle(UploadFileRequest request, CancellationToken cancellationToken)
-        //{
-        //    if (!request.IsValid())
-        //    {
-        //        ValidationResult.Errors.AddRange(request.ValidationResult.Errors);
-        //        return ValidationResult;
-        //    }
+        public async Task<ValidationResultBag> Handle(UploadFileRequest request, CancellationToken cancellationToken)
+        {
+            if (!request.IsValid())
+            {
+                ValidationResult.Errors.AddRange(request.ValidationResult.Errors);
+                return ValidationResult;
+            }
 
-        //    var arquivos = request;
+            var listaPessoas = await _uploadCreateRegistrationService.Create(_mapper.Map<FileDto>(request));
 
-        //    await _uploadCreateRegistrationService.Create(_mapper.Map<FileDto>(request));
+            ValidationResult.Data = _mapper.Map<List<PessoasDto>>(listaPessoas);
 
-        //    using (var writer = new StringWriter())
-        //    {
-        //        var teste = writer.NewLine;
-        //    }
-
-
-        //    ArquivosDto? arquivo = _mapper.Map<ArquivosDto>(request);
-
-        //    ValidationResult.Data = _mapper.Map<ArquivosResponse>(resultArquivo);
-
-        //    return ValidationResult;
-        //}
+            return ValidationResult;
+        }
 
         public async Task<ValidationResultBag> Handle(CreateArquivosRequest request, CancellationToken cancellationToken)
         {
@@ -81,9 +73,12 @@ namespace Holerite.Application.Commands.Holerite.Handlers
         {
             FilterArquivosHoleriteDto? filter = _mapper.Map<FilterArquivosHoleriteDto>(request);
 
-            var resultArquivo = await _arquivosService.GetPesquisarArquivos(filter);
+            List<ArquivosDto> resultArquivo = await _arquivosService.GetPesquisarArquivos(filter);
 
-            ValidationResult.Data = _mapper.Map<List<ArquivosResponse>>(resultArquivo);
+            List<ArquivosResponse>? responses = _mapper.Map<List<ArquivosResponse>>(resultArquivo);
+            responses.ForEach(r => r.MesExtenso = new DateTime(r.Created.Value.Year, (int)r.Mes, r.Created.Value.Day).ToString("MMMM/yyyy").ToUpper());
+
+            ValidationResult.Data = responses;
 
             return ValidationResult;
         }
@@ -156,6 +151,24 @@ namespace Holerite.Application.Commands.Holerite.Handlers
             var resultArquivo = await _arquivosService.ConfirmarEnvioEmail(arquivo);
 
             ValidationResult.Data = _mapper.Map<List<ArquivosResponse>>(resultArquivo);
+
+            return ValidationResult;
+        }
+        
+        public async Task<ValidationResultBag> Handle(ReenviarEmailRequest request, CancellationToken cancellationToken)
+        {
+            List<ArquivosDto>? listaArquivo = new List<ArquivosDto>();
+            
+            ArquivosDto arquivo = _mapper.Map<ArquivosDto>(request.Arquivos);
+
+            listaArquivo.Add(arquivo);
+
+            var resultArquivo = await _arquivosService.ConfirmarEnvioEmail(listaArquivo);
+            string msgRetorno = string.Empty;
+            if (resultArquivo != null)
+                msgRetorno = "E-mail encaminhado com sucesso!!!";
+
+            ValidationResult.Data = msgRetorno;
 
             return ValidationResult;
         }

@@ -50,8 +50,6 @@ const DefaultPage = () => {
     const pathName = pathNameList.length > 1 ? pathNameList[1] : '';
     temp.forEach((x) => (x.className = x.id === pathName ? 'active' : ''));
     setLista([...filtraMenu(temp)]);
-    console.log('lista - menu');
-    console.log(lista);
     blockUI.blocked = false;
   }, [localion]);
 

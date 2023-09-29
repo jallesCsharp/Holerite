@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Holerite.Application.Commands.Holerite.Requests.ArquivosRequest;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,10 +18,10 @@ namespace ApiHolerite.Controllers.Holerite
             : base(mediator, mapper) { }
 
         [HttpPost("UploadCadastroGeral")]
-        [EnableCors("AlowsCors")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult> UploadCreateRegistration([FromForm] UploadFileRequest request)
         {
             try
@@ -29,9 +31,13 @@ namespace ApiHolerite.Controllers.Holerite
                 var resulte = await _mediator.Send(request);
                 return CustomResponse(resulte);
             }
-            catch (Exception)
+            catch (Exception eX)
             {
-                return CustomResponse(StatusCodes.Status400BadRequest);
+                return CustomResponse(new Dictionary<string, object>
+                {
+                    {"errors", eX.Message },
+                    {"success", false }
+                });
             }
         }
 
@@ -43,14 +49,14 @@ namespace ApiHolerite.Controllers.Holerite
         {
             try
             {
-                string[] modelo = { "CPF", "PIS", "NOME", "CODIGOFOLHA", "EMPRESA", "PROFISSOES", "EMAIL",  };
+                string[] modelo = { "CPF", "PIS", "NOME", "CÓDIGO FOLHA", "EMPRESA", "FUNÇÃO", "EMAIL", "NASCIMENTO", "ADMISSÃO", "SALÁRIO" };
 
                 StringBuilder sb = new StringBuilder();
 
                 for (int j = 0; j < modelo.Length; j++)
                     sb.Append(modelo[j] + ';');
-
-                return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "ImportarCadastro.csv");
+                                                                
+                return File(UTF8Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "ImportarCadastro.csv");
             }
             catch (Exception)
             {

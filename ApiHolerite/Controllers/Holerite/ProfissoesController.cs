@@ -3,6 +3,7 @@ using Holerite.Application.Commands.Holerite.Requests.ProfissoesRequest;
 using Holerite.Application.Commands.Holerite.Responses.ProfissoesResponses;
 using Holerite.Core.Validation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -15,16 +16,16 @@ namespace ApiHolerite.Controllers.Holerite
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProfissoesController : CustomController
     {
         public ProfissoesController(IMediator mediator, IMapper mapper)
             : base(mediator, mapper) { }
 
         [HttpGet]
-        [EnableCors("AlowsCors")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(List<ProfissoesResponse>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]        
         public async Task<ActionResult> GetAll([FromQuery] FilterProfissoesRequest request)
         {
             try
@@ -44,7 +45,6 @@ namespace ApiHolerite.Controllers.Holerite
         //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ProfissoesResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
         public async Task<ActionResult> Create([FromBody] CreateProfissoesRequest request)
         {
             try
@@ -61,6 +61,7 @@ namespace ApiHolerite.Controllers.Holerite
         }
 
         [HttpPut]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ProfissoesResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdateProfissoesRequest command)
@@ -70,6 +71,7 @@ namespace ApiHolerite.Controllers.Holerite
         }
 
         [HttpPatch("{id}")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ProfissoesResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Patch(Guid id, JsonPatchDocument<PatchProfissoesRequest> patchRequest)
@@ -82,6 +84,7 @@ namespace ApiHolerite.Controllers.Holerite
         }
 
         [HttpDelete("{id:Guid}")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ValidationResultBag), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationResultBag), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]

@@ -41,7 +41,7 @@ namespace Holerite.Core.Services.Holerite
         public async Task<PessoasDto?> GetByCodigoFolha(string pCodigoFolha)
         {
             var pessoa = await _repository
-                .QueryableFor(p => p.CodigoFolha == Convert.ToInt64(pCodigoFolha))
+                .QueryableFor(p => p.CodigoFolha == pCodigoFolha)
                 .FirstOrDefaultAsync();
             return _mapper.Map<PessoasDto>(pessoa);
         }
@@ -72,14 +72,23 @@ namespace Holerite.Core.Services.Holerite
         
         public async Task<IEnumerable<PessoasDto>> CreateList(List<PessoasDto> listPessoasDto)
         {
-            var listPessoas = _mapper.Map<List<Pessoas>>(listPessoasDto);
-            var ret = _repository.AddRange(listPessoas);
-            await _repository.UnitOfWork.Commit();
-            return _mapper.Map<IEnumerable<PessoasDto>>(ret);
+            try
+            {
+                var listPessoas = _mapper.Map<List<Pessoas>>(listPessoasDto);
+                var ret = _repository.AddRange(listPessoas);
+                await _repository.UnitOfWork.Commit();
+                return _mapper.Map<IEnumerable<PessoasDto>>(ret);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+            
         }
 
         public async Task<PessoasDto> Update(PessoasDto pessoaDto)
-        {
+        {   
             var pessoa = _mapper.Map<Pessoas>(pessoaDto);
             var ret = _repository.Update(pessoa);
             await _repository.UnitOfWork.Commit();

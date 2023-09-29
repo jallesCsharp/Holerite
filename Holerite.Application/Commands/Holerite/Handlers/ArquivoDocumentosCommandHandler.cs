@@ -18,7 +18,8 @@ namespace Holerite.Application.Commands.Holerite.Handlers
     public class ArquivoDocumentosCommandHandler : CommandHandler,
         IRequestHandler<CreateArquivoDocumentosRequest, ValidationResultBag>,
         IRequestHandler<UpdateArquivoDocumentosRequest, ValidationResultBag>,
-        IRequestHandler<DeleteArquivoDocumentosRequest, ValidationResultBag>
+        IRequestHandler<DeleteArquivoDocumentosRequest, ValidationResultBag>,
+        IRequestHandler<FilterArquivoDocumentosRequest, ValidationResultBag>
     {
         private readonly IMapper _mapper;
         private readonly IArquivoDocumentosService _arquivoDocumentosService;
@@ -36,6 +37,16 @@ namespace Holerite.Application.Commands.Holerite.Handlers
             _pessoasService = pessoasService;
         }
 
+        public async Task<ValidationResultBag> Handle(FilterArquivoDocumentosRequest request, CancellationToken cancellationToken)
+        {
+           
+            var listaResult = await _arquivoDocumentosService
+                .GetFilter(_mapper.Map<FilterArquivoDocumentosDto>(request));
+
+            ValidationResult.Data = listaResult.ToList();
+            return ValidationResult;
+        }
+        
         public async Task<ValidationResultBag> Handle(CreateArquivoDocumentosRequest request, CancellationToken cancellationToken)
         {
             List<string> listaResult = new List<string>();

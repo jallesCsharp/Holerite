@@ -36,21 +36,27 @@ export const menuItems: MenuItem[] = [
     items: [
       {
         id: 'cadastrar-holerite',
-        label: 'Carrega Arquivo',
+        label: 'Importa Arquivo',
         url: '/holerite/arquivo',
         modulo: 'HOLERITE_ARQUIVO',
       },
       {
         id: 'holerite-pendentes',
         label: 'Pendente Notificação',
-        url: '/holerite/holeritePendenteNotificacao',
+        url: '/holerite/PendenteNotificacao',
         modulo: 'HOLERITE_PENDENTE_NOTIFICACAO',
       },
       {
         id: 'listar-holerite',
         label: 'Listar Holerite',
-        url: '/holerite/holeriteLista',
+        url: '/holerite/HoleriteLista',
         modulo: 'HOLERITE_LISTA',
+      },
+      {
+        id: 'listar-holerite',
+        label: 'Arquivos Importados',
+        url: '/holerite/ListaArquivosImportados',
+        modulo: 'HOLERITE_LISTA_ARQUIVOS_IMPORTADOS',
       },
     ],
   },

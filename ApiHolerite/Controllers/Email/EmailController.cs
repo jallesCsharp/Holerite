@@ -2,6 +2,7 @@
 using Holerite.Application.Commands.Email.Requests;
 using Holerite.Application.Commands.Email.Responses;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ namespace ApiHolerite.Controllers.Email
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmailController : CustomController
     {
         public EmailController(IMediator mediator, IMapper mapper)
@@ -20,8 +22,7 @@ namespace ApiHolerite.Controllers.Email
         [HttpPost]
         //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(EmailSettingsResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]        
         public async Task<ActionResult> Create([FromBody] CreateEmailSettingsRequest request)
         {
             try
@@ -38,6 +39,7 @@ namespace ApiHolerite.Controllers.Email
         }
 
         [HttpPut]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(EmailSettingsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdateEmailSettingsRequest command)

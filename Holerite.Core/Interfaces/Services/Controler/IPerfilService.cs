@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Holerite.Core.Interfaces.Services.Controler
 {
-    public interface IControlerService
+    public interface IPerfilService
     {
-        Task<LoginAuthDto> LoginAuth(string? pCpf, string? pPassword);
-        Task<LoginAuthDto> LoginCreate(LoginAuthDto emailSettingsDto);
+        Task<IEnumerable<PerfilDto>> GetPerfilAll();
+        Task<PerfilDto> GetPerfil(string perfil);
     }
 }

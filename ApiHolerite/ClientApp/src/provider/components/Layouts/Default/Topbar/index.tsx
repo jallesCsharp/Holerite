@@ -12,8 +12,6 @@ const Topbar: React.FC<Props> = ({ onClick }) => {
   const op: any = useRef(null);
   const authService = new AuthService();
   const auth = authService.getUser();
-  console.log(' - perfil');
-  console.log(auth);
   const history = useHistory();
 
   return (
@@ -45,24 +43,15 @@ const Topbar: React.FC<Props> = ({ onClick }) => {
           >
             <i className="fa-solid fa-user topbar-menu-icon" />
           </button>
-          {/* <OverlayPanel appendTo="self" ref={op}>
-            <div className="topbar-user-info">
-              {auth && auth.user && auth.user.name && (
-                <h2>
-                  <b>Nome: </b>
-                  {auth.user.name}
-                </h2>
-              )}
-              <h2 className="topbar-exit" onClick={() => history.push('/logout')}>
-                Sair
-              </h2>
-            </div>
-          </OverlayPanel> */}
           <OverlayPanel appendTo="self" ref={op}>
             <div className="topbar-user-info">
               <h2>{auth.nomeUsuario}</h2>
-              <h2>Teste</h2>
+              <h2 className="topbar-password" onClick={() => history.push('/password')}>
+                <i className="pi pi-shield" style={{ fontSize: '1.5rem' }}></i>
+                Segurança
+              </h2>
               <h2 className="topbar-exit" onClick={() => history.push('/logout')}>
+                <i className="pi pi-sign-out" style={{ fontSize: '1.5rem' }}></i>
                 Sair
               </h2>
             </div>
@@ -74,3 +63,5 @@ const Topbar: React.FC<Props> = ({ onClick }) => {
 };
 
 export default Topbar;
+//  icon="pi pi-eye"
+//           className="p-button-rounded p-button-info mr-2"

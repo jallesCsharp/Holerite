@@ -10,7 +10,6 @@ export default class PerfilService extends AbstractService {
 
   public async UpdatePerfil(model?: PerfilModel): Promise<TResponse<PerfilModel>> {
     const response = await apiUrl.put('/Perfil', model);
-    console.log(response);
     return {
       success: response.data,
       data: null,
@@ -48,7 +47,6 @@ export default class PerfilService extends AbstractService {
   }
 
   public async InsertPerfil(data?: PerfilModel): Promise<TResponse<PerfilModel>> {
-    debugger;
     const response = await apiUrl.post('/Perfil', data);
     return response.data;
   }

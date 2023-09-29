@@ -9,7 +9,7 @@ export interface PessoasModel {
   created: Date;
   updated: Date;
   deleted: Date;
-  codigoFolha: number;
+  codigoFolha: string;
   cpf: string;
   pis: string;
   nome: string;

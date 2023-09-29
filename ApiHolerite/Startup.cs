@@ -33,10 +33,16 @@ namespace ApiHolerite
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            var connectionString = Configuration["Connection:ConnectionString"];
-            services.AddDbContext<HoleriteContext>(options =>
-                options.UseNpgsql(connectionString)
-            );
+            string[] connectionString = 
+            { 
+                Configuration["Connection:ConHost"], 
+                Configuration["Connection:ConPort"],
+                Configuration["Connection:ConPooling"],
+                Configuration["Connection:ConDatabase"],
+                Configuration["Connection:ConUserId"],
+                Configuration["Connection:ConPassword"]
+            };
+            services.AddDbContextInjector(connectionString);
 
             services.AddAutoMapper(typeof(Startup));
             services.AddMediatR(typeof(Startup));
@@ -48,7 +54,6 @@ namespace ApiHolerite
             services.AddServicesInjector();
             services.AddMediatorInjector();
             services.AddAutoMapperInjector();
-            //services.AddDbContextInjector(connectionString);
 
             services.AddHttpClient();
             services.AddEndpointsApiExplorer();
@@ -154,13 +159,6 @@ namespace ApiHolerite
               .AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader());
-
-            var webSocketOptions = new WebSocketOptions
-            {
-                KeepAliveInterval = TimeSpan.FromMinutes(2)
-            };
-
-            app.UseWebSockets(webSocketOptions);
 
             app.UseEndpoints(endpoints =>
             {

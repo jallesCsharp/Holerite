@@ -110,7 +110,7 @@ const DataGridUsuarios: React.FC<Props> = ({ filter, controller }) => {
           currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} Usuários"
           emptyMessage="Nenhum resultado encontrado!"
           footer={footerGrid}
-          responsiveLayout="scroll"
+          responsiveLayout="stack"
         >
           <Column field="nome" header="Nome" align={'center'} style={{ textAlign: 'center' }} />
           <Column field="cpf" header="CPF" align={'center'} style={{ textAlign: 'center' }} />

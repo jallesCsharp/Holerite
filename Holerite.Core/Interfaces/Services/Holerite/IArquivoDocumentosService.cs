@@ -6,6 +6,7 @@ namespace Holerite.Core.Interfaces.Services.Holerite
 {
     public interface IArquivoDocumentosService
     {
+        Task<IEnumerable<ArquivoDocumentosDto?>> GetFilter(FilterArquivoDocumentosDto filter);
         Task<ArquivoDocumentosDto?> GetById(Guid id);
         Task<IEnumerable<ArquivoDocumentosDto?>> GetAll();
         Task<ArquivoDocumentosDto> Create(IFormFile? pFile);

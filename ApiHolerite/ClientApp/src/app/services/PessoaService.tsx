@@ -9,14 +9,11 @@ export default class PessoaService extends AbstractService {
   }
 
   public async Create(data?: PessoasModel): Promise<TResponse<PessoasModel>> {
-    console.log('Salvar Ficha Pessoa');
-    console.log(data);
     const response = await apiUrl.post('/Pessoas', data);
     return response.data;
   }
 
   public async Update(data?: PessoasModel): Promise<TResponse<PessoasModel>> {
-    console.log('Salvar Ficha Pessoa');
     const response = await apiUrl.put('/Pessoas', data);
     return response.data;
   }

@@ -24,8 +24,10 @@ public static class XExtension
 
     public static DateTime AsDateTime(this object pValor)
     {
-        if (pValor is null) return DateTime.Now.Date;
-        return Convert.ToDateTime(pValor);
+        var dateTime = Convert.ToDateTime(pValor);
+        if (dateTime.Kind == DateTimeKind.Utc)
+            return dateTime;
+        return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
     }
 
     public static bool EstaVazio(this string pValor)
@@ -71,6 +73,12 @@ public static class XExtension
     {
         entrada = AsRetornarSomenteNumeros(entrada);
         return entrada.PadLeft(11, '0');
+    }
+
+    public static string AsValidaSomenteNumerosCodFolha(this string entrada)
+    {
+        entrada = AsRetornarSomenteNumeros(entrada);
+        return entrada.PadLeft(6, '0');
     }
 
     public static int AsInt(this object entrada)

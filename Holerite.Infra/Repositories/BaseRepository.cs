@@ -71,6 +71,13 @@ namespace Holerite.Infra.Repositories
             return entity;
         }
 
+        public TEntity Deleta(TEntity entity)
+        {
+            
+            DbSet.Remove(entity);
+            return entity;
+        }
+
         public TEntity FindById(params object[] ids)
         {
             return DbSet.Find(ids);

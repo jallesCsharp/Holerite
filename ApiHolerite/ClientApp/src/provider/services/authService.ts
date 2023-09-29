@@ -48,7 +48,6 @@ export default class AuthService implements ReduxInterface {
   }
 
   public getCurrentState() {
-    debugger;
     return useSelector((state: AppStore) => state.auth, shallowEqual);
   }
 

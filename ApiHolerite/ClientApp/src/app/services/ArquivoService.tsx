@@ -22,10 +22,17 @@ export default class ArquivoService extends AbstractService {
     return response.data;
   }
 
-  public async ConfirmarEnvioEmail(data?: ArquivosModel[]) {
-    console.log('ConfirmarEnvioEmail');
-    console.log(data);
-    const response = await apiUrl.post('/Arquivos/Confirmar', { arquivos: data });
+  public async ConfirmarEnvioEmailPendentes(data?: ArquivosModel[]) {
+    const response = await apiUrl.post('/Arquivos/ConfirmarEnvioEmailPendentes', {
+      arquivos: data,
+    });
+    return response.data;
+  }
+
+  public async ReenviarEmail(data?: ArquivosModel) {
+    const response = await apiUrl.post('/Arquivos/ReenviarEmail', {
+      arquivos: data,
+    });
     return response.data;
   }
 
@@ -35,7 +42,12 @@ export default class ArquivoService extends AbstractService {
     try {
       let param = '';
 
-      if (filter.Mes === 0 && filter.Id === null && filter.Nome === null) {
+      if (
+        filter.Mes === 0 &&
+        filter.Id === null &&
+        filter.Nome === null &&
+        filter.PessoaId != null
+      ) {
         param = `?PessoaId=${filter.PessoaId}`;
       }
       if (filter.Mes !== 0) {
@@ -55,8 +67,6 @@ export default class ArquivoService extends AbstractService {
       ) {
         param = `?EmailEnviado=${filter.EmailEnviado}`;
       }
-
-      console.log(param);
 
       const response = await apiUrl.get('/Arquivos/GetPesquisarArquivos' + param);
 

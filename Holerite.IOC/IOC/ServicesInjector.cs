@@ -20,6 +20,7 @@ public static class ServicesInjector
         services.AddScoped<IProfissoesService, ProfissoesService>();
         services.AddScoped<IUploadCreateRegistrationService, UploadCreateRegistrationService>();
         services.AddScoped<IControlerService, ControlerService>();
+        services.AddScoped<IPerfilService, PerfilService>();
 
         return services;
 

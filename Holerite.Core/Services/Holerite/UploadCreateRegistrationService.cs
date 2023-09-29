@@ -2,7 +2,9 @@
 using Holerite.Core.Dtos;
 using Holerite.Core.Extension;
 using Holerite.Core.Interfaces.Repositories.Holerite;
+using Holerite.Core.Interfaces.Services.Controler;
 using Holerite.Core.Interfaces.Services.Holerite;
+using XUtilities.NetCore6.Seguranca;
 
 namespace Holerite.Core.Services.Holerite
 {
@@ -13,12 +15,16 @@ namespace Holerite.Core.Services.Holerite
         private readonly IEmpresasService _empresasService;
         private readonly IProfissoesService _profissoesService;
         private readonly IPessoasService _pessoasService;
+        private readonly IControlerService _controlerService;
+        private readonly IPerfilService _perfilService;
 
         public UploadCreateRegistrationService(
             IArquivosRepository repository, 
             IEmpresasService empresasService,
             IProfissoesService profissoesService,
             IPessoasService pessoasService,
+            IControlerService controlerService,
+            IPerfilService perfilService,
             IMapper mapper)
         {
             _mapper = mapper;
@@ -26,6 +32,8 @@ namespace Holerite.Core.Services.Holerite
             _empresasService = empresasService;
             _profissoesService = profissoesService;
             _pessoasService = pessoasService;
+            _controlerService = controlerService;
+            _perfilService = perfilService;
         }
 
         public async Task<IEnumerable<PessoasDto>> Create(FileDto pFile)
@@ -41,29 +49,38 @@ namespace Holerite.Core.Services.Holerite
                 listaCadastro.Remove(listaItens[0]);
                 string[] lista = listaCadastro.ToArray();
 
+                if(lista.ToArray().Count() == 0)
+                    throw new Exception("Arquivo não contem registros!!!");
+
                 foreach (var item in lista)
                 {
                     string[] itemCadastro = item.Split(";");
                     if (String.IsNullOrEmpty(item))
                         break;
+                    if (_pessoasService.GetLogin(itemCadastro[0].AsString().AsValidaSomenteNumerosCpf()) != null)
+                        break;
+
                     try
                     {
                         listaArquivo.Add(new PessoasDto()
                         {
-                            Cpf = itemCadastro[0].ToString().AsValidaSomenteNumerosCpf(),
-                            Pis = itemCadastro[1].ToString().AsValidaSomenteNumerosCpf(),
-                            Nome = itemCadastro[2].ToString(),
-                            CodigoFolha = itemCadastro[3] == String.Empty ? 0 : Convert.ToInt32(itemCadastro[3]),
-                            Email = itemCadastro[6].ToString(),
+                            Cpf = itemCadastro[0].AsString().AsValidaSomenteNumerosCpf(),
+                            Pis = itemCadastro[1].AsString().AsRetornarSomenteNumeros(),
+                            Nome = itemCadastro[2].AsString(),
+                            CodigoFolha = itemCadastro[3].ToString().AsValidaSomenteNumerosCodFolha(),
+                            Email = itemCadastro[6].AsString(),
+                            Nascimento = itemCadastro[7].AsDateTime(),
+                            Admissao = itemCadastro[8].AsDateTime(),
+                            SalarioBase = itemCadastro[9].ToString(),
                             EmpresasId = await CadastrarEmpresa(new EmpresasDto()
                             {
-                                NomeEmpresa = itemCadastro[4] == String.Empty ? null : itemCadastro[4],
+                                NomeEmpresa = itemCadastro[4] == String.Empty ? null : itemCadastro[4].AsString().ToUpper(),
                                 Cnpj = null,
                                 Email = null,
                             }),
                             ProfissoesId = await CadastrarProfissao(new ProfissoesDto()
                             {
-                                NomeProfissao = itemCadastro[5] == String.Empty ? null : itemCadastro[5],
+                                NomeProfissao = itemCadastro[5] == String.Empty ? null : itemCadastro[5].AsString().ToUpper(),
                             }),
                         });
                     }
@@ -74,6 +91,18 @@ namespace Holerite.Core.Services.Holerite
                 }
                 listResult = await _pessoasService.CreateList(listaArquivo);
             }
+            listResult.ToList().ForEach(async item => {
+                await _controlerService.LoginCreate(new LoginAuthDto()
+                {
+                    LoginAuth = item.Cpf,
+                    PerfilId = _perfilService.GetPerfil("EXETERNO").Result.Id,
+                    PessoasId = item.Id,
+                    UltimoLogin = DateTime.UtcNow,
+                    Senha = XAesCrip.Criptografar(item.Cpf.AsString().Substring(0, 6)),                    
+                    SecaoAtiva = false
+                });
+
+            });
             await _repository.UnitOfWork.Commit();
             return listResult;
         }

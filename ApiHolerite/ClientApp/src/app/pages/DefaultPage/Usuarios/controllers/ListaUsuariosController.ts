@@ -124,8 +124,6 @@ export default class ListaUsuariosController extends AbstractController {
     try {
       this.blockUIService.start();
       await this.pessoaService.getPessoas().then((result) => {
-        console.log(result.data);
-
         if (result.success == false) {
           ToastService.showError(
             'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
@@ -150,8 +148,6 @@ export default class ListaUsuariosController extends AbstractController {
     try {
       this.blockUIService.start();
       await this.empresasService.getEmpresas().then((result) => {
-        console.log(result.data);
-
         if (result.data?.toString() === '400') {
           ToastService.showError(Mensagem.ERROR_400);
           return;

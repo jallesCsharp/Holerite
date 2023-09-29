@@ -1,15 +1,7 @@
 ﻿using Holerite.Core.Dtos;
-using Holerite.Core.Dtos.ModeloHoleritePdfDto;
-using Holerite.Core.Interfaces.Repositories.Holerite;
-using Holerite.Core.Interfaces.Services.Holerite;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Holerite.Core.Extension.ModeloHolerite
 {
@@ -41,9 +33,8 @@ namespace Holerite.Core.Extension.ModeloHolerite
                             var textPdf = sb.AppendLine(PdfTextExtractor.GetTextFromPage(doc.GetPage(i))).ToString();
 
                             PessoasDto? pessoa = null;
-                            int? codigoFuncionario = null;
+                            string? codigoFuncionario = null;
                             string mesArquivo = "";
-                            //ENGEGRAPH ENGENHARIA DE SISTEMAS LTDA. Demonstrativo de Pagamento de Salário
                             using (StringReader reader = new StringReader(textPdf))
                             {
                                 string linha;
@@ -73,7 +64,7 @@ namespace Holerite.Core.Extension.ModeloHolerite
                                     {
                                         if (linha != string.Empty)
                                         {
-                                            codigoFuncionario = (int?)Convert.ToInt64(linha.Substring(0, 6).ToString());
+                                            codigoFuncionario = linha.Substring(0, 6);
                                             pessoa = listaPessoasDto.FirstOrDefault(pX => pX.CodigoFolha == codigoFuncionario && pX.EmpresasId == nomeEmpresa.Id);
                                             if (pessoa is null)
                                             {
@@ -117,8 +108,6 @@ namespace Holerite.Core.Extension.ModeloHolerite
 
                                         if (item != null)
                                         {
-                                            //Byte[] fileBytes = File.ReadAllBytes(item.FullName);
-                                            //Convert.ToBase64String(fileBytes),
                                             listaHolerites.Add(new ArquivosDto()
                                             {
                                                 Arquivo = File.ReadAllBytes(item.FullName),

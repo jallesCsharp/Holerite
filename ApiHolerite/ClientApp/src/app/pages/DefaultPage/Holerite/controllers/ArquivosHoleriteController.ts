@@ -39,7 +39,7 @@ export default class ArquivosHoleriteController extends AbstractController {
 
   async init() {
     super.init();
-    await this.PesquisarArquivos({ Mes: 0, Id: null, Nome: null });
+    await this.PesquisarArquivos({ Mes: 0, Id: null, Nome: null, PessoaId: null });
     this.breadCrumbService.change([
       {
         label: 'Listar Holerite',
@@ -74,16 +74,11 @@ export default class ArquivosHoleriteController extends AbstractController {
   }
 
   public SelecionarMes(idMes: any) {
-    console.log('idMes');
-    console.log(idMes);
     this.filter.setMes(idMes);
   }
 
   public SelecionarAno(ano: number) {
-    console.log('SelecionarAno');
-    console.log(ano);
     this.filter.setAno(ano);
-    console.log(this.filter.ano);
   }
 
   public async GetAllListaPessoas() {
@@ -97,11 +92,9 @@ export default class ArquivosHoleriteController extends AbstractController {
         this.setListaPessoas(result.data);
         return result.data;
       });
-      //await this.limparFilter();
       this.blockUIService.stop();
     } catch (error) {
       ToastService.showError(Mensagem.ERROR_501);
-      // await this.limparFilter();
       this.blockUIService.stop();
     }
   }
@@ -110,11 +103,6 @@ export default class ArquivosHoleriteController extends AbstractController {
     try {
       this.blockUIService.start();
       await this.arquivoService.getPesquisarArquivos(filter).then((result) => {
-        // console.log('result.data?.toString()');
-
-        // console.log('errors');
-        // console.log(result.errors.data.errors.Messagens[0]);
-
         if (result.success == false) {
           ToastService.showError(
             'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
@@ -125,7 +113,6 @@ export default class ArquivosHoleriteController extends AbstractController {
           ToastService.showError(Mensagem.ERROR_400);
           return;
         }
-        console.log(result.data);
         this.filter.setListaArquivos(result.data);
         return result.data;
       });

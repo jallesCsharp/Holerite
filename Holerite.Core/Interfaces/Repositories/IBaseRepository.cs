@@ -16,6 +16,7 @@ namespace Holerite.Core.Interfaces.Repositories
         TEntity FindById(params object[] keyValues);
         TEntity Update(TEntity entity);
         TEntity Remove(TEntity entity);
+        TEntity Deleta(TEntity entity);
         IQueryable<TEntity> QueryableFilter();
         IQueryable<TEntity> QueryableFor(Expression<Func<TEntity, bool>> criteria = null, bool @readonly = false, params Expression<Func<TEntity, object>>[] includes);
     }
