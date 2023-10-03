@@ -71,7 +71,7 @@ const DataGridListaArquivosImportados: React.FC<Props> = ({ filter, controller }
           responsiveLayout="stack"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
           currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords}"
-          rows={50}
+          rows={20}
           paginator
           emptyMessage="Nenhum resultado encontrado!"
         >

@@ -73,6 +73,7 @@ namespace Holerite.Core.Services.Holerite
         {
             var arquivo = await _repository
                 .QueryableFor(p => p.Id == id)
+                .Include(pX => pX.Arquivos)
                 .FirstOrDefaultAsync();
             return _mapper.Map<ArquivoDocumentosDto>(arquivo);
         }
@@ -112,7 +113,9 @@ namespace Holerite.Core.Services.Holerite
             try
             {
                 var arquivo = _mapper.Map<ArquivoDocumentos>(arquivoDto);
-                _repository.Deleta(arquivo);
+                
+                _repository.Delete(arquivo);
+                _repository.UnitOfWork.Commit();
 
                 return await Task.FromResult(_mapper.Map<ArquivoDocumentosDto>(arquivoDto));
             }

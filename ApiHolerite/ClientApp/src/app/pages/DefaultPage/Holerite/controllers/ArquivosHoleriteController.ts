@@ -54,6 +54,11 @@ export default class ArquivosHoleriteController extends AbstractController {
     this.GetAllListaPessoas();
   }
 
+  public visulizarHol = (arquivo?: any) => {
+    this.filter.setOnVisualizar(true);
+    this.filter.setArquivosModel(arquivo);
+  };
+
   public getArquivosHolerite() {
     this.blockUIService.start();
     // @ts-ignore

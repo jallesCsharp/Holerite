@@ -3,6 +3,7 @@ using System;
 using Holerite.Infra;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Holerite.Infra.Migrations
 {
     [DbContext(typeof(HoleriteContext))]
-    partial class HoleriteContextModelSnapshot : ModelSnapshot
+    [Migration("20230929220747_DeleteCascadeArquivoDocumentos")]
+    partial class DeleteCascadeArquivoDocumentos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

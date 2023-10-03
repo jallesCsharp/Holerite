@@ -117,7 +117,7 @@ namespace Holerite.Core.Services.Holerite
                     .OrderByDescending(pX => pX.Created)
                     .OrderByDescending(pX => pX.Mes)
                     .ToList();
-
+            
             if (!filter.PessoaId.Equals(Guid.Empty))
             {
                 lista = new List<Arquivos>();

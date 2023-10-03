@@ -71,10 +71,12 @@ namespace Holerite.Infra.Repositories
             return entity;
         }
 
-        public TEntity Deleta(TEntity entity)
+        public TEntity Delete(TEntity entity)
         {
-            
-            DbSet.Remove(entity);
+            if (entity is BaseModel baseModel)
+            {
+                DbSet.Remove(DbSet.Find(baseModel.Id));
+            }
             return entity;
         }
 

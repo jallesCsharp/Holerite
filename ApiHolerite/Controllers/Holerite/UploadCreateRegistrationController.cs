@@ -21,7 +21,7 @@ namespace ApiHolerite.Controllers.Holerite
         //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult> UploadCreateRegistration([FromForm] UploadFileRequest request)
         {
             try

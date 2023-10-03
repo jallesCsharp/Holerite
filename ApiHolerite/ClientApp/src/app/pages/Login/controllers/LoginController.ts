@@ -23,12 +23,13 @@ export default class LoginController extends AbstractController {
     super.init();
   }
 
-  async logar(data: LoginModel) {
+  public async logar(data: LoginModel) {
+    this.blockUIService.start();
+
     if (!data.cpf || data.cpf.length == 0 || !data.password || data.password.length == 0) {
-      return 'Informe o Login da rede e a Senha';
+      return 'Informe o Login ou Senha';
     }
     try {
-      this.blockUIService.start();
       const response = await this.loginService.authLogin(data);
 
       console.log('logar');
@@ -48,6 +49,7 @@ export default class LoginController extends AbstractController {
       }
     } catch (err: any) {
       ToastService.showError(err);
+      this.blockUIService.stop();
     }
     this.blockUIService.stop();
   }

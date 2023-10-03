@@ -57,8 +57,8 @@ namespace Holerite.Core.Services.Holerite
                     string[] itemCadastro = item.Split(";");
                     if (String.IsNullOrEmpty(item))
                         break;
-                    if (_pessoasService.GetLogin(itemCadastro[0].AsString().AsValidaSomenteNumerosCpf()) != null)
-                        break;
+                    //if (_pessoasService.GetLogin(itemCadastro[0].AsString().AsValidaSomenteNumerosCpf()) != null)
+                    //    break;
 
                     try
                     {

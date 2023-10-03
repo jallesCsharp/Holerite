@@ -104,9 +104,8 @@ const DataGridUsuarios: React.FC<Props> = ({ filter, controller }) => {
           value={filter.listaPessoas}
           dataKey="id"
           paginator
-          rows={10}
-          rowsPerPageOptions={[10, 20, 30]}
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          rows={20}
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
           currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} Usuários"
           emptyMessage="Nenhum resultado encontrado!"
           footer={footerGrid}
