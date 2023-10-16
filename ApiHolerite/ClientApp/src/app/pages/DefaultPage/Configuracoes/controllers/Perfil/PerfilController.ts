@@ -62,8 +62,6 @@ export default class PerfilController extends AbstractController {
     let obterUser = this.obterUsuario();
     this.ObterPerfil();
     this.ObterPessoas();
-    console.log('obterUser');
-    console.log(obterUser);
     this.setUser(obterUser);
     this.breadCrumbService.change([
       { label: 'Histórico de Alterações da Instalação', id: 'configuracoes-perfil' },
@@ -90,11 +88,9 @@ export default class PerfilController extends AbstractController {
     debugger;
     try {
       this.blockUIService.start();
-      const teste = await this.perfilService.InsertPerfil(perfil);
-      console.log('teste');
-      console.log(teste);
+      const perfilResult = await this.perfilService.InsertPerfil(perfil);
       this.blockUIService.stop();
-      return teste;
+      return perfilResult;
     } catch (error) {
       ToastService.showInfo(`Error: ${error}`);
     }
@@ -108,7 +104,6 @@ export default class PerfilController extends AbstractController {
   }
 
   async onDeletePerfil(perfil?: PerfilModel) {
-    debugger;
     this.blockUIService.start();
     const teste = await this.perfilService.DeletePerfil(perfil);
     this.blockUIService.stop();
@@ -119,15 +114,12 @@ export default class PerfilController extends AbstractController {
     this.blockUIService.start();
     let userStorage: User;
     userStorage = await this.authService.getUser();
-    console.log(userStorage);
     if (userStorage) {
       this.setUser(userStorage);
       this.blockUIService.stop();
       return;
     } else {
       await this.setUser(userStorage);
-      console.log('Usuario - user');
-      console.log(this.user);
     }
     this.blockUIService.stop();
   }
@@ -175,7 +167,6 @@ export default class PerfilController extends AbstractController {
       const resultTrue = Object.values(response)[1];
       if (resultTrue) {
         this.setListaPerfilModel(response.data);
-        console.log(response.data);
         ToastService.showInfo('Busca realizada !!');
       }
       this.blockUIService.stop();
@@ -195,7 +186,6 @@ export default class PerfilController extends AbstractController {
       const resultTrue = Object.values(response)[1];
       if (resultTrue) {
         this.setListaPessoasModel(response.data);
-        console.log(response.data);
         ToastService.showInfo('Busca realizada !!');
       }
       this.blockUIService.stop();

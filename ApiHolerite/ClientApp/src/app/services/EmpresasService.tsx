@@ -10,15 +10,11 @@ export default class EmpresasService extends AbstractService {
   }
 
   public async Create(data?: EmpresaModel): Promise<TResponse<EmpresaModel>> {
-    console.log('Salvar Empresa');
-    console.log(data);
     const response = await apiUrl.post('/Empresas', data);
     return response.data;
   }
 
   public async Update(data?: EmpresaModel): Promise<TResponse<EmpresaModel>> {
-    console.log('Salvar Ficha Pessoa');
-    console.log(data);
     const response = await apiUrl.put('/Empresas', data);
     return response.data;
   }

@@ -44,32 +44,6 @@ namespace ApiHolerite.Controllers.Controler
             }
         }
 
-        //[HttpPost("LoginAuth")]
-        //[EnableCors("AlowsCors")]
-        //[ProducesResponseType(typeof(PessoasDto), StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public async Task<ActionResult<PessoasDto>> LoginAuth([FromQuery] string user, string pass)
-        //{
-        //    try
-        //    {
-        //        var pessoas = _mapper.Map<PessoasDto>(await _repository.ObterLogin(user,pass));
-
-        //        if (pessoas is null)
-        //            return BadRequest("Login inválido");
-
-        //        pessoas.access_token = TokenServices.GenerateToken(pessoas);
-        //        pessoas.TimeLog = DateTime.UtcNow;
-        //        pessoas.Senha = "";
-
-        //        return Ok(pessoas);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-
         [HttpPost("LoginCreate")]
         [EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(LoginAutResponse), StatusCodes.Status201Created)]

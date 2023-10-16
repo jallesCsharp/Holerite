@@ -88,8 +88,7 @@ const DataGridHoleritePendentes: React.FC<Props> = ({ filter, controller }) => {
           value={filter.listaArquivos}
           responsiveLayout="stack"
           currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords}"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          rowsPerPageOptions={[10, 20, 30, 50]}
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
           rows={50}
           paginator
           sortOrder={-1}

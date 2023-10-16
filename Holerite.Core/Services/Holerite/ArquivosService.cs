@@ -16,14 +16,20 @@ namespace Holerite.Core.Services.Holerite
     {
         private readonly IMapper _mapper;
         private readonly IArquivosRepository _repository;
+        private readonly IPessoasRepository _pessoasRepository;
         private readonly IEmailSettingsRepository _emailSettingsRepository;
         private readonly IEmailSMTPService _emailSMTPService;
 
-        public ArquivosService(IArquivosRepository repository, IEmailSettingsRepository emailSettingsRepository, IEmailSMTPService emailSMTPService, IMapper mapper)
+        public ArquivosService(IArquivosRepository repository,
+            IEmailSettingsRepository emailSettingsRepository, 
+            IEmailSMTPService emailSMTPService,
+            IPessoasRepository pessoasRepository,
+            IMapper mapper)
         {
             _repository = repository;
             _emailSettingsRepository = emailSettingsRepository;
             _emailSMTPService = emailSMTPService;
+            _pessoasRepository = pessoasRepository;
             _mapper = mapper;
         }
 
@@ -96,25 +102,65 @@ namespace Holerite.Core.Services.Holerite
         {
             List<Arquivos> lista = new List<Arquivos>();
 
-            if (!filter.Id.Equals(Guid.Empty))
-                lista.AddRange(await _repository.QueryableFilter()
-                    .Where(p => p.PessoasId == filter.Id)
+            if(filter.Id.Equals(Guid.Empty) && filter.Mes.Equals(0) && filter.PessoaId.Equals(Guid.Empty))
+            {
+                lista.AddRange(await _repository.QueryableFor(pX => pX.Pessoas.Deleted.HasValue != null)
+                .Include(pX => pX.ArquivoDocumento)
+                .Include(pX => pX.Pessoas)
+                .ThenInclude(pX => pX.Empresas)
+                .OrderByDescending(pX => pX.Created)
+                .OrderByDescending(pX => pX.Mes)
+                .ToListAsync());
+                lista.ForEach(r => r.Arquivo = null);
+            }
+
+            if (!filter.Id.Equals(Guid.Empty) && filter.PessoaId.Equals(Guid.Empty))
+                lista.AddRange(await _repository.QueryableFor(p => p.Id == filter.Id)
                     .Include(pX => pX.ArquivoDocumento)
                     .Include(pX => pX.Pessoas)
                     .ThenInclude(pX => pX.Empresas)
+                    .OrderByDescending(pX => pX.Created)
+                    .OrderByDescending(pX => pX.Mes)
                     .ToListAsync());
 
-            if (!filter.Mes.Equals(0))
-                lista = lista.Where(p => p.Mes == filter.Mes).ToList();
-
-            if (!filter.PessoaId.Equals(Guid.Empty))
-            {
-                lista = new List<Arquivos>();
-                lista.AddRange(await _repository.QueryableFilter()
-                    .Where(p => p.PessoasId == filter.PessoaId)
+            if (!filter.Mes.Equals(0) && filter.PessoaId.Equals(Guid.Empty))
+                lista.AddRange(await _repository.QueryableFor(p => p.Mes == filter.Mes)
                     .Include(pX => pX.ArquivoDocumento)
                     .Include(pX => pX.Pessoas)
                     .ThenInclude(pX => pX.Empresas)
+                    .OrderByDescending(pX => pX.Created)
+                    .OrderByDescending(pX => pX.Mes)
+                    .ToListAsync());
+
+            if (!filter.Mes.Equals(0) && !filter.PessoaId.Equals(Guid.Empty))
+            {
+                var cpf = _pessoasRepository.QueryableFor(pX => pX.Id == filter.PessoaId).FirstOrDefault().Cpf;
+                var listaPessoa = _pessoasRepository.QueryableFor(pR => pR.Cpf == cpf).Select(pZ => pZ.Id).ToList();
+
+                lista.AddRange(await _repository.QueryableFor(p => listaPessoa.Contains(p.PessoasId.Value))
+                    .Include(pX => pX.ArquivoDocumento)
+                    .Include(pX => pX.Pessoas)
+                    .ThenInclude(pX => pX.Empresas)
+                    .OrderByDescending(pX => pX.Created)
+                    .OrderByDescending(pX => pX.Mes)
+                    .ToListAsync());
+
+                lista = lista.Where(p => p.Mes == filter.Mes).ToList();
+            }
+
+            if (!filter.PessoaId.Equals(Guid.Empty) && filter.Mes.Equals(0))
+            {
+                lista = new List<Arquivos>();
+
+                var cpf = _pessoasRepository.QueryableFor(pX => pX.Id == filter.PessoaId).FirstOrDefault()?.Cpf;
+                var listaPessoa = _pessoasRepository.QueryableFor(pR => pR.Cpf == cpf).Select(pZ => pZ.Id).ToList();
+
+                lista.AddRange(await _repository.QueryableFor(p => listaPessoa.Contains(p.PessoasId.Value))
+                    .Include(pX => pX.ArquivoDocumento)
+                    .Include(pX => pX.Pessoas)
+                    .ThenInclude(pX => pX.Empresas)
+                    .OrderByDescending(pX => pX.Created)
+                    .OrderByDescending(pX => pX.Mes)
                     .ToListAsync());
             }
 
@@ -132,8 +178,9 @@ namespace Holerite.Core.Services.Holerite
                     .ThenInclude(pX => pX.Empresas)
                     .Where(pX => pX.EmailEnviado == false)
                     .ToListAsync();
-            
-                return _mapper.Map<List<ArquivosDto>>(lista);
+            lista.ForEach(r => r.Arquivo = null);
+
+            return _mapper.Map<List<ArquivosDto>>(lista);
         }
 
         public async Task<List<ArquivosDto>> ConfirmarEnvioEmail(List<ArquivosDto> arquivosDto)
@@ -155,7 +202,7 @@ namespace Holerite.Core.Services.Holerite
 
                     string displayName = "Departamento Pessoal";
 
-                    string body = $"Segue anexo o contracheque de competência o mês de {arquivo?.Mes.Value.ToString("00")}/{DateTime.Now.Year}.";
+                    string body = $"Segue anexo o contracheque de competência o mês de {arquivo?.Mes.Value.ToString("00")}/{arquivo.Created.Value.Year}.";
 
                     var emailEnviado = await _emailSMTPService.EnvioEmail(emailSettingsDto, displayName, arquivo?.Pessoas?.Empresas?.Email, arquivo?.Pessoas?.Email, Convert.ToBase64String(arquivo.Arquivo), Assunto, body);
                     if (emailEnviado)

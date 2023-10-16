@@ -3,6 +3,7 @@ using Holerite.Core.Dtos;
 using Holerite.Core.Interfaces.Repositories.Controler;
 using Holerite.Core.Interfaces.Repositories.Email;
 using Holerite.Core.Interfaces.Services.Controler;
+using Holerite.Core.Models;
 using Holerite.Core.ServiceJwtToken;
 using Microsoft.EntityFrameworkCore;
 using XUtilities.NetCore6.Seguranca;
@@ -68,6 +69,18 @@ namespace Holerite.Core.Services.Controler
             loginAuthDto.Funcionalidades = funcionalidade;
 
             return loginAuthDto;
+        }
+
+        public async Task<LoginAuthDto> LoginCreate(LoginAuthDto loginAuthDto)
+        {
+            if (_loginRepository.QueryableFor(pX => pX.LoginAuth == loginAuthDto.LoginAuth).Any())
+                return loginAuthDto;
+
+            var login = _mapper.Map<Login>(loginAuthDto);
+            var ret = _loginRepository.Add(login);
+            await _loginRepository.UnitOfWork.Commit();
+            return _mapper.Map<LoginAuthDto>(ret);
+            
         }
     }
 }

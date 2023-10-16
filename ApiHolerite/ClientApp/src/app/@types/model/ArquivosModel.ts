@@ -9,6 +9,7 @@ export interface ArquivosModel {
   pessoasId: string;
   arquivoDocumentoId: string;
   mes: string | null;
+  mesExtenso: string | null;
   nomeArquivo: string;
   arquivo: BinaryType;
   emailEnviado: boolean;

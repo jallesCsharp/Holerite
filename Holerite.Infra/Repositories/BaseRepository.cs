@@ -61,13 +61,19 @@ namespace Holerite.Infra.Repositories
             if (entity is BaseModel baseModel)
             {
                 baseModel.Deleted = DateTime.UtcNow;
-                DbSet.Update(entity);
+                baseModel.Updated = DateTime.UtcNow;                
             }
-            else
-            {
-                DbSet.Remove(entity);
-            }
+            DbSet.Entry(entity).State = EntityState.Modified;
+            return entity;
+        }
 
+        public TEntity Delete(TEntity entity)
+        {
+            if (entity is BaseModel baseModel)
+            {
+                DbSet.Remove(DbSet.Find(baseModel.Id));
+                
+            }
             return entity;
         }
 

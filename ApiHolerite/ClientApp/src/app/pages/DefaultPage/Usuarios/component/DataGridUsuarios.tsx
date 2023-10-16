@@ -8,6 +8,7 @@ import PropDropdown from '../../../../../provider/components/Dropdown';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
+import { Toolbar } from 'primereact/toolbar';
 
 interface Props {
   filter: UsuariosFilter;
@@ -52,18 +53,49 @@ const DataGridUsuarios: React.FC<Props> = ({ filter, controller }) => {
         loading={filter.loading}
         label="Cancelar"
         icon="pi pi-times"
-        className="p-button-text"
+        className="p-button p-button-danger"
         onClick={controller.onDialogCancelarFicha}
       />
       <Button
         loading={filter.loading}
         label="Gravar"
         icon="pi pi-check"
-        className="p-button-text"
+        className="p-button p-button-success"
         onClick={controller.onSalvarFicha}
       />
     </>
   );
+
+  const deleteDialogFooter = (
+    <>
+      <Button
+        label="Não"
+        icon="pi pi-times"
+        className="p-button p-button-danger"
+        onClick={controller.hideDeleteDialog}
+      />
+      <Button
+        label="Sim"
+        icon="pi pi-check"
+        className="p-button p-button-success"
+        onClick={controller.deleteSelected}
+      />
+    </>
+  );
+
+  const leftToolbarTemplate = () => {
+    return (
+      <React.Fragment>
+        <Button
+          label="Novo"
+          icon="pi pi-plus"
+          className="p-button-success mr-2"
+          style={{ marginRight: '.5em' }}
+          onClick={controller.openNew}
+        />
+      </React.Fragment>
+    );
+  };
 
   const footerGrid = () => {
     return (
@@ -99,18 +131,18 @@ const DataGridUsuarios: React.FC<Props> = ({ filter, controller }) => {
   return (
     <>
       <Card>
+        <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
         <DataTable
           ref={dt}
           value={filter.listaPessoas}
           dataKey="id"
           paginator
-          rows={10}
-          rowsPerPageOptions={[10, 20, 30]}
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          rows={20}
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
           currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} Usuários"
           emptyMessage="Nenhum resultado encontrado!"
           footer={footerGrid}
-          responsiveLayout="scroll"
+          responsiveLayout="stack"
         >
           <Column field="nome" header="Nome" align={'center'} style={{ textAlign: 'center' }} />
           <Column field="cpf" header="CPF" align={'center'} style={{ textAlign: 'center' }} />
@@ -138,7 +170,7 @@ const DataGridUsuarios: React.FC<Props> = ({ filter, controller }) => {
       </Card>
 
       <Dialog
-        visible={filter.modalDialog}
+        visible={filter.editarModalDialog}
         modal
         header="Ficha"
         maximizable={true}
@@ -217,17 +249,17 @@ const DataGridUsuarios: React.FC<Props> = ({ filter, controller }) => {
                   <i className="pi pi-id-card"></i>
                 </span>
                 <InputText
-                  placeholder="CPF"
-                  value={filter.pessoasSelecionado?.cpf}
+                  placeholder="PIS"
+                  value={filter.pessoasSelecionado?.pis}
                   onChange={(e) => {
                     filter.setPessoasSelecionado({
                       ...filter.pessoasSelecionado,
-                      cpf: e.target.value,
+                      pis: e.target.value,
                     });
                   }}
                 />
-                {filter.submitted && !filter.pessoasSelecionado?.cpf && (
-                  <small className="p-invalid">CPF é obrigatório.</small>
+                {filter.submitted && !filter.pessoasSelecionado?.pis && (
+                  <small className="p-invalid">PIS é obrigatório.</small>
                 )}
               </div>
             </div>
@@ -238,7 +270,7 @@ const DataGridUsuarios: React.FC<Props> = ({ filter, controller }) => {
                   <i className="pi pi-id-card"></i>
                 </span>
                 <InputText
-                  placeholder="CPF"
+                  placeholder="Código Folha"
                   value={filter.pessoasSelecionado?.codigoFolha}
                   onChange={(e) => {
                     filter.setPessoasSelecionado({
@@ -247,7 +279,7 @@ const DataGridUsuarios: React.FC<Props> = ({ filter, controller }) => {
                     });
                   }}
                 />
-                {filter.submitted && !filter.pessoasSelecionado?.created && (
+                {filter.submitted && !filter.pessoasSelecionado?.codigoFolha && (
                   <small className="p-invalid">Código de Folha Holerite é obrigatório.</small>
                 )}
               </div>
@@ -273,6 +305,22 @@ const DataGridUsuarios: React.FC<Props> = ({ filter, controller }) => {
               </div>
             </div>
           </div>
+        </div>
+      </Dialog>
+
+      <Dialog
+        visible={filter.deleteModalDialog}
+        modal
+        style={{ width: '40%', height: '95%', whiteSpace: 'nowrap' }}
+        header="Confirma"
+        footer={deleteDialogFooter}
+        onHide={controller.hideDeleteDialog}
+      >
+        <div className="flex align-items-center justify-content-center">
+          <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+          <span>
+            Tem certeza que deseja excluir Usuário <b>{}</b>?
+          </span>
         </div>
       </Dialog>
     </>

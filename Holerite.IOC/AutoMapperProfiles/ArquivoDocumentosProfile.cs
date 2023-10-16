@@ -16,6 +16,7 @@ namespace Holerite.IOC.AutoMapperProfiles
             CreateMap<ArquivoDocumentosDto, ArquivoDocumentosResponse>().ReverseMap();
             CreateMap<ArquivosDto, ArquivosResponse>().ReverseMap();
 
+            CreateMap<FilterArquivoDocumentosDto, FilterArquivoDocumentosRequest>().ReverseMap();
             CreateMap<ArquivoDocumentosDto, CreateArquivoDocumentosRequest>().ReverseMap();
             CreateMap<ArquivoDocumentosDto, UpdateArquivoDocumentosRequest>().ReverseMap();
             CreateMap<ArquivoDocumentosDto, DeleteArquivoDocumentosRequest>().ReverseMap();

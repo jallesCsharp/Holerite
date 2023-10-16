@@ -9,16 +9,23 @@ export default class PessoaService extends AbstractService {
   }
 
   public async Create(data?: PessoasModel): Promise<TResponse<PessoasModel>> {
-    console.log('Salvar Ficha Pessoa');
-    console.log(data);
     const response = await apiUrl.post('/Pessoas', data);
     return response.data;
   }
 
   public async Update(data?: PessoasModel): Promise<TResponse<PessoasModel>> {
-    console.log('Salvar Ficha Pessoa');
     const response = await apiUrl.put('/Pessoas', data);
     return response.data;
+  }
+
+  public async Delete(model?: PessoasModel): Promise<TResponse<string>> {
+    const response = await apiUrl.delete(`/Pessoas/${model?.id}`);
+
+    return {
+      success: true,
+      data: response.data,
+      errors: null,
+    };
   }
 
   public async getPessoas(): Promise<TResponse<PessoasModel[]>> {

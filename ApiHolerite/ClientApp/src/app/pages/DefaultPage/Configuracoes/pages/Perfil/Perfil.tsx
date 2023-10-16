@@ -54,13 +54,9 @@ const Perfil: React.FC = () => {
     // setUserModel(controller?.selecionarPessoa);
     setPerfilModel({ ...perfilModel });
     if (!perfilModel?.id) {
-      console.log('onInsertPerfil');
-      const resultSalva = await controller.onInsertPerfil(perfilModel);
-      console.log(resultSalva);
+      await controller.onInsertPerfil(perfilModel);
     } else {
-      console.log('onUpdatePerfil');
-      const resultAltera = await controller.onUpdatePerfil(perfilModel);
-      console.log(resultAltera);
+      await controller.onUpdatePerfil(perfilModel);
     }
 
     setLoading(false);
@@ -109,8 +105,6 @@ const Perfil: React.FC = () => {
       setPerfilModel(perfil);
       // controller.onSelecionarChenge(modal?.modulo);
     }, 2000);
-    console.log('editarTemplate');
-    console.log(perfilModel);
     // controller.onTipoBancosChange(lancamento.bancos);
     // controller.onTipoLancamentoChange(lancamento.tipoLancamento);
     setModalDialog(true);

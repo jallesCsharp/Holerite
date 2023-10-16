@@ -11,6 +11,10 @@ namespace Holerite.Infra.Mapping
 
             builder.ToTable("ArquivoDocumentos");
             builder.HasKey(m => m.Id);
+            builder.HasMany(p => p.Arquivos)
+                .WithOne(x => x.ArquivoDocumento)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

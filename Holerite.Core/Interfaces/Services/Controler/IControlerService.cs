@@ -10,6 +10,6 @@ namespace Holerite.Core.Interfaces.Services.Controler
     public interface IControlerService
     {
         Task<LoginAuthDto> LoginAuth(string? pCpf, string? pPassword);
-        //Task<EmailSettingsDto> LoginCreate(EmailSettingsDto emailSettingsDto);
+        Task<LoginAuthDto> LoginCreate(LoginAuthDto emailSettingsDto);
     }
 }

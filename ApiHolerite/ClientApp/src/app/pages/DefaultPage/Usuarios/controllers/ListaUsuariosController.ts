@@ -38,12 +38,22 @@ export default class ListaUsuariosController extends AbstractController {
 
   public onDialogCancelarFicha = () => {
     this.filter.setSubmitted(false);
-    this.filter.setModalDialog(false);
+    this.filter.setEditarModalDialog(false);
+  };
+
+  public openNew = () => {
+    this.filter.setEditarModalDialog(true);
+    this.filter.setPessoasSelecionado({
+      ...this.filter.pessoasSelecionado,
+      id: undefined,
+    });
   };
 
   public onSalvarFicha = async () => {
     this.filter.setLoading(true);
     try {
+      console.log('salvar pessoa');
+      console.log(this.filter.pessoasSelecionado);
       this.blockUIService.start();
       if (this.filter.pessoasSelecionado?.id === undefined) {
         await this.pessoaService.Create(this.filter.pessoasSelecionado).then((result) => {
@@ -85,9 +95,13 @@ export default class ListaUsuariosController extends AbstractController {
     }
   };
 
+  public hideDeleteDialog = () => {
+    this.filter.setDeleteModalDialog(true);
+  };
+
   public fecharModal = () => {
     this.filter.setSubmitted(false);
-    this.filter.setModalDialog(false);
+    this.filter.setEditarModalDialog(false);
     this.filter.setLoading(false);
     this.getPesquisarUsuario();
   };
@@ -96,12 +110,21 @@ export default class ListaUsuariosController extends AbstractController {
     const itemEmpresa = { ...pessoa?.empresas };
     this.filter.setPessoasSelecionado(pessoa);
     this.filter.setEmpresaSelecionado(itemEmpresa);
-    this.filter.setModalDialog(true);
+    this.filter.setEditarModalDialog(true);
   };
 
   public confirmDeleteTemplate = (pessoa: PessoasModel) => {
     this.filter.setPessoasSelecionado(pessoa);
-    this.filter.setDeleteTemplateDialog(true);
+    this.filter.setDeleteModalDialog(true);
+  };
+
+  public deleteSelected = async () => {
+    this.blockUIService.start();
+    this.filter.setDeleteModalDialog(false);
+    let result = await this.pessoaService.Delete(this.filter.pessoasSelecionado);
+    ToastService.showWarn(result.data);
+    this.blockUIService.stop();
+    await this.getPesquisarUsuario();
   };
 
   public onSelecionarEmpresa = (empresa: EmpresaModel) => {
@@ -124,8 +147,6 @@ export default class ListaUsuariosController extends AbstractController {
     try {
       this.blockUIService.start();
       await this.pessoaService.getPessoas().then((result) => {
-        console.log(result.data);
-
         if (result.success == false) {
           ToastService.showError(
             'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
@@ -150,8 +171,6 @@ export default class ListaUsuariosController extends AbstractController {
     try {
       this.blockUIService.start();
       await this.empresasService.getEmpresas().then((result) => {
-        console.log(result.data);
-
         if (result.data?.toString() === '400') {
           ToastService.showError(Mensagem.ERROR_400);
           return;

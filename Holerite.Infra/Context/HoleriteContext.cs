@@ -33,9 +33,9 @@ namespace Holerite.Infra
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
             builder.Ignore<ValidationResult>();
             builder.Ignore<Event>();
-
             base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new ArquivoDocumentosMap());

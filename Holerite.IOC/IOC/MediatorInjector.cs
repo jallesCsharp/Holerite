@@ -28,7 +28,9 @@ public static class MediatorInjector
         services.AddScoped<IRequestHandler<CreateArquivosRequest, ValidationResultBag>, ArquivosCommandHandler>();
         services.AddScoped<IRequestHandler<PatchArquivosRequest, ValidationResultBag>, ArquivosCommandHandler>();
         services.AddScoped<IRequestHandler<UpdateArquivosRequest, ValidationResultBag>, ArquivosCommandHandler>();
+        services.AddScoped<IRequestHandler<UploadFileRequest, ValidationResultBag>, ArquivosCommandHandler>();
         services.AddScoped<IRequestHandler<ConfirmarEnvioEmailArquivosRequest, ValidationResultBag>, ArquivosCommandHandler>();
+        services.AddScoped<IRequestHandler<ReenviarEmailRequest, ValidationResultBag>, ArquivosCommandHandler>();
         services.AddScoped<IRequestHandler<DeleteArquivosRequest, ValidationResultBag>, ArquivosCommandHandler>();
         services.AddScoped<IRequestHandler<FilterArquivosHoleriteRequest, ValidationResultBag>, ArquivosCommandHandler>();
         services.AddScoped<IRequestHandler<FilterArquivosPendentesHoleriteRequest, ValidationResultBag>, ArquivosCommandHandler>();
@@ -56,6 +58,7 @@ public static class MediatorInjector
         services.AddScoped<IRequestHandler<CreateArquivoDocumentosRequest, ValidationResultBag>, ArquivoDocumentosCommandHandler>();
         services.AddScoped<IRequestHandler<UpdateArquivoDocumentosRequest, ValidationResultBag>, ArquivoDocumentosCommandHandler>();
         services.AddScoped<IRequestHandler<DeleteArquivoDocumentosRequest, ValidationResultBag>, ArquivoDocumentosCommandHandler>();
+        services.AddScoped<IRequestHandler<FilterArquivoDocumentosRequest, ValidationResultBag>, ArquivoDocumentosCommandHandler>();
 
         services.AddScoped<IRequestHandler<LoginAuthRequest, ValidationResultBag>, ControlerCommandHandler>();
         services.AddScoped<IRequestHandler<CreateLoginAuthRequest, ValidationResultBag>, ControlerCommandHandler>();

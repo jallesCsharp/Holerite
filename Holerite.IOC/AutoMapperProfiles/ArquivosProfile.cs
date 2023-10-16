@@ -12,8 +12,8 @@ namespace Holerite.IOC.AutoMapperProfiles
         public ArquivosProfile()
         {
             CreateMap<Arquivos, ArquivosDto>().ReverseMap();
-            CreateMap<ArquivosResponse, ArquivosDto>()
-               .ForMember(pX => pX.Mes, rX => rX.MapFrom(pX => pX.Mes.GetMes()))
+            CreateMap<ArquivosDto, ArquivosResponse> ()
+               .ForMember(pX => pX.MesExtenso, rX => rX.MapFrom(pX => pX.Mes))
                .ReverseMap();
 
             CreateMap<FileDto, UploadFileRequest>().ReverseMap();

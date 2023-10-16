@@ -44,9 +44,11 @@ namespace Holerite.Application.Commands.Controler.Handlers
 
             var pessoasDto = _mapper.Map<PessoasDto>(request);
 
-            var resultEmailSettings = await _pessoasService.Create(pessoasDto);
+            var resultPessoasDto = await _pessoasService.Create(pessoasDto);
+            var loginAuthDto = _mapper.Map<LoginAuthDto>(resultPessoasDto);
+            var resultLoginAuthDto = await _controlerService.LoginCreate(loginAuthDto);
 
-            ValidationResult.Data = _mapper.Map<LoginAutResponse>(resultEmailSettings);
+            ValidationResult.Data = _mapper.Map<LoginAutResponse>(resultLoginAuthDto);
 
             return ValidationResult;
         }

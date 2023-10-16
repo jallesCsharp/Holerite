@@ -48,6 +48,30 @@ export default class PerfilController extends AbstractController {
     this.filter.setOnVisualizarHolerite(false);
   };
 
+  public reenviarEmail = async (arquivo?: any) => {
+    try {
+      this.blockUIService.start();
+      await this.arquivoService.ReenviarEmail(arquivo).then((result) => {
+        if (result.success == false) {
+          ToastService.showError(
+            'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
+          );
+          return;
+        }
+        if (result.data?.toString() === '400') {
+          ToastService.showError(Mensagem.ERROR_400);
+          return;
+        }
+        ToastService.showSuccess(result.data);
+        return;
+      });
+      this.blockUIService.stop();
+    } catch (error) {
+      ToastService.showError(Mensagem.ERROR_501 + error);
+      this.blockUIService.stop();
+    }
+  };
+
   public visulizarHolerite = (arquivo?: any) => {
     this.filter.setOnVisualizarHolerite(true);
     this.filter.setArquivosModel(arquivo);
@@ -90,8 +114,6 @@ export default class PerfilController extends AbstractController {
         });
       } else {
         await this.pessoaService.Update(this.filter.pessoa).then((result) => {
-          console.log('response.data - Update');
-          console.log(result);
           if (result.data?.toString() === '400') {
             ToastService.showError(Mensagem.ERROR_400);
             return;
@@ -151,7 +173,6 @@ export default class PerfilController extends AbstractController {
   };
 
   public onSalvarEmpresa = async () => {
-    console.log('onSalvarEmpresa');
     this.filter.setLoading(true);
     try {
       this.blockUIService.start();
@@ -179,8 +200,6 @@ export default class PerfilController extends AbstractController {
   };
 
   public onSelecionarEmpresa = (empresa: EmpresaModel) => {
-    console.log('onSelecionarEmpresa');
-    console.log(empresa);
     if (this.filter.listaEmpresas) {
       for (let i = 0; i < this.filter.listaEmpresas.length; i++) {
         if (this.filter.listaEmpresas[i].nomeEmpresa === empresa) {
@@ -217,7 +236,6 @@ export default class PerfilController extends AbstractController {
   };
 
   public onSalvarProfissao = async () => {
-    console.log('onSalvarProfissao');
     this.filter.setLoading(true);
     try {
       this.blockUIService.start();
@@ -267,8 +285,8 @@ export default class PerfilController extends AbstractController {
   public async getPesquisarPerfilUsuario(id?: any) {
     this.blockUIService.start();
     try {
-      this.getPesquisarArquivoUsuario(id);
-      let pessoa = await this.pessoaService
+      await this.getPesquisarArquivoUsuario(id);
+      await this.pessoaService
         .getPerfil(id)
         .then((result) => {
           if (result.success === false) {
@@ -277,13 +295,12 @@ export default class PerfilController extends AbstractController {
             );
             return;
           }
+          this.filter.setPessoa(result.data);
           return result.data;
         })
         .catch((error) => {
-          console.log('catch - getPesquisarPerfilUsuario');
-          console.log(error);
+          ToastService.showError(error);
         });
-      this.filter.setPessoa(pessoa);
       this.blockUIService.stop();
     } catch (error) {
       ToastService.showError(Mensagem.ERROR_501 + error);
@@ -292,7 +309,6 @@ export default class PerfilController extends AbstractController {
   }
 
   public async getPesquisarArquivoUsuario(id?: any) {
-    console.log('getPesquisarArquivoUsuario');
     this.blockUIService.start();
     try {
       let filterArquivo: FilterArquivosHolerite = {
@@ -302,11 +318,9 @@ export default class PerfilController extends AbstractController {
         EmailEnviado: undefined,
         Nome: null,
       };
-      console.log(filterArquivo);
       let listaArq = await this.arquivoService
         .getPesquisarArquivos(filterArquivo)
         .then((result) => {
-          console.log(result);
           if (result.success === false) {
             ToastService.showError(
               'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
@@ -316,11 +330,8 @@ export default class PerfilController extends AbstractController {
           return result.data;
         })
         .catch((error) => {
-          console.log('catch - getPesquisarArquivoUsuario');
-          console.log(error);
+          ToastService.showError(error);
         });
-      console.log('listaArq');
-      console.log(listaArq);
       this.filter.setListaArquivos(listaArq);
       this.blockUIService.stop();
     } catch (error) {
@@ -333,9 +344,6 @@ export default class PerfilController extends AbstractController {
     try {
       this.blockUIService.start();
       await this.empresasService.getEmpresas().then((result) => {
-        console.log('getPesquisarEmpresas');
-        console.log(result.data);
-
         if (result.data?.toString() === '400') {
           ToastService.showError(Mensagem.ERROR_400);
           return;
@@ -354,8 +362,6 @@ export default class PerfilController extends AbstractController {
     try {
       this.blockUIService.start();
       await this.profissoesService.getProfissoes().then((result) => {
-        console.log(result.data);
-
         if (result.data?.toString() === '400') {
           ToastService.showError(Mensagem.ERROR_400);
           return;
