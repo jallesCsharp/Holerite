@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation.Results;
 using Holerite.Application.Commands.Holerite.Requests.PessoasRequest;
 using Holerite.Application.Commands.Holerite.Responses.PessoasResponses;
 using Holerite.Core.Validation;
@@ -23,10 +24,9 @@ namespace ApiHolerite.Controllers.Holerite
             : base(mediator, mapper) { }
 
         [HttpGet]
-        [EnableCors("AlowsCors")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(List<PessoasResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
         public async Task<ActionResult> GetAll([FromQuery] FilterPessoasRequest request)
         {
             try
@@ -43,7 +43,7 @@ namespace ApiHolerite.Controllers.Holerite
         }
 
         [HttpPost]
-        [EnableCors("AlowsCors")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(PessoasResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -63,7 +63,8 @@ namespace ApiHolerite.Controllers.Holerite
             }
         }
 
-        [HttpPut]        
+        [HttpPut]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(PessoasResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdatePessoasRequest command)
@@ -73,6 +74,7 @@ namespace ApiHolerite.Controllers.Holerite
         }
 
         [HttpPatch("{id}")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(PessoasResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Patch(Guid id, JsonPatchDocument<PatchPessoasRequest> patchRequest)
@@ -84,7 +86,8 @@ namespace ApiHolerite.Controllers.Holerite
             return CustomResponse(result);
         }
 
-        [HttpDelete("{id:Guid}")]        
+        [HttpDelete("{id:Guid}")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ValidationResultBag), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationResultBag), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -98,9 +101,11 @@ namespace ApiHolerite.Controllers.Holerite
 
                 return CustomResponse(result);
             }
-            catch (Exception)
+            catch (Exception eX)
             {
-                return CustomResponse(StatusCodes.Status400BadRequest);
+                var bag = new ValidationResultBag();
+                bag.Errors.Add(new ValidationFailure(StatusCodes.Status400BadRequest.ToString(), $"{eX.Message}"));
+                return CustomResponse(bag);
             }
         }
     }

@@ -14,11 +14,51 @@ namespace Holerite.Core.Services.Holerite
     {
         private readonly IMapper _mapper;
         private readonly IArquivoDocumentosRepository _repository;
+        private readonly IArquivosRepository _arquivosRepository;
 
-        public ArquivoDocumentosService(IArquivoDocumentosRepository repository, IMapper mapper)
+        public ArquivoDocumentosService(
+            IArquivoDocumentosRepository repository, 
+            IArquivosRepository arquivosRepository,
+            IMapper mapper)
         {
+            _arquivosRepository = arquivosRepository;
             _repository = repository;
             _mapper = mapper;
+        }
+
+        public async Task<IEnumerable<ArquivoDocumentosDto?>> GetFilter(FilterArquivoDocumentosDto filter)
+        {
+            List<ArquivoDocumentos> lista = new List<ArquivoDocumentos>();
+
+            lista.AddRange(
+                await _repository.QueryableFilter()
+                .Include(pX => pX.Arquivos)
+                .OrderByDescending(pX => pX.Created)
+                .ToListAsync()
+                );
+
+            if (filter.Id != null)
+                lista = lista
+                    .Where(p => p.Id == filter.Id)
+                    .OrderByDescending(pX => pX.Created)
+                    .ToList();
+
+            if (filter.DataInicio.HasValue && filter.DataFim.HasValue)
+                lista = lista
+                    .Where(p => (p.Created >= filter.DataInicio) && (p.Created <= filter.DataFim))
+                    .OrderByDescending(pX => pX.Created)
+                    .ToList();
+
+            if (!String.IsNullOrEmpty(filter.Nome))
+            {
+                lista = new List<ArquivoDocumentos>();
+                lista.AddRange(await _repository.QueryableFilter()
+                    .Where(p => p.Nome == filter.Nome)
+                    .OrderByDescending(pX => pX.Created)
+                    .ToListAsync());
+            }
+
+            return _mapper.Map<List<ArquivoDocumentosDto>>(lista);
         }
 
         public async Task<IEnumerable<ArquivoDocumentosDto?>> GetAll()
@@ -33,6 +73,7 @@ namespace Holerite.Core.Services.Holerite
         {
             var arquivo = await _repository
                 .QueryableFor(p => p.Id == id)
+                .Include(pX => pX.Arquivos)
                 .FirstOrDefaultAsync();
             return _mapper.Map<ArquivoDocumentosDto>(arquivo);
         }
@@ -69,9 +110,19 @@ namespace Holerite.Core.Services.Holerite
 
         public async Task<ArquivoDocumentosDto?> Delete(ArquivoDocumentosDto arquivoDto)
         {
-            var arquivo = _mapper.Map<ArquivoDocumentos>(arquivoDto);
-            var resultArquivo = _repository?.Remove(arquivo);
-            return await Task.FromResult(_mapper.Map<ArquivoDocumentosDto>(resultArquivo));
+            try
+            {
+                var arquivo = _mapper.Map<ArquivoDocumentos>(arquivoDto);
+                
+                _repository.Delete(arquivo);
+                _repository.UnitOfWork.Commit();
+
+                return await Task.FromResult(_mapper.Map<ArquivoDocumentosDto>(arquivoDto));
+            }
+            catch (Exception eX)
+            {
+                throw new Exception(eX.Message);
+            }
         }
     }
 }

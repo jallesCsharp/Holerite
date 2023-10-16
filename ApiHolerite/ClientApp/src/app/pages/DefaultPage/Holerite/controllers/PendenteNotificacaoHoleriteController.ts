@@ -29,9 +29,18 @@ export default class PendenteNotificacaoHoleriteController extends AbstractContr
     ]);
   }
 
-  public visulizarHol = (arquivo?: any) => {
+  public visulizarHol = async (arquivo?: any) => {
+    this.blockUIService.start();
     this.filter.setOnVisualizar(true);
-    this.filter.setArquivosModel(arquivo);
+    const result = await this.arquivoService.getArquivoHolerite(arquivo.id);
+    if (result.success === false) {
+      ToastService.showError(result.errors);
+      return;
+    }
+    console.log('result');
+    console.log(result);
+    this.filter.setArquivosModel(result.data);
+    this.blockUIService.stop();
   };
 
   public modalOnFechar = () => {
@@ -42,22 +51,22 @@ export default class PendenteNotificacaoHoleriteController extends AbstractContr
   public async ConfirmarEnvioEmail() {
     try {
       this.blockUIService.start();
-      // console.log('this.filter.listaArquivos');
-      // console.log(this.filter.listaArquivos);
-      await this.arquivoService.ConfirmarEnvioEmail(this.filter.listaArquivos).then((result) => {
-        if (result.success == false) {
-          ToastService.showError(
-            'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
-          );
-          return;
-        }
-        if (result.data?.toString() === '400') {
-          ToastService.showError(Mensagem.ERROR_400);
-          return;
-        }
-        this.filter.setListaArquivos(result.data);
-        return result.data;
-      });
+      await this.arquivoService
+        .ConfirmarEnvioEmailPendentes(this.filter.listaArquivos)
+        .then((result) => {
+          if (result.success == false) {
+            ToastService.showError(
+              'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
+            );
+            return;
+          }
+          if (result.data?.toString() === '400') {
+            ToastService.showError(Mensagem.ERROR_400);
+            return;
+          }
+          this.filter.setListaArquivos(result.data);
+          return result.data;
+        });
       this.blockUIService.stop();
     } catch (error) {
       ToastService.showError(Mensagem.ERROR_501 + error);
@@ -66,8 +75,6 @@ export default class PendenteNotificacaoHoleriteController extends AbstractContr
   }
 
   public SelecionarMes(idMes: any) {
-    console.log('idMes');
-    console.log(idMes);
     this.filter.setMes(idMes);
   }
 

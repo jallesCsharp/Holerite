@@ -22,14 +22,11 @@ const Arquivos: React.FC = () => {
 
     const reader = new FileReader();
     let blob = await fetch(file.objectURL).then((r) => r.blob());
-    console.log(blob);
     reader.readAsDataURL(blob);
-    console.log(reader);
 
     reader.onloadend = function () {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       reader.result;
-      console.log(reader.result);
     };
   };
 

@@ -3,17 +3,17 @@ import { PessoasModel } from '../../../../@types/model/PessoasModel';
 import { EmpresaModel } from '../../../../@types/model/EmpresaModel';
 
 export default class UsuariosFilter {
-  public modalDialog?: boolean;
+  public editarModalDialog?: boolean;
 
-  public setModalDialog: (e: any) => void;
+  public setEditarModalDialog: (e: any) => void;
 
   public loading?: boolean;
 
   public setLoading: (e: any) => void;
 
-  public deleteTemplateDialog?: boolean;
+  public deleteModalDialog?: boolean;
 
-  public setDeleteTemplateDialog: (e: any) => void;
+  public setDeleteModalDialog: (e: any) => void;
 
   public submitted?: boolean;
 
@@ -38,9 +38,9 @@ export default class UsuariosFilter {
   constructor() {
     [this.submitted, this.setSubmitted] = useState<boolean>(false);
     [this.loading, this.setLoading] = useState<boolean>(false);
-    [this.modalDialog, this.setModalDialog] = useState<boolean>(false);
-    [this.deleteTemplateDialog, this.setDeleteTemplateDialog] = useState<boolean>(false);
-    [this.pessoasSelecionado, this.setPessoasSelecionado] = useState<PessoasModel>();
+    [this.editarModalDialog, this.setEditarModalDialog] = useState<boolean>(false);
+    [this.deleteModalDialog, this.setDeleteModalDialog] = useState<boolean>(false);
+    [this.pessoasSelecionado, this.setPessoasSelecionado] = useState<PessoasModel | undefined>();
     [this.empresaSelecionado, this.setEmpresaSelecionado] = useState<EmpresaModel | undefined>();
     [this.listaPessoas, this.setListaPessoas] = useState<PessoasModel[] | undefined>();
     [this.listaEmpresas, this.setListaEmpresas] = useState<EmpresaModel[]>();

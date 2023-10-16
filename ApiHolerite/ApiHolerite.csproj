@@ -9,6 +9,7 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <PackageIcon></PackageIcon>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <NeutralLanguage>aa-ET</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>

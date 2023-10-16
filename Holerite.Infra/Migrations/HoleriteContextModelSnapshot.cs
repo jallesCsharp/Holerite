@@ -309,8 +309,11 @@ namespace Holerite.Infra.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("CodigoFolha")
-                        .HasColumnType("integer");
+                    b.Property<DateTime?>("Admissao")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CodigoFolha")
+                        .HasColumnType("text");
 
                     b.Property<string>("Cpf")
                         .HasColumnType("text");
@@ -327,6 +330,9 @@ namespace Holerite.Infra.Migrations
                     b.Property<Guid?>("EmpresasId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("Nascimento")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Nome")
                         .HasColumnType("text");
 
@@ -335,6 +341,9 @@ namespace Holerite.Infra.Migrations
 
                     b.Property<Guid?>("ProfissoesId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("SalarioBase")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("timestamp with time zone");
@@ -375,7 +384,8 @@ namespace Holerite.Infra.Migrations
                 {
                     b.HasOne("Holerite.Core.Models.ArquivoDocumentos", "ArquivoDocumento")
                         .WithMany("Arquivos")
-                        .HasForeignKey("ArquivoDocumentoId");
+                        .HasForeignKey("ArquivoDocumentoId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Holerite.Core.Models.Pessoas", "Pessoas")
                         .WithMany()

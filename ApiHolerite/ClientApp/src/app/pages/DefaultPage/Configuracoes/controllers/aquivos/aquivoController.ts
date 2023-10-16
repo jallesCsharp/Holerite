@@ -58,8 +58,6 @@ export default class AquivoController extends AbstractController {
     super.init();
     let obterUser = this.obterUsuario();
     this.ObterPessoas();
-    console.log('obterUser');
-    console.log(obterUser);
     this.setUser(obterUser);
     this.breadCrumbService.change([
       { label: 'Histórico de Alterações da Instalação', id: 'configuracoes-grupos' },
@@ -74,15 +72,12 @@ export default class AquivoController extends AbstractController {
     this.blockUIService.start();
     let userStorage: User;
     userStorage = await this.authService.getUser();
-    console.log(userStorage);
     if (userStorage) {
       this.setUser(userStorage);
       this.blockUIService.stop();
       return;
     } else {
       await this.setUser(userStorage);
-      console.log('Usuario - user');
-      console.log(this.user);
     }
     this.blockUIService.stop();
   }
@@ -125,7 +120,6 @@ export default class AquivoController extends AbstractController {
       const resultTrue = Object.values(response)[1];
       if (resultTrue) {
         this.setListaPessoasModel(response.data);
-        console.log(response.data);
         ToastService.showInfo('Busca realizada !!');
       }
       this.blockUIService.stop();

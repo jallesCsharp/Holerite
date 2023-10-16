@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using iText.Kernel.Pdf;
+using iText.Kernel.Utils;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Holerite.Core.Extension;
@@ -24,8 +26,10 @@ public static class XExtension
 
     public static DateTime AsDateTime(this object pValor)
     {
-        if (pValor is null) return DateTime.Now.Date;
-        return Convert.ToDateTime(pValor);
+        var dateTime = Convert.ToDateTime(pValor);
+        if (dateTime.Kind == DateTimeKind.Utc)
+            return dateTime;
+        return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
     }
 
     public static bool EstaVazio(this string pValor)
@@ -73,6 +77,12 @@ public static class XExtension
         return entrada.PadLeft(11, '0');
     }
 
+    public static string AsValidaSomenteNumerosCodFolha(this string entrada)
+    {
+        entrada = AsRetornarSomenteNumeros(entrada);
+        return entrada.PadLeft(6, '0');
+    }
+
     public static int AsInt(this object entrada)
     {
         return Convert.ToInt16(entrada);
@@ -82,5 +92,61 @@ public static class XExtension
     {
         var teste = new DateTimeFormatInfo().GetMonthName(entrada.AsInt());
         return Convert.ToString(teste);
+    }
+
+    public static byte[] GerarJuntarPfs(IList<byte[]> pdfs)
+    {
+        using (var writerMemoryStream = new MemoryStream())
+        {
+            using (var writer = new PdfWriter(writerMemoryStream))
+            {
+                using (var mergedDocument = new PdfDocument(writer))
+                {
+                    var merger = new PdfMerger(mergedDocument);
+
+                    foreach (var pdfBytes in pdfs)
+                    {
+                        using (var copyFromMemoryStream = new MemoryStream(pdfBytes))
+                        {
+                            using (var reader = new PdfReader(copyFromMemoryStream))
+                            {
+                                using (var copyFromDocument = new PdfDocument(reader))
+                                {
+                                    merger.Merge(copyFromDocument, 1, copyFromDocument.GetNumberOfPages());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return writerMemoryStream.ToArray();
+        }
+    }
+
+    public static byte[] GerarBytes(this byte[]? entrada)
+    {
+        using (var writerMemoryStream = new MemoryStream())
+        {
+            using (var writer = new PdfWriter(writerMemoryStream))
+            {
+                using (var mergedDocument = new PdfDocument(writer))
+                {
+                    var merger = new PdfMerger(mergedDocument);
+                    using (var copyFromMemoryStream = new MemoryStream(entrada))
+                    {
+                        using (var reader = new PdfReader(copyFromMemoryStream))
+                        {
+                            using (var copyFromDocument = new PdfDocument(reader))
+                            {
+                                merger.Merge(copyFromDocument, 1, copyFromDocument.GetNumberOfPages());
+                            }
+                        }
+                    }
+                }
+            }
+
+            return writerMemoryStream.ToArray();
+        }
     }
 }

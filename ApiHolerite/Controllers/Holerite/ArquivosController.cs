@@ -23,11 +23,32 @@ namespace ApiHolerite.Controllers.Holerite
         public ArquivosController(IMediator mediator, IMapper mapper)
             : base(mediator, mapper) { }
 
-        [HttpGet("GetPesquisarArquivos")]
-        [EnableCors("AlowsCors")]
+
+        [HttpGet("GetArquivoHolerite")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(List<ArquivosResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
+        public async Task<ActionResult> GetArquivoHolerite([FromQuery] FilterArquivosHoleriteRequest request)
+        {
+            try
+            {
+                if (request is null)
+                    return CustomResponse("Objeto inválido");
+                var resulte = await _mediator.Send(request);
+                return CustomResponse(resulte);
+            }
+            catch (Exception eX)
+            {
+                var bag = new ValidationResultBag();
+                bag.Errors.Add(new ValidationFailure(StatusCodes.Status400BadRequest.ToString(), $"{eX.Message}"));
+                return CustomResponse(bag);
+                // return CustomResponse(StatusCodes.Status400BadRequest);
+            }
+        }
+        [HttpGet("GetPesquisarArquivos")]
+        //[EnableCors("AlowsCors")]
+        [ProducesResponseType(typeof(List<ArquivosResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> GetPesquisarArquivos([FromQuery] FilterArquivosHoleriteRequest request)
         {
             try
@@ -47,7 +68,7 @@ namespace ApiHolerite.Controllers.Holerite
         }
         
         [HttpGet("GetPesquisarArquivosPendentes")]
-        [EnableCors("AlowsCors")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(List<ArquivosResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //[Authorize]
@@ -89,12 +110,30 @@ namespace ApiHolerite.Controllers.Holerite
             }
         }
 
-        [HttpPost("Confirmar")]
+        [HttpPost("ConfirmarEnvioEmailPendentes")]
         //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ArquivosResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
-        public async Task<ActionResult> Confirmar([FromBody] ConfirmarEnvioEmailArquivosRequest request)
+        public async Task<ActionResult> ConfirmarEnvioEmailPendentes([FromBody] ConfirmarEnvioEmailArquivosRequest request)
+        {
+            try
+            {
+                if (request is null)
+                    return CustomResponse("Objeto inválido");
+                var resulte = await _mediator.Send(request);
+                return CustomResponse(resulte);
+            }
+            catch (Exception)
+            {
+                return CustomResponse(StatusCodes.Status400BadRequest);
+            }
+        }
+        
+        [HttpPost("ReenviarEmail")]
+        //[EnableCors("AlowsCors")]
+        [ProducesResponseType(typeof(ArquivosResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ReenviarEmail([FromBody] ReenviarEmailRequest request)
         {
             try
             {
@@ -110,6 +149,7 @@ namespace ApiHolerite.Controllers.Holerite
         }
 
         [HttpPut]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ArquivosResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdateArquivosRequest command)
@@ -119,6 +159,7 @@ namespace ApiHolerite.Controllers.Holerite
         }
 
         [HttpPatch("{id}")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ArquivosResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Patch(Guid id, JsonPatchDocument<PatchArquivosRequest> patchRequest)
@@ -131,6 +172,7 @@ namespace ApiHolerite.Controllers.Holerite
         }
 
         [HttpDelete("{id:Guid}")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ValidationResultBag), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationResultBag), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]

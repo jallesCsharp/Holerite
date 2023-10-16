@@ -17,14 +17,37 @@ namespace ApiHolerite.Controllers.Holerite
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ArquivoDocumentosController : CustomController
     {
         public ArquivoDocumentosController(IMediator mediator, IMapper mapper)
             : base(mediator, mapper) { }
 
+        [HttpGet("GetArquivosDocumentos")]
+        //[EnableCors("AlowsCors")]
+        [ProducesResponseType(typeof(List<ArquivosResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[Authorize]
+        public async Task<ActionResult> GetArquivosDocumentos([FromQuery] FilterArquivoDocumentosRequest request)
+        {
+            try
+            {
+                if (request is null)
+                    return CustomResponse("Objeto inválido");
+                var resulte = await _mediator.Send(request);
+                return CustomResponse(resulte);
+            }
+            catch (Exception eX)
+            {
+                var bag = new ValidationResultBag();
+                bag.Errors.Add(new ValidationFailure(StatusCodes.Status400BadRequest.ToString(), $"{eX.Message}"));
+                return CustomResponse(bag);
+                // return CustomResponse(StatusCodes.Status400BadRequest);
+            }
+        }
+
         [HttpPost("Holerite")]
-        [EnableCors("AlowsCors")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ArquivosResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]        
         public async Task<ActionResult> Create([FromForm] CreateArquivoDocumentosRequest request)
@@ -52,6 +75,7 @@ namespace ApiHolerite.Controllers.Holerite
         }
 
         [HttpPut]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ArquivosResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdateArquivoDocumentosRequest command)
@@ -61,6 +85,7 @@ namespace ApiHolerite.Controllers.Holerite
         }
 
         [HttpDelete("{id:Guid}")]
+        //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ValidationResultBag), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationResultBag), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]

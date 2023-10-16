@@ -6,36 +6,16 @@ import ArquivosFilter from '../models/ArquivosFilter';
 import ArquivosHoleriteController from '../controllers/ArquivosHoleriteController';
 import { TriStateCheckbox } from 'primereact/tristatecheckbox';
 import { classNames } from 'primereact/utils';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
 
 interface Props {
   filter: ArquivosFilter;
   controller: ArquivosHoleriteController;
 }
 
-const DataGridHolerite: React.FC<Props> = ({ filter }) => {
+const DataGridHolerite: React.FC<Props> = ({ filter, controller }) => {
   const dt = useRef(null);
-
-  // const pdfBodyTemplate = (rowData: any) => {
-  //   // let blob = new Blob([rowData.arquivo], { type: 'application/pdf' });
-  //   // let url = URL.createObjectURL(blob);
-  //   // return <img src={url} width="100" height="100" />;
-  //   return <iframe width="100%" height="330px" src={rowData.arquivo}></iframe>;
-  // };
-
-  const pdfBodyTemplate = (rowData: any) => {
-    const rowPDF = rowData;
-    return (
-      <React.Fragment>
-        {/* <iframe width="400px" height="230px" src={rowPDF.arquivo}></iframe> */}
-        <object
-          width="600px"
-          height="230px"
-          type="application/pdf"
-          data={'data:application/pdf;base64,' + `${rowPDF.arquivo}`}
-        ></object>
-      </React.Fragment>
-    );
-  };
 
   const verifiedFilterTemplate = (options: any) => {
     return (
@@ -57,33 +37,27 @@ const DataGridHolerite: React.FC<Props> = ({ filter }) => {
     );
   };
 
-  const footerGrid = () => {
+  const modalDialogFooter = (
+    <>
+      <Button
+        type="button"
+        label="Fechar"
+        icon="pi pi-check"
+        className="p-button-danger mr-2"
+        onClick={controller.modalOnFechar}
+      />
+    </>
+  );
+
+  const visualizarHolerite = (rowData: any) => {
     return (
-      <div className="flex justify-content-end flex-wrap card-container  export-buttons">
-        {/* <Button
-          type="button"
-          icon="pi pi-file"
-          className="mr-2"
-          data-pr-tooltip="CSV"
-          label={'Exportar CSV'}
-          onClick={() => controller.exportCSV(dt)}
-        />
+      <div className="actions">
         <Button
-          type="button"
-          icon="pi pi-file-pdf"
-          onClick={() => controller.exportPdf(filter.grid, 'Relatorio_historico_instalacaes', 'a4')}
-          className="p-button-warning mr-2"
-          label={'Exportar PDF'}
-          data-pr-tooltip="PDF"
+          icon="pi pi-eye"
+          className="p-button-rounded p-button-info mr-2"
+          style={{ marginRight: '.8em' }}
+          onClick={() => controller.visulizarHol(rowData)}
         />
-        <Button
-          type="button"
-          icon="pi pi-file-excel"
-          className="p-button-success mr-2"
-          label={'Exportar XLS'}
-          data-pr-tooltip="XLS"
-          onClick={() => controller.exportExcel(filter.grid, 'Relatorio_historico_instalacaes')}
-        /> */}
       </div>
     );
   };
@@ -94,13 +68,11 @@ const DataGridHolerite: React.FC<Props> = ({ filter }) => {
         <DataTable
           ref={dt}
           dataKey="id"
-          footer={footerGrid}
           value={filter.listaArquivos}
           paginator
-          rows={10}
-          rowsPerPageOptions={[10, 20, 30]}
+          rows={20}
           className="datatable-responsive"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
           currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords}"
           emptyMessage="Nenhum resultado encontrado!"
           responsiveLayout="scroll"
@@ -117,8 +89,13 @@ const DataGridHolerite: React.FC<Props> = ({ filter }) => {
             align={'center'}
             style={{ textAlign: 'center' }}
           />
-          {/* <Column header="Image" body={pdfBodyTemplate}></Column> */}
           <Column
+            field="mesExtenso"
+            header="Mês"
+            align={'center'}
+            style={{ textAlign: 'center' }}
+          />
+          {/* <Column
             header="Holerite"
             align={'center'}
             style={{ textAlign: 'center' }}
@@ -127,7 +104,13 @@ const DataGridHolerite: React.FC<Props> = ({ filter }) => {
             showFilterMatchModes={true}
             body={pdfBodyTemplate}
             filterElement={pdfBodyTemplate}
-          />
+          /> */}
+          <Column
+            header="Holerite"
+            align={'center'}
+            style={{ width: '15%', height: '10%', textAlign: 'center' }}
+            body={visualizarHolerite}
+          ></Column>
           <Column
             header="E-mail Enviado"
             field="emailEnviado"
@@ -138,10 +121,32 @@ const DataGridHolerite: React.FC<Props> = ({ filter }) => {
             body={verifiedBodyTemplate}
             filterElement={verifiedFilterTemplate}
           />
-          {/* <Column field="mes" header="Mês" style={{ textAlign: 'left' }} sortable /> */}
           <Column field="Acoes" header="Ações" align={'center'} style={{ textAlign: 'center' }} />
         </DataTable>
       </Card>
+
+      <Dialog
+        visible={filter.onVisualizar}
+        modal
+        header="Holerite"
+        maximizable={true}
+        style={{ width: '40%', height: '95%', whiteSpace: 'nowrap' }}
+        footer={modalDialogFooter}
+        onHide={controller.modalOnFechar}
+      >
+        <div className="card">
+          <div className="grid p-fluid">
+            <div className="col-12 md:col-12">
+              <object
+                width="100%"
+                height="800px"
+                type="application/pdf"
+                data={'data:application/pdf;base64,' + `${filter.arquivosModel?.arquivo}`}
+              ></object>
+            </div>
+          </div>
+        </div>
+      </Dialog>
     </>
   );
 };

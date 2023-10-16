@@ -9,11 +9,14 @@ export interface PessoasModel {
   created: Date;
   updated: Date;
   deleted: Date;
-  codigoFolha: number;
+  admissao: Date;
+  nascimento: Date;
+  codigoFolha: string;
   cpf: string;
   pis: string;
   nome: string;
   email: string;
+  salarioBase: string;
   profissoes: ProfissoesModel;
   empresas: EmpresaModel;
   arquivos: ArquivosModel[];

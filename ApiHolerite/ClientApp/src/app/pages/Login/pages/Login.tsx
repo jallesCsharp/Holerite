@@ -4,6 +4,7 @@ import { InputText } from 'primereact/inputtext';
 import { BordaCampo, Container, ModelLogin } from '../styles/styles';
 import { LoginModel } from '../../../@types/model/LoginModel';
 import LoginController from '../controllers/LoginController';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 export const Login: React.FC = () => {
   const controller = new LoginController();
@@ -13,16 +14,18 @@ export const Login: React.FC = () => {
 
   const [isCadastrar, setIsCadastrar] = useState(false);
   const [cpf, setCpf] = useState('');
+  const [spinner, setSpinner] = useState<boolean>(false);
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
+    setSpinner(true);
     if (cpf && password) {
       const userLogin: LoginModel = {
         cpf: cpf,
         password: password,
       };
 
-      controller.logar(userLogin);
+      await controller.logar(userLogin);
 
       // const isLogged = await auth.authLogin(userLogin);
       // console.log('isLogged');
@@ -39,41 +42,29 @@ export const Login: React.FC = () => {
 
   return (
     <Container>
-      <div className="col-12">
-        <ModelLogin>
-          <div className="card p-fluid">
-            <div className="field grid">
-              <label htmlFor="cpf-cnpj" className="col-12 mb-2 md:col-2">
-                CPF/CNPJ
-              </label>
-              <div className="col-12 md:col-10">
-                <BordaCampo />
-                <InputText
-                  id="cpf-cnpj"
-                  type="text"
-                  value={cpf}
-                  onChange={(e) => setCpf(e.target.value)}
-                />
+      {spinner ? (
+        <ProgressSpinner aria-label="Loading" />
+      ) : (
+        <div className="col-12">
+          <ModelLogin>
+            <div className="card p-fluid">
+              <div className="field grid">
+                <label htmlFor="cpf-cnpj" className="col-12 mb-2 md:col-2">
+                  CPF/CNPJ
+                </label>
+                <div className="col-12 md:col-10">
+                  <BordaCampo />
+                  <InputText
+                    id="cpf-cnpj"
+                    type="text"
+                    value={cpf}
+                    onChange={(e) => setCpf(e.target.value)}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="field grid">
-              <label htmlFor="pass" className="col-12 mb-2 md:col-2">
-                Senha
-              </label>
-              <div className="col-12 md:col-10">
-                <BordaCampo />
-                <InputText
-                  id="pass"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-            </div>
-            {isCadastrar && (
               <div className="field grid">
                 <label htmlFor="pass" className="col-12 mb-2 md:col-2">
-                  Confirmar Senha
+                  Senha
                 </label>
                 <div className="col-12 md:col-10">
                   <BordaCampo />
@@ -85,30 +76,48 @@ export const Login: React.FC = () => {
                   />
                 </div>
               </div>
-            )}
-            {!isCadastrar && (
-              <div className="field grid">
-                <div className="col-12 md:col-6">
-                  <Button label="Logar" onClick={handleLogin}></Button>
+              {isCadastrar && (
+                <div className="field grid">
+                  <label htmlFor="pass" className="col-12 mb-2 md:col-2">
+                    Confirmar Senha
+                  </label>
+                  <div className="col-12 md:col-10">
+                    <BordaCampo />
+                    <InputText
+                      id="pass"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="col-12 md:col-6">
-                  <Button label="Novo Cadastro" onClick={() => setIsCadastrar(true)}></Button>
+              )}
+              {!isCadastrar && (
+                <div className="field grid">
+                  <div className="col-12 md:col-5"></div>
+                  <div className="col-12 md:col-4">
+                    <Button label="Logar" onClick={handleLogin}></Button>
+                  </div>
+                  <div className="col-12 md:col-3"></div>
+                  {/* <div className="col-12 md:col-6">
+                    <Button label="Novo Cadastro" onClick={() => setIsCadastrar(true)}></Button>
+                  </div> */}
                 </div>
-              </div>
-            )}
-            {isCadastrar && (
-              <div className="field grid">
-                <div className="col-12 md:col-6">
-                  <Button label="Voltar" onClick={() => setIsCadastrar(false)}></Button>
+              )}
+              {isCadastrar && (
+                <div className="field grid">
+                  <div className="col-12 md:col-6">
+                    <Button label="Voltar" onClick={() => setIsCadastrar(false)}></Button>
+                  </div>
+                  <div className="col-12 md:col-6">
+                    <Button label="Salvar" onClick={() => setIsCadastrar(false)}></Button>
+                  </div>
                 </div>
-                <div className="col-12 md:col-6">
-                  <Button label="Salvar" onClick={() => setIsCadastrar(false)}></Button>
-                </div>
-              </div>
-            )}
-          </div>
-        </ModelLogin>
-      </div>
+              )}
+            </div>
+          </ModelLogin>
+        </div>
+      )}
     </Container>
   );
 };
