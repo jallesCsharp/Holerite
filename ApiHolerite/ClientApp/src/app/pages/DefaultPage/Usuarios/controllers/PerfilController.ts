@@ -286,7 +286,7 @@ export default class PerfilController extends AbstractController {
     this.blockUIService.start();
     try {
       await this.getPesquisarArquivoUsuario(id);
-      let pessoa = await this.pessoaService
+      await this.pessoaService
         .getPerfil(id)
         .then((result) => {
           if (result.success === false) {
@@ -295,13 +295,12 @@ export default class PerfilController extends AbstractController {
             );
             return;
           }
+          this.filter.setPessoa(result.data);
           return result.data;
         })
         .catch((error) => {
-          console.log('catch - getPesquisarPerfilUsuario');
-          console.log(error);
+          ToastService.showError(error);
         });
-      this.filter.setPessoa(pessoa);
       this.blockUIService.stop();
     } catch (error) {
       ToastService.showError(Mensagem.ERROR_501 + error);
@@ -331,8 +330,7 @@ export default class PerfilController extends AbstractController {
           return result.data;
         })
         .catch((error) => {
-          console.log('catch - getPesquisarArquivoUsuario');
-          console.log(error);
+          ToastService.showError(error);
         });
       this.filter.setListaArquivos(listaArq);
       this.blockUIService.stop();

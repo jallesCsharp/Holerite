@@ -29,7 +29,7 @@ namespace Holerite.Core.Extension.ModeloHolerite
                         for (int i = 1; i <= doc.GetNumberOfPages(); i++)
                         {
                             StringBuilder sb = new StringBuilder();
-                            var ytt = doc.GetPageNumber(doc.GetPage(i));
+
                             var textPdf = sb.AppendLine(PdfTextExtractor.GetTextFromPage(doc.GetPage(i))).ToString();
 
                             PessoasDto? pessoa = null;
@@ -82,44 +82,47 @@ namespace Holerite.Core.Extension.ModeloHolerite
 
                             if (pessoa != null)
                             {
-                                if (!Directory.Exists("TEMP"))
-                                    Directory.CreateDirectory("TEMP");
-
-                                var caminhoSistema = Directory.GetCurrentDirectory() + "\\TEMP\\" + pessoa?.CodigoFolha + "_" + pessoa?.Nome + ".pdf";
-
-                                var directory = Directory.GetCurrentDirectory();
-
                                 try
                                 {
-                                    using (var pdfNovo = new PdfWriter(caminhoSistema))
+                                    Byte[] byteArquivo = null;
+
+                                    using (MemoryStream memoryStream = new MemoryStream())
                                     {
-                                        using (var docNovo = new PdfDocument(pdfNovo))
+                                        using (var pdfNovo = new PdfWriter(memoryStream))
                                         {
-                                            doc.CopyPagesTo(i, i, docNovo);
-
-
-                                        }
-                                        List<FileInfo> arquivos = new List<FileInfo>();
-
-                                        var arquivosPdf = Directory.GetFiles(Path.Combine(directory, "TEMP"), "*.PDF", SearchOption.AllDirectories).ToArray();
-                                        arquivosPdf.ToList().ForEach(pX => arquivos.Add(new FileInfo(pX)));
-
-                                        var item = arquivos.FirstOrDefault(pX => pX.FullName == caminhoSistema);
-
-                                        if (item != null)
-                                        {
-                                            listaHolerites.Add(new ArquivosDto()
+                                            using (var docNovo = new PdfDocument(pdfNovo))
                                             {
-                                                Arquivo = File.ReadAllBytes(item.FullName),
-                                                ArquivoDocumentoId = documentosDto.Id,
-                                                Mes = Convert.ToInt32(mesArquivo),
-                                                EmailEnviado = false,
-                                                NomeArquivo = item.Name,
-                                                PessoasId = pessoa?.Id,
-                                            });
-                                            File.Delete(caminhoSistema);
+                                                doc.CopyPagesTo(i, i, docNovo);
+                                                docNovo.Close();
+
+                                                IList<byte[]> bytes = new List<byte[]>();
+                                                if (listaHolerites.Exists(pX => pX.PessoasId == pessoa.Id))
+                                                {
+                                                    var item = listaHolerites.Where(pX => pX.PessoasId == pessoa.Id).FirstOrDefault().Arquivo;
+                                                    bytes.Add(item);
+                                                }
+                                                
+                                                bytes.Add(XExtension.GerarBytes(memoryStream.ToArray()));
+                                                byteArquivo = XExtension.GerarJuntarPfs(bytes);
+                                            }
                                         }
                                     }
+
+                                    if (listaHolerites.Exists(pX => pX.PessoasId == pessoa.Id))
+                                    {
+                                        listaHolerites.Find(pX => pX?.PessoasId == pessoa?.Id).Arquivo = byteArquivo;
+                                    }
+                                    else
+                                        listaHolerites.Add(new ArquivosDto()
+                                        {
+                                            Arquivo = byteArquivo,
+                                            ArquivoDocumentoId = documentosDto.Id,
+                                            Mes = mesArquivo.AsInt32(),
+                                            EmailEnviado = false,
+                                            NomeArquivo = $"{pessoa?.CodigoFolha}_{pessoa?.Nome}.pdf",
+                                            PessoasId = pessoa?.Id,
+                                        });
+                                
                                 }
                                 catch (Exception error)
                                 {

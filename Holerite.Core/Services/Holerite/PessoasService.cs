@@ -20,10 +20,14 @@ namespace Holerite.Core.Services.Holerite
 
         public async Task<IEnumerable<PessoasDto?>> GetAll()
         {
+
+            var teste = _repository.QueryableFor(pX => pX.Deleted.HasValue == null).ToList();
+
             var pessoa = await _repository
-                .QueryableFor()
+                .QueryableFor(pX => pX.Deleted.HasValue != null)
                 .Include(pX => pX.Empresas)
                 .Include(pX => pX.Profissoes)
+                .OrderBy(p => p.Nome)
                 .ToListAsync();
             return _mapper.Map<IEnumerable<PessoasDto>>(pessoa);
         }
@@ -95,11 +99,19 @@ namespace Holerite.Core.Services.Holerite
             return _mapper.Map<PessoasDto>(ret);
         }
 
-        public async Task<PessoasDto?> Delete(PessoasDto pessoaDto)
+        public async Task<string?> Delete(PessoasDto pessoaDto)
         {
-            var pessoa = _mapper.Map<Pessoas>(pessoaDto);
-            var ret = _mapper.Map<PessoasDto>(_repository?.Remove(pessoa));
-            return await Task.FromResult(ret);
+            try
+            {
+                var pessoa = _mapper.Map<Pessoas>(pessoaDto);
+                _repository.Remove(pessoa);
+                await _repository.UnitOfWork.Commit();
+                return await Task.FromResult($"Exclusão do usuário '{pessoaDto.Nome}' realizado com sucesso!");
+            }
+            catch (Exception eX)
+            {
+                throw new Exception(eX.Message);
+            }
         }
     }
 }

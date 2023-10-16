@@ -36,28 +36,62 @@ export default class ArquivoService extends AbstractService {
     return response.data;
   }
 
+  public async getArquivoHolerite(id: number): Promise<TResponse<ArquivosModel>> {
+    try {
+      const response = await apiUrl.get(`/Arquivos/GetArquivoHolerite?Id=${id}`);
+      const data: ArquivosModel = response.data[0];
+      return {
+        success: true,
+        data: data,
+        errors: null,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: null,
+        errors: error,
+      };
+    }
+  }
+
   public async getPesquisarArquivos(
     filter: FilterArquivosHolerite,
   ): Promise<TResponse<ArquivosModel[]>> {
     try {
+      console.log(filter);
       let param = '';
 
       if (
         filter.Mes === 0 &&
         filter.Id === null &&
         filter.Nome === null &&
-        filter.PessoaId != null
+        filter.PessoaId !== null
       ) {
         param = `?PessoaId=${filter.PessoaId}`;
       }
-      if (filter.Mes !== 0) {
+      if (
+        filter.Mes !== 0 &&
+        filter.Id === null &&
+        filter.Nome === null &&
+        filter.PessoaId === null
+      ) {
         param = `?Mes=${filter.Mes}`;
       }
-      if (filter.Mes === 0 && filter.Id !== null && filter.Nome !== null) {
-        param = `?Id=${filter.Id}&Nome=${filter.Nome}`;
+      if (
+        filter.Mes === 0 &&
+        filter.Id === null &&
+        filter.Nome !== null &&
+        filter.PessoaId != null
+      ) {
+        param = `?PessoaId=${filter.PessoaId}&Nome=${filter.Nome}`;
       }
-      if (filter.Mes !== 0 && filter.Id !== null && filter.Nome !== null) {
-        param = `?Mes=${filter.Mes}&Id=${filter.Id}&Nome=${filter.Nome}`;
+      if (
+        filter.Mes !== 0 &&
+        filter.Id === null &&
+        filter.Nome !== null &&
+        filter.PessoaId !== null
+      ) {
+        param = `?Mes=${filter.Mes}&PessoaId=${filter.PessoaId}&Nome=${filter.Nome}`;
       }
       if (
         filter.EmailEnviado !== undefined &&
@@ -67,6 +101,8 @@ export default class ArquivoService extends AbstractService {
       ) {
         param = `?EmailEnviado=${filter.EmailEnviado}`;
       }
+      console.log('param');
+      console.log(param);
 
       const response = await apiUrl.get('/Arquivos/GetPesquisarArquivos' + param);
 

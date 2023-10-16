@@ -54,9 +54,23 @@ export default class ArquivosHoleriteController extends AbstractController {
     this.GetAllListaPessoas();
   }
 
-  public visulizarHol = (arquivo?: any) => {
+  public visulizarHol = async (arquivo?: any) => {
+    this.blockUIService.start();
     this.filter.setOnVisualizar(true);
-    this.filter.setArquivosModel(arquivo);
+    const result = await this.arquivoService.getArquivoHolerite(arquivo.id);
+    if (result.success === false) {
+      ToastService.showError(result.errors);
+      return;
+    }
+    console.log('result');
+    console.log(result);
+    this.filter.setArquivosModel(result.data);
+    this.blockUIService.stop();
+  };
+
+  public modalOnFechar = () => {
+    this.filter.setOnVisualizar(false);
+    this.filter.setArquivosModel(null);
   };
 
   public getArquivosHolerite() {

@@ -4,6 +4,7 @@ using Holerite.Core.Extension;
 using Holerite.Core.Interfaces.Repositories.Holerite;
 using Holerite.Core.Interfaces.Services.Controler;
 using Holerite.Core.Interfaces.Services.Holerite;
+using System.Globalization;
 using XUtilities.NetCore6.Seguranca;
 
 namespace Holerite.Core.Services.Holerite
@@ -62,11 +63,12 @@ namespace Holerite.Core.Services.Holerite
 
                     try
                     {
+                        TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
                         listaArquivo.Add(new PessoasDto()
                         {
                             Cpf = itemCadastro[0].AsString().AsValidaSomenteNumerosCpf(),
                             Pis = itemCadastro[1].AsString().AsRetornarSomenteNumeros(),
-                            Nome = itemCadastro[2].AsString(),
+                            Nome = textInfo.ToTitleCase(itemCadastro[2].AsString()),
                             CodigoFolha = itemCadastro[3].ToString().AsValidaSomenteNumerosCodFolha(),
                             Email = itemCadastro[6].AsString(),
                             Nascimento = itemCadastro[7].AsDateTime(),
@@ -74,13 +76,13 @@ namespace Holerite.Core.Services.Holerite
                             SalarioBase = itemCadastro[9].ToString(),
                             EmpresasId = await CadastrarEmpresa(new EmpresasDto()
                             {
-                                NomeEmpresa = itemCadastro[4] == String.Empty ? null : itemCadastro[4].AsString().ToUpper(),
+                                NomeEmpresa = itemCadastro[4] == String.Empty ? null : textInfo.ToTitleCase(itemCadastro[4].AsString()),
                                 Cnpj = null,
                                 Email = null,
                             }),
                             ProfissoesId = await CadastrarProfissao(new ProfissoesDto()
                             {
-                                NomeProfissao = itemCadastro[5] == String.Empty ? null : itemCadastro[5].AsString().ToUpper(),
+                                NomeProfissao = itemCadastro[5] == String.Empty ? null : textInfo.ToTitleCase(itemCadastro[5].AsString()),
                             }),
                         });
                     }

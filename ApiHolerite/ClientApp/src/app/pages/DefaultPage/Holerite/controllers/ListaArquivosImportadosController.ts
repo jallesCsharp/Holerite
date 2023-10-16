@@ -87,9 +87,11 @@ export default class ListaArquivosImportadosController extends AbstractControlle
         this.filter.setListaArquivosDocumentosModel(result.data);
         return result.data;
       });
+      await this.PesquisarArquivosDoc();
       this.blockUIService.stop();
     } catch (error) {
       ToastService.showError(Mensagem.ERROR_501 + error);
+      await this.PesquisarArquivosDoc();
       this.blockUIService.stop();
     }
   }

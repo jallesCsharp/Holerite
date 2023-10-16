@@ -26,15 +26,17 @@ const FilterHolerite: React.FC<Props> = ({ filter, controller }) => {
   function onLimparPesquisar() {
     filter.setMes(undefined);
     setPessoa(undefined);
-    controller.PesquisarArquivos({ Mes: 0, Id: null, Nome: null });
+    controller.PesquisarArquivos({ Mes: 0, Id: null, PessoaId: null, Nome: null });
   }
 
   async function onPesquisar() {
     let filterArq: FilterArquivosHolerite = {
+      Id: null,
       Nome: pessoa?.nome === undefined ? null : pessoa.nome,
-      Id: pessoa?.id === undefined ? null : pessoa.id,
-      Mes: filter.mes.id,
+      PessoaId: pessoa?.id === undefined ? null : pessoa.id,
+      Mes: filter.mes.id === undefined ? 0 : filter.mes.id,
     };
+    console.log(filterArq);
     await controller.PesquisarArquivos(filterArq);
   }
 
@@ -94,12 +96,6 @@ const FilterHolerite: React.FC<Props> = ({ filter, controller }) => {
                   style={{ fontSize: '1em' }}
                   label="Pesquisar"
                   onClick={onPesquisar}
-                />
-                <Button
-                  id="Volar"
-                  className="p-button-secondary mr-2"
-                  style={{ fontSize: '1em' }}
-                  label="Volar"
                 />
                 <Button
                   id="Limpar"

@@ -7,7 +7,9 @@ namespace Holerite.Application.Commands.Holerite.Requests.PessoasRequest
     {
         public Guid? EmpresasId { get; set; }
         public Guid? ProfissoesId { get; set; }
-        public string? Codigo { get; set; }
+        public string? CodigoFolha { get; set; }
+        public string? Cpf { get; set; }
+        public string? Pis { get; set; }
         public string? Nome { get; set; }
         public string? Email { get; set; }
         public DateTime? Nascimento { get; set; }

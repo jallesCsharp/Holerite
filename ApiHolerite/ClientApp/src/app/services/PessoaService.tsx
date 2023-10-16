@@ -18,6 +18,16 @@ export default class PessoaService extends AbstractService {
     return response.data;
   }
 
+  public async Delete(model?: PessoasModel): Promise<TResponse<string>> {
+    const response = await apiUrl.delete(`/Pessoas/${model?.id}`);
+
+    return {
+      success: true,
+      data: response.data,
+      errors: null,
+    };
+  }
+
   public async getPessoas(): Promise<TResponse<PessoasModel[]>> {
     try {
       const response = await apiUrl.get('/Pessoas');

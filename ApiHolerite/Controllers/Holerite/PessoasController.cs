@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation.Results;
 using Holerite.Application.Commands.Holerite.Requests.PessoasRequest;
 using Holerite.Application.Commands.Holerite.Responses.PessoasResponses;
 using Holerite.Core.Validation;
@@ -100,9 +101,11 @@ namespace ApiHolerite.Controllers.Holerite
 
                 return CustomResponse(result);
             }
-            catch (Exception)
+            catch (Exception eX)
             {
-                return CustomResponse(StatusCodes.Status400BadRequest);
+                var bag = new ValidationResultBag();
+                bag.Errors.Add(new ValidationFailure(StatusCodes.Status400BadRequest.ToString(), $"{eX.Message}"));
+                return CustomResponse(bag);
             }
         }
     }

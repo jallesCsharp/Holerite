@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using XUtilities.NetCore6.Seguranca;
 
 namespace ApiHolerite
 {
@@ -20,6 +21,7 @@ namespace ApiHolerite
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    //webBuilder.UseUrls($"https://0.0.0.0:5002;http://0.0.0.0:5000");
                     webBuilder.UseStartup<Startup>();
                 })
                 .UseWindowsService();

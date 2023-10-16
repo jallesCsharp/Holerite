@@ -23,6 +23,28 @@ namespace ApiHolerite.Controllers.Holerite
         public ArquivosController(IMediator mediator, IMapper mapper)
             : base(mediator, mapper) { }
 
+
+        [HttpGet("GetArquivoHolerite")]
+        //[EnableCors("AlowsCors")]
+        [ProducesResponseType(typeof(List<ArquivosResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> GetArquivoHolerite([FromQuery] FilterArquivosHoleriteRequest request)
+        {
+            try
+            {
+                if (request is null)
+                    return CustomResponse("Objeto inválido");
+                var resulte = await _mediator.Send(request);
+                return CustomResponse(resulte);
+            }
+            catch (Exception eX)
+            {
+                var bag = new ValidationResultBag();
+                bag.Errors.Add(new ValidationFailure(StatusCodes.Status400BadRequest.ToString(), $"{eX.Message}"));
+                return CustomResponse(bag);
+                // return CustomResponse(StatusCodes.Status400BadRequest);
+            }
+        }
         [HttpGet("GetPesquisarArquivos")]
         //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(List<ArquivosResponse>), StatusCodes.Status200OK)]

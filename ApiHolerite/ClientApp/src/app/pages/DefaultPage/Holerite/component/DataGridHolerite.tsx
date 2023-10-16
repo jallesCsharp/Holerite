@@ -7,6 +7,7 @@ import ArquivosHoleriteController from '../controllers/ArquivosHoleriteControlle
 import { TriStateCheckbox } from 'primereact/tristatecheckbox';
 import { classNames } from 'primereact/utils';
 import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
 
 interface Props {
   filter: ArquivosFilter;
@@ -36,8 +37,19 @@ const DataGridHolerite: React.FC<Props> = ({ filter, controller }) => {
     );
   };
 
+  const modalDialogFooter = (
+    <>
+      <Button
+        type="button"
+        label="Fechar"
+        icon="pi pi-check"
+        className="p-button-danger mr-2"
+        onClick={controller.modalOnFechar}
+      />
+    </>
+  );
+
   const visualizarHolerite = (rowData: any) => {
-    console.log(rowData);
     return (
       <div className="actions">
         <Button
@@ -77,6 +89,12 @@ const DataGridHolerite: React.FC<Props> = ({ filter, controller }) => {
             align={'center'}
             style={{ textAlign: 'center' }}
           />
+          <Column
+            field="mesExtenso"
+            header="Mês"
+            align={'center'}
+            style={{ textAlign: 'center' }}
+          />
           {/* <Column
             header="Holerite"
             align={'center'}
@@ -106,6 +124,29 @@ const DataGridHolerite: React.FC<Props> = ({ filter, controller }) => {
           <Column field="Acoes" header="Ações" align={'center'} style={{ textAlign: 'center' }} />
         </DataTable>
       </Card>
+
+      <Dialog
+        visible={filter.onVisualizar}
+        modal
+        header="Holerite"
+        maximizable={true}
+        style={{ width: '40%', height: '95%', whiteSpace: 'nowrap' }}
+        footer={modalDialogFooter}
+        onHide={controller.modalOnFechar}
+      >
+        <div className="card">
+          <div className="grid p-fluid">
+            <div className="col-12 md:col-12">
+              <object
+                width="100%"
+                height="800px"
+                type="application/pdf"
+                data={'data:application/pdf;base64,' + `${filter.arquivosModel?.arquivo}`}
+              ></object>
+            </div>
+          </div>
+        </div>
+      </Dialog>
     </>
   );
 };

@@ -7,7 +7,7 @@ namespace Holerite.Application.Commands.Holerite.Validations
     {
         public PessoasRequestValidation()
         {
-            RuleFor(c => c.Codigo)
+            RuleFor(c => c.Cpf)
                 .NotEmpty()
                 .WithMessage("Campo Obrigatório Código.");
 

@@ -4,7 +4,7 @@ export const menuItems: MenuItem[] = [
   {
     label: 'Página inicial',
     icon: 'pi pi-fw pi-home',
-    url: '/home',
+    url: '/Home',
     modulo: 'MOD_HOME',
     id: 'home',
   },
@@ -17,13 +17,13 @@ export const menuItems: MenuItem[] = [
       {
         id: 'perfil_usuarios',
         label: 'Perfil',
-        url: '/usuarios/perfil',
+        url: '/Usuarios/Perfil',
         modulo: 'USUARIOS_PERFIL',
       },
       {
         id: 'listar-usuarios',
         label: 'Listar Usuários',
-        url: '/usuarios/listar',
+        url: '/Usuarios/Listar',
         modulo: 'USUARIOS_LISTAR',
       },
     ],
@@ -37,67 +37,29 @@ export const menuItems: MenuItem[] = [
       {
         id: 'cadastrar-holerite',
         label: 'Importa Arquivo',
-        url: '/holerite/arquivo',
+        url: '/Holerite/Arquivo',
         modulo: 'HOLERITE_ARQUIVO',
       },
       {
         id: 'holerite-pendentes',
         label: 'Pendente Notificação',
-        url: '/holerite/PendenteNotificacao',
+        url: '/Holerite/PendenteNotificacao',
         modulo: 'HOLERITE_PENDENTE_NOTIFICACAO',
       },
       {
         id: 'listar-holerite',
         label: 'Listar Holerite',
-        url: '/holerite/HoleriteLista',
+        url: '/Holerite/HoleriteLista',
         modulo: 'HOLERITE_LISTA',
       },
       {
         id: 'listar-holerite',
         label: 'Arquivos Importados',
-        url: '/holerite/ListaArquivosImportados',
+        url: '/Holerite/ListaArquivosImportados',
         modulo: 'HOLERITE_LISTA_ARQUIVOS_IMPORTADOS',
       },
     ],
   },
-  // {
-  //   label: 'Acompanhamento',
-  //   icon: 'pi pi-cog',
-  //   items: [
-  //     {
-  //       id: 'instalacao-consultar',
-  //       label: 'Atendimentos',
-  //       url: '/instalacao',
-  //       modulo: 'INSTALACAO',
-  //     },
-  //     {
-  //       id: 'instalacao-consultar',
-  //       label: 'Agenda',
-  //       url: '/instalacao',
-  //       modulo: 'INSTALACAO',
-  //     },
-  //   ],
-  // },
-  // {
-  //   id: 'relatorio',
-  //   icon: 'pi pi-cog',
-  //   label: 'Relatório',
-  //   modulo: 'RELATORIO',
-  //   items: [
-  //     {
-  //       id: 'relatorio_empresa',
-  //       label: 'Instalações por Empresa',
-  //       url: '/relatorio/empresa',
-  //       modulo: 'RELATORIO_EMPRESA',
-  //     },
-  //     {
-  //       id: 'historico_alteracao_instalacao',
-  //       label: 'Histórico de Alterações da Instalação',
-  //       url: '/relatorio/historico-instalacao',
-  //       modulo: 'RELATORIO_HISTORICO_ALTERACAO_INSTALACAO',
-  //     },
-  //   ],
-  // },
   {
     label: 'Configurações',
     icon: 'pi pi-cog',

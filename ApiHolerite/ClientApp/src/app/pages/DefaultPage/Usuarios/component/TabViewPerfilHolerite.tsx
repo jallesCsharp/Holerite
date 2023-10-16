@@ -88,9 +88,8 @@ const TabViewPerfilHolerite: React.FC<Props> = ({ filter, controller }) => {
                 value={filter.listaArquivos?.filter((pX) => pX.emailEnviado === true)}
                 responsiveLayout="stack"
                 currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords}"
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                rowsPerPageOptions={[10, 20, 30, 50]}
-                rows={10}
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
+                rows={30}
                 paginator
                 sortOrder={-1}
                 emptyMessage="Nenhum resultado encontrado!"

@@ -11,7 +11,7 @@ namespace Holerite.Core.Interfaces.Services.Holerite
         Task<IEnumerable<PessoasDto>> CreateList(List<PessoasDto> plistPessoa);
         Task<PessoasDto> GetLogin(string pCpf);
         Task<PessoasDto> Update(PessoasDto pPessoa);
-        Task<PessoasDto?> Delete(PessoasDto pPessoa);
+        Task<string?> Delete(PessoasDto pPessoa);
         Task<IEnumerable<PessoasDto?>> GetFilterProperty(IEnumerable<FilterDto> pProperty);
     }
 }
