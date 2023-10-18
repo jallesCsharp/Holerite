@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,8 +15,8 @@ namespace ApiHolerite.Controllers.Holerite
 {
     public class UploadCreateRegistrationController : CustomController
     {
-        public UploadCreateRegistrationController(IMediator mediator, IMapper mapper)
-            : base(mediator, mapper) { }
+        public UploadCreateRegistrationController(ILogger<UploadCreateRegistrationController> logger, IMediator mediator, IMapper mapper)
+            : base(logger, mediator, mapper) { }
 
         [HttpPost("UploadCadastroGeral")]
         //[EnableCors("AlowsCors")]

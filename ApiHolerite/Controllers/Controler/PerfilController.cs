@@ -1,34 +1,33 @@
 ﻿using AutoMapper;
-using FluentValidation.Results;
-using Holerite.Application.Commands.Holerite.Requests.PessoasRequest;
-using Holerite.Application.Commands.Holerite.Responses.PessoasResponses;
+using Holerite.Application.Commands.Controler.Requests.PerfilRequest;
+using Holerite.Application.Commands.Controler.Responses.PerfilResponses;
 using Holerite.Core.Validation;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ApiHolerite.Controllers.Holerite
+namespace ApiHolerite.Controllers.Controler
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class PessoasController : CustomController
+    public class PerfilController : CustomController
     {
-        public PessoasController(ILogger<PessoasController> logger, IMediator mediator, IMapper mapper)
-            : base(logger, mediator, mapper) { }
+
+        public PerfilController(
+            ILogger<PerfilController> logger,
+            IMediator mediator,
+            IMapper mapper) : base(logger, mediator, mapper) 
+        { }
 
         [HttpGet]
         //[EnableCors("AlowsCors")]
-        [ProducesResponseType(typeof(List<PessoasResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<PerfilResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> GetAll([FromQuery] FilterPessoasRequest request)
+        public async Task<ActionResult> GetAll([FromQuery] FilterPerfilRequest request)
         {
             try
             {
@@ -45,11 +44,9 @@ namespace ApiHolerite.Controllers.Holerite
 
         [HttpPost]
         //[EnableCors("AlowsCors")]
-        [ProducesResponseType(typeof(PessoasResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(PerfilResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
-        public async Task<ActionResult> Create([FromBody] CreatePessoasRequest request)
+        public async Task<ActionResult> Create([FromBody] CreatePerfilRequest request)
         {
             try
             {
@@ -66,24 +63,11 @@ namespace ApiHolerite.Controllers.Holerite
 
         [HttpPut]
         //[EnableCors("AlowsCors")]
-        [ProducesResponseType(typeof(PessoasResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PerfilResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update([FromBody] UpdatePessoasRequest command)
+        public async Task<IActionResult> Update([FromBody] UpdatePerfilRequest command)
         {
             var result = await _mediator.Send(command);
-            return CustomResponse(result);
-        }
-
-        [HttpPatch("{id}")]
-        //[EnableCors("AlowsCors")]
-        [ProducesResponseType(typeof(PessoasResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Patch(Guid id, JsonPatchDocument<PatchPessoasRequest> patchRequest)
-        {
-            var command = new PatchPessoasRequest(patchRequest);
-
-            var result = await _mediator.Send(command);
-
             return CustomResponse(result);
         }
 
@@ -96,17 +80,15 @@ namespace ApiHolerite.Controllers.Holerite
         {
             try
             {
-                var command = new DeletePessoasRequest(id);
+                var command = new DeletePerfilRequest(id);
 
                 var result = await _mediator.Send(command);
 
                 return CustomResponse(result);
             }
-            catch (Exception eX)
+            catch (Exception)
             {
-                var bag = new ValidationResultBag();
-                bag.Errors.Add(new ValidationFailure(StatusCodes.Status400BadRequest.ToString(), $"{eX.Message}"));
-                return CustomResponse(bag);
+                return CustomResponse(StatusCodes.Status400BadRequest);
             }
         }
     }

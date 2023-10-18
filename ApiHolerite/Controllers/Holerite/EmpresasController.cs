@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,8 +20,8 @@ namespace ApiHolerite.Controllers.Holerite
     [Authorize]
     public class EmpresasController : CustomController
     {
-        public EmpresasController(IMediator mediator, IMapper mapper)
-            : base(mediator, mapper) { }
+        public EmpresasController(ILogger<EmpresasController> logger, IMediator mediator, IMapper mapper)
+            : base(logger, mediator, mapper) { }
 
         [HttpGet]
         //[EnableCors("AlowsCors")]

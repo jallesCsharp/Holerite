@@ -1,41 +1,36 @@
-﻿using AutoMapper;
-using Holerite.Application.Commands.Holerite.Requests.EmpresasRequest;
-using Holerite.Application.Commands.Holerite.Responses.EmpresasResponses;
+﻿using MediatR;
+using AutoMapper;
 using Holerite.Core.Dtos;
-using Holerite.Core.Interfaces.Services.Holerite;
 using Holerite.Core.Messages;
 using Holerite.Core.Validation;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Holerite.Core.Interfaces.Services.Controler;
+using Holerite.Application.Commands.Controler.Requests.ControleAcessosRequest;
+using Holerite.Application.Commands.Controler.Responses.ControleAcessosResponses;
 
 namespace Holerite.Application.Commands.Controler.Handlers
 {
     public class ControleAcessosCommandHandler : CommandHandler,
-        IRequestHandler<CreateEmpresasRequest, ValidationResultBag>,
-        IRequestHandler<PatchEmpresasRequest, ValidationResultBag>,
-        IRequestHandler<UpdateEmpresasRequest, ValidationResultBag>,
-        IRequestHandler<DeleteEmpresasRequest, ValidationResultBag>,
-        IRequestHandler<FilterEmpresasRequest, ValidationResultBag>
+        IRequestHandler<CreateControleAcessosRequest, ValidationResultBag>,
+        IRequestHandler<PatchControleAcessosRequest, ValidationResultBag>,
+        IRequestHandler<UpdateControleAcessosRequest, ValidationResultBag>,
+        IRequestHandler<DeleteControleAcessosRequest, ValidationResultBag>,
+        IRequestHandler<FilterControleAcessosRequest, ValidationResultBag>
     {
         private readonly IMapper _mapper;
-        private readonly IEmpresasService _empresasService;
+        private readonly IControleAcessosService _controleAcessosService;
 
         public ControleAcessosCommandHandler(IMapper mapper,
-            IEmpresasService empresasService)
+            IControleAcessosService controleAcessosService)
         {
             _mapper = mapper;
-            _empresasService = empresasService;
+            _controleAcessosService = controleAcessosService;
         }
 
-        public async Task<ValidationResultBag> Handle(FilterEmpresasRequest request, CancellationToken cancellationToken)
+        public async Task<ValidationResultBag> Handle(FilterControleAcessosRequest request, CancellationToken cancellationToken)
         {
-            IEnumerable<EmpresasDto?> listaEmpresas = await _empresasService.GetAll();
+            IEnumerable<ControleAcessosDto?> listaControleAcesso = await _controleAcessosService.GetAll();
 
-            ValidationResult.Data = _mapper.Map<List<EmpresasResponse>>(listaEmpresas);
+            ValidationResult.Data = _mapper.Map<List<ControleAcessosResponse>>(listaControleAcesso);
 
             return ValidationResult;
 
@@ -49,61 +44,61 @@ namespace Holerite.Application.Commands.Controler.Handlers
                 return ValidationResult;
             }
 
-            EmpresasDto empresa = _mapper.Map<EmpresasDto>(request);
+            ControleAcessosDto controleAcesso = _mapper.Map<ControleAcessosDto>(request);
 
-            var resultEmpresa = await _empresasService.Create(empresa);
+            var result = await _controleAcessosService.Create(controleAcesso);
 
-            ValidationResult.Data = _mapper.Map<EmpresasResponse>(resultEmpresa);
+            ValidationResult.Data = _mapper.Map<ControleAcessosResponse>(result);
 
             return ValidationResult;
         }
 
         public async Task<ValidationResultBag> Handle(UpdateControleAcessosRequest request, CancellationToken cancellationToken)
         {
-            EmpresasDto? empresa = _mapper.Map<EmpresasDto>(request);
+            ControleAcessosDto? controleAcesso = _mapper.Map<ControleAcessosDto>(request);
 
-            var resultEmpresa = await _empresasService.Update(empresa);
+            var result = await _controleAcessosService.Update(controleAcesso);
 
-            ValidationResult.Data = _mapper.Map<EmpresasResponse>(resultEmpresa);
+            ValidationResult.Data = _mapper.Map<ControleAcessosResponse>(result);
 
             return ValidationResult;
         }
 
         public async Task<ValidationResultBag> Handle(PatchControleAcessosRequest request, CancellationToken cancellationToken)
         {
-            EmpresasDto? empresas = await _empresasService.GetById(request.Id);
+            ControleAcessosDto? controleAcessos = await _controleAcessosService.GetById(request.Id);
 
-            if (empresas == null)
+            if (controleAcessos == null)
             {
                 AddError("Registro não existe.");
                 return ValidationResult;
             }
 
-            var patchEmpresas = _mapper.Map<PatchEmpresasRequest>(empresas);
+            var patch = _mapper.Map<PatchControleAcessosRequest>(controleAcessos);
 
-            request.PatchEmpresas.ApplyTo(patchEmpresas);
+            request.Patch.ApplyTo(patch);
 
-            _mapper.Map(patchEmpresas, empresas);
+            _mapper.Map(patch, controleAcessos);
 
-            var resultEmpresas = await _empresasService.Update(empresas);
+            var result = await _controleAcessosService.Update(controleAcessos);
 
-            ValidationResult.Data = _mapper.Map<EmpresasResponse>(resultEmpresas);
+            ValidationResult.Data = _mapper.Map<ControleAcessosResponse>(result);
 
             return ValidationResult;
         }
 
         public async Task<ValidationResultBag> Handle(DeleteControleAcessosRequest request, CancellationToken cancellationToken)
         {
-            var pessoas = await _empresasService.GetById(request.Id);
+            var controleAcesso = await _controleAcessosService.GetById(request.Id);
 
             if (!request.IsValid()) return ValidationResult;
 
-            if (pessoas == null)
+            if (controleAcesso == null)
             {
                 AddError("Registro não existe.");
                 return ValidationResult;
             }
-            ValidationResult.Data = await _empresasService.Delete(pessoas);
+            ValidationResult.Data = await _controleAcessosService.Delete(controleAcesso);
 
             return ValidationResult;
         }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,8 +21,8 @@ namespace ApiHolerite.Controllers.Holerite
     [Authorize]
     public class ArquivosController : CustomController
     {
-        public ArquivosController(IMediator mediator, IMapper mapper)
-            : base(mediator, mapper) { }
+        public ArquivosController(ILogger<ArquivosController> logger, IMediator mediator, IMapper mapper)
+            : base(logger, mediator, mapper) { }
 
 
         [HttpGet("GetArquivoHolerite")]

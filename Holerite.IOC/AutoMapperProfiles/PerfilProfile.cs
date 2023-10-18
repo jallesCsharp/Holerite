@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Holerite.Application.Commands.Controler.Requests.PerfilRequest;
+using Holerite.Application.Commands.Controler.Responses.PerfilResponses;
 using Holerite.Core.Dtos;
 using Holerite.Core.Models;
 using System;
@@ -14,6 +16,12 @@ namespace Holerite.IOC.AutoMapperProfiles
         public PerfilProfile()
         {
             CreateMap<Perfil, PerfilDto>().ReverseMap();
+            CreateMap<PerfilDto, PerfilResponse>().ReverseMap();
+
+            CreateMap<PerfilDto, CreatePerfilRequest>().ReverseMap();
+            CreateMap<PerfilDto, UpdatePerfilRequest>().ReverseMap();
+            CreateMap<PerfilDto, DeletePerfilRequest>().ReverseMap();
+            CreateMap<PerfilDto, FilterPerfilRequest>().ReverseMap();
         }
     }
 }

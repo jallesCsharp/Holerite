@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace ApiHolerite.Controllers.Controler
     {
         public readonly IPessoasRepository _repository;
 
-        public LoginController(IMediator mediator, IPessoasRepository repository, IMapper mapper) : base(mediator, mapper)
+        public LoginController(ILogger<LoginController> logger, IMediator mediator, IPessoasRepository repository, IMapper mapper) : base(logger, mediator, mapper)
         {
             _repository = repository;
         }

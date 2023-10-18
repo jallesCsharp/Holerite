@@ -21,6 +21,7 @@ public static class ServicesInjector
         services.AddScoped<IUploadCreateRegistrationService, UploadCreateRegistrationService>();
         services.AddScoped<IControlerService, ControlerService>();
         services.AddScoped<IPerfilService, PerfilService>();
+        services.AddScoped<IControleAcessosService, ControleAcessosService>();
 
         return services;
 

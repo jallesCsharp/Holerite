@@ -23,9 +23,23 @@ namespace ApiHolerite.Controllers
             _logger = logger;
         }
 
+        //Tamanho do Banco
+        //[HttpGet]
+        //public IActionResult GetSizeBanco()
+        //{
+        //    //SELECT
+        //    //    pg_database.datname, 
+        //    //    pg_size_pretty(pg_database_size(pg_database.datname)) AS size
+        //    //FROM pg_database;
+        //}
+
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            //SELECT
+            //    pg_database.datname, 
+            //    pg_size_pretty(pg_database_size(pg_database.datname)) AS size
+            //FROM pg_database;
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

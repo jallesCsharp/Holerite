@@ -9,7 +9,12 @@ namespace Holerite.Core.Interfaces.Services.Controler
 {
     public interface IPerfilService
     {
-        Task<IEnumerable<PerfilDto>> GetPerfilAll();
-        Task<PerfilDto> GetPerfil(string perfil);
+        Task<PerfilDto> GetPerfil(string pPerfil);
+        Task<PerfilDto?> GetById(Guid id);
+        Task<IEnumerable<PerfilDto?>> GetAll();
+        Task<PerfilDto> CreateUpdate(PerfilDto pPerfil);
+        Task<PerfilDto> Create(PerfilDto pPerfil);
+        Task<PerfilDto> Update(PerfilDto pPerfil);
+        Task<string?> Delete(PerfilDto pPerfil);
     }
 }

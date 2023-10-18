@@ -4,6 +4,7 @@ using System.Linq;
 using Holerite.Core.Validation;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace ApiHolerite.Controllers
 {
@@ -11,16 +12,20 @@ namespace ApiHolerite.Controllers
     [ApiController]
     public abstract class CustomController : ControllerBase
     {
+        private readonly ILogger<CustomController> _logger;
         protected readonly IMediator _mediator;
         protected readonly IMapper _mapper;
         protected ICollection<string> Errors = new List<string>();
 
-        public CustomController(IMediator mediator, IMapper mapper)
+        public CustomController(
+            ILogger<CustomController> logger, 
+            IMediator mediator, 
+            IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _logger = logger;
         }
-
 
         protected ActionResult CustomResponse(object result = null)
         {

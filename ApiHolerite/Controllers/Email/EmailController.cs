@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -16,8 +17,8 @@ namespace ApiHolerite.Controllers.Email
     [Authorize]
     public class EmailController : CustomController
     {
-        public EmailController(IMediator mediator, IMapper mapper)
-            : base(mediator, mapper) { }
+        public EmailController(ILogger<EmailController> logger, IMediator mediator, IMapper mapper)
+            : base(logger, mediator, mapper) { }
 
         [HttpPost]
         //[EnableCors("AlowsCors")]

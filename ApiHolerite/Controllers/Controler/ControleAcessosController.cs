@@ -1,18 +1,15 @@
-﻿using AutoMapper;
-using Holerite.Application.Commands.Controler.Requests;
-using Holerite.Application.Commands.Controler.Responses;
-using Holerite.Core.Interfaces.Repositories.Holerite;
+﻿using System;
 using MediatR;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 using System.Threading.Tasks;
-using System;
-using Holerite.Application.Commands.Holerite.Requests.EmpresasRequest;
-using Holerite.Application.Commands.Holerite.Responses.EmpresasResponses;
+using Microsoft.AspNetCore.Mvc;
 using Holerite.Core.Validation;
-using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.JsonPatch;
+using Holerite.Application.Commands.Controler.Responses.ControleAcessosResponses;
+using Holerite.Application.Commands.Controler.Requests.ControleAcessosRequest;
 
 namespace ApiHolerite.Controllers.Controler
 {
@@ -20,21 +17,18 @@ namespace ApiHolerite.Controllers.Controler
     [ApiController]
     public class ControleAcessosController : CustomController
     {
-        public readonly IPessoasRepository _repository;
-
         public ControleAcessosController(
-            IMediator mediator, 
-            IPessoasRepository repository, 
-            IMapper mapper) : base(mediator, mapper)
+            ILogger<ControleAcessosController> logger,
+            IMediator mediator,
+            IMapper mapper) : base(logger, mediator, mapper)
         {
-            _repository = repository;
         }
 
         [HttpGet]
         //[EnableCors("AlowsCors")]
-        [ProducesResponseType(typeof(List<EmpresasResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<ControleAcessosResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> GetAll([FromQuery] FilterEmpresasRequest request)
+        public async Task<ActionResult> GetAll([FromQuery] FilterControleAcessosRequest request)
         {
             try
             {
@@ -51,9 +45,9 @@ namespace ApiHolerite.Controllers.Controler
 
         [HttpPost]
         //[EnableCors("AlowsCors")]
-        [ProducesResponseType(typeof(EmpresasResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ControleAcessosResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Create([FromBody] CreateEmpresasRequest request)
+        public async Task<ActionResult> Create([FromBody] CreateControleAcessosRequest request)
         {
             try
             {
@@ -70,9 +64,9 @@ namespace ApiHolerite.Controllers.Controler
 
         [HttpPut]
         //[EnableCors("AlowsCors")]
-        [ProducesResponseType(typeof(EmpresasResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ControleAcessosResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update([FromBody] UpdateEmpresasRequest command)
+        public async Task<IActionResult> Update([FromBody] UpdateControleAcessosRequest command)
         {
             var result = await _mediator.Send(command);
             return CustomResponse(result);
@@ -80,11 +74,11 @@ namespace ApiHolerite.Controllers.Controler
 
         [HttpPatch("{id}")]
         //[EnableCors("AlowsCors")]
-        [ProducesResponseType(typeof(EmpresasResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ControleAcessosResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Patch(Guid id, JsonPatchDocument<PatchEmpresasRequest> patchRequest)
+        public async Task<IActionResult> Patch(Guid id, JsonPatchDocument<PatchControleAcessosRequest> patchRequest)
         {
-            var command = new PatchEmpresasRequest(patchRequest);
+            var command = new PatchControleAcessosRequest(patchRequest);
 
             var result = await _mediator.Send(command);
 
@@ -100,7 +94,7 @@ namespace ApiHolerite.Controllers.Controler
         {
             try
             {
-                var command = new DeleteEmpresasRequest(id);
+                var command = new DeleteControleAcessosRequest(id);
 
                 var result = await _mediator.Send(command);
 
