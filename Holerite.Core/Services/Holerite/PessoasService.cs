@@ -20,11 +20,8 @@ namespace Holerite.Core.Services.Holerite
 
         public async Task<IEnumerable<PessoasDto?>> GetAll()
         {
-
-            var teste = _repository.QueryableFor(pX => pX.Deleted.HasValue == null).ToList();
-
             var pessoa = await _repository
-                .QueryableFor(pX => pX.Deleted.HasValue != null)
+                .QueryableFor(pX => pX.Deleted.HasValue != true)
                 .Include(pX => pX.Empresas)
                 .Include(pX => pX.Profissoes)
                 .OrderBy(p => p.Nome)
