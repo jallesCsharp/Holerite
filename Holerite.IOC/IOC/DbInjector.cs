@@ -38,8 +38,10 @@ public static class DbInjector
 
     public static IServiceCollection AddDbContextInjector(this IServiceCollection services, string[] connectionString)
     {
-        services.AddDbContext<HoleriteContext>(options =>
-            options.UseNpgsql(@$"Host={XAesCrip.Decriptografar(connectionString[0])};Port={XAesCrip.Decriptografar(connectionString[1])};Pooling={XAesCrip.Decriptografar(connectionString[2])};Database={XAesCrip.Decriptografar(connectionString[3])};User Id={XAesCrip.Decriptografar(connectionString[4])};Password={XAesCrip.Decriptografar(connectionString[5])}")
+        services.AddDbContext<HoleriteContext>(options => {
+            options.UseNpgsql(@$"Host={XAesCrip.Decriptografar(connectionString[0])};Port={XAesCrip.Decriptografar(connectionString[1])};Pooling={XAesCrip.Decriptografar(connectionString[2])};Database={XAesCrip.Decriptografar(connectionString[3])};User Id={XAesCrip.Decriptografar(connectionString[4])};Password={XAesCrip.Decriptografar(connectionString[5])}");
+            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        }
         );
         return services;
     }
