@@ -16,21 +16,34 @@ namespace Holerite.Core.Services.Controler
     {
         private readonly IMapper _mapper;
         private readonly IPerfilRepository _repository;
+        private readonly IControleAcessosRepository _controleAcessosRepository;
 
         public PerfilService(
             IPerfilRepository repository,
+            IControleAcessosRepository controleAcessosRepository,
             IMapper mapper)
         {
             _mapper = mapper;
             _repository = repository;
+            _controleAcessosRepository = controleAcessosRepository;
         }
 
         public async Task<IEnumerable<PerfilDto?>> GetAll()
         {
-            var perfil = await _repository
-                .QueryableFor()
-                .ToListAsync();
-            return _mapper.Map<IEnumerable<PerfilDto>>(perfil);
+            List<PerfilDto> listaPerfils = new List<PerfilDto>();
+            listaPerfils = _mapper.Map<List<PerfilDto>>(await _repository
+                .QueryableFor(pX => pX.Deleted.HasValue != true)
+                .Include(p => p.ControleAcessos)
+                .ThenInclude(p => p.Funcionalidades)
+                .ToListAsync());
+
+            listaPerfils.ForEach(item => {
+                item.ControleAcessos.ToList().ForEach(pX => pX.Perfil = null);
+            });
+
+
+
+            return _mapper.Map<IEnumerable<PerfilDto>>(listaPerfils);
         }
 
         public async Task<PerfilDto?> GetById(Guid id)

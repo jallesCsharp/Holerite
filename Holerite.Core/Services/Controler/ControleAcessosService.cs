@@ -29,7 +29,14 @@ namespace Holerite.Core.Services.Controler
         {
             var perfil = await _repository
                 .QueryableFor()
+                .Include(pX => pX.Perfil)
+                .Include(pX => pX.Funcionalidades)
                 .ToListAsync();
+
+            perfil.ForEach(item => {
+                item.Perfil.ControleAcessos = null;
+            });
+
             return _mapper.Map<IEnumerable<ControleAcessosDto>>(perfil);
         }
 
@@ -37,6 +44,8 @@ namespace Holerite.Core.Services.Controler
         {
             var controleAcessos = await _repository
                 .QueryableFor(p => p.Id == id)
+                .Include(pX => pX.Perfil)
+                .Include(pX => pX.Funcionalidades)
                 .FirstOrDefaultAsync();
             return _mapper.Map<ControleAcessosDto>(controleAcessos);
         }

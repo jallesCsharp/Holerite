@@ -1,3 +1,5 @@
+import { ControleAcessosModel } from './ControleAcessosModel';
+
 export interface PerfilModel {
   id?: string;
   created?: Date;
@@ -5,5 +7,5 @@ export interface PerfilModel {
   deleted?: Date;
   nomePerfil?: string;
   ativo?: boolean;
-  //   controleAcessos?: string;
+  controleAcessos: ControleAcessosModel[];
 }

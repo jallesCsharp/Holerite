@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment } from 'react';
 import { Card } from 'primereact/card';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
@@ -16,8 +16,6 @@ interface Props {
 }
 
 const DataGridUsuarios: React.FC<Props> = ({ filter, controller }) => {
-  const dt = useRef(null);
-
   const VisualizarPerfil = (rowData: any) => {
     controller.history.push(`perfil/${rowData.id}`);
   };
@@ -133,7 +131,6 @@ const DataGridUsuarios: React.FC<Props> = ({ filter, controller }) => {
       <Card>
         <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
         <DataTable
-          ref={dt}
           value={filter.listaPessoas}
           dataKey="id"
           paginator

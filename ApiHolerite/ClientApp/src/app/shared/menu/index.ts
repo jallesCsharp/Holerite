@@ -74,7 +74,7 @@ export const menuItems: MenuItem[] = [
       {
         id: 'configuracoes-perfil',
         label: 'Perfil de Grupos',
-        url: '/Configuracoes/Perfil',
+        url: '/Configuracoes/PerfilGrupos',
         modulo: 'CONFIGURACAO_PERFIL_GRUPOS',
       },
     ],

@@ -76,7 +76,7 @@ namespace Holerite.Application.Commands.Holerite.Handlers
             List<ArquivosDto> resultArquivo = await _arquivosService.GetPesquisarArquivos(filter);
 
             List<ArquivosResponse>? responses = _mapper.Map<List<ArquivosResponse>>(resultArquivo);
-            responses.ForEach(r => r.MesExtenso = new DateTime(r.Created.Value.Year, (int)r.Mes, r.Created.Value.Day).ToString("MMMM/yyyy").ToUpper());
+            responses.ForEach(r => r.MesExtenso = new DateTime(r.Created.Value.Year, (int)r.Mes, 1).ToString("MMMM/yyyy").ToUpper());
 
             ValidationResult.Data = responses;
 

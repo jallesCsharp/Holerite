@@ -22,19 +22,25 @@ namespace Holerite.Application.Commands.Controler.Handlers
     {
         private readonly IMapper _mapper;
         private readonly IPerfilService _perfilService;
+        private readonly IControleAcessosService _controleAcessosService;
 
-        public PerfilCommandHandler(IMapper mapper,
-            IPerfilService perfilService)
+        public PerfilCommandHandler(
+            IMapper mapper,
+            IPerfilService perfilService,
+            IControleAcessosService controleAcessosService)
         {
             _mapper = mapper;
             _perfilService = perfilService;
+            _controleAcessosService = controleAcessosService;
         }
 
         public async Task<ValidationResultBag> Handle(FilterPerfilRequest request, CancellationToken cancellationToken)
         {
             IEnumerable<PerfilDto?> listaControleAcesso = await _perfilService.GetAll();
 
-            ValidationResult.Data = _mapper.Map<List<PerfilResponse>>(listaControleAcesso);
+            var teste = await _controleAcessosService.GetAll();
+
+            ValidationResult.Data = teste;
 
             return ValidationResult;
 

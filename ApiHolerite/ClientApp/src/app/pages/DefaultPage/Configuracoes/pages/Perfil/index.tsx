@@ -1,14 +1,15 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Perfil from './Perfil';
+import PerfilGrupos from './PerfilGrupos';
 
-const PerfilPage: React.FC = () => {
+const PerfilGruposPage: React.FC = () => {
   return (
     <>
       <Switch>
-        <Route path="/Configuracoes/Grupos" exact={true} component={Perfil} />
+        <Route path="/Configuracoes/PerfilGrupos" exact={true} component={PerfilGrupos} />
+        <Route path="/Configuracoes/AdicionarPerfilGrupos" exact={true} component={PerfilGrupos} />
       </Switch>
     </>
   );
 };
-export default PerfilPage;
+export default PerfilGruposPage;
