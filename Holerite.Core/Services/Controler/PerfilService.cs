@@ -31,18 +31,10 @@ namespace Holerite.Core.Services.Controler
         public async Task<IEnumerable<PerfilDto?>> GetAll()
         {
             List<PerfilDto> listaPerfils = new List<PerfilDto>();
-            listaPerfils = _mapper.Map<List<PerfilDto>>(await _repository
+            listaPerfils = _mapper.Map<List<PerfilDto>>(
+                await _repository
                 .QueryableFor(pX => pX.Deleted.HasValue != true)
-                .Include(p => p.ControleAcessos)
-                .ThenInclude(p => p.Funcionalidades)
                 .ToListAsync());
-
-            listaPerfils.ForEach(item => {
-                item.ControleAcessos.ToList().ForEach(pX => pX.Perfil = null);
-            });
-
-
-
             return _mapper.Map<IEnumerable<PerfilDto>>(listaPerfils);
         }
 

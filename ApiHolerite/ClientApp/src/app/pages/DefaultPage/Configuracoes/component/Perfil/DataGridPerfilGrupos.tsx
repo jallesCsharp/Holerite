@@ -9,6 +9,7 @@ import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import ProDropdown from '../../../../../../provider/components/Dropdown';
+import { InputText } from 'primereact/inputtext';
 
 interface Props {
   filter: PerfilGruposFilter;
@@ -80,6 +81,25 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
     </>
   );
 
+  const modalDialogPerfilFooter = (
+    <>
+      <Button
+        loading={filter.loading}
+        label="Cancelar"
+        icon="pi pi-times"
+        className="p-button p-button-danger"
+        onClick={controller.fecharCadastrarPerfilModal}
+      />
+      <Button
+        loading={filter.loading}
+        label="Gravar"
+        icon="pi pi-check"
+        className="p-button p-button-success"
+        onClick={controller.onSalvarPerfilGrupos}
+      />
+    </>
+  );
+
   const leftToolbarTemplate = () => {
     return (
       <React.Fragment>
@@ -138,38 +158,135 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
           modal
           header="Cadastrar Controle de Acesso"
           maximizable={true}
-          style={{ width: '40%', height: '95%', whiteSpace: 'nowrap' }}
+          style={{ width: '95%', height: '95%', whiteSpace: 'nowrap' }}
           footer={modalDialogFooter}
           onHide={controller.onDialogCancelar}
         >
           <div className="card">
             <div className="grid p-fluid">
-              <div className="col-12 md:col-12">
-                <div className="col-12 md:col-6">
-                  <label htmlFor="profissao">Perfil Usuário:</label>
-                  <div className="p-inputgroup">
-                    <span className="p-inputgroup-addon">
-                      <Button
-                        disabled={filter.perfilGruposModalDialog}
-                        className="p-button-sucess"
-                        icon="pi pi-plus-circle"
-                        loading={filter.loading}
-                        onClick={() => controller.CadastrarPerfilGrupos()}
-                      />
-                    </span>
-                    <ProDropdown
-                      optionLabel={'perfil.nomePerfil'}
-                      optionValue={'perfil.nomePerfil'}
-                      showClear={false}
-                      filter={false}
-                      options={filter.listaPerfilGrupos}
-                      value={filter.perfilGrupoSelecionado?.nomePerfil || undefined}
-                      onChange={(e: any) => controller.onSelecionarPerfilGrupo(e.target.value)}
+              <div className="col-12 md:col-6">
+                <label htmlFor="perfil">Perfil:</label>
+                <div className="p-inputgroup">
+                  <span className="p-inputgroup-addon">
+                    <Button
+                      disabled={false}
+                      className="p-button-sucess"
+                      icon="pi pi-plus-circle"
+                      loading={filter.loading}
+                      onClick={() => controller.CadastrarPerfilGrupos()}
                     />
-                    {filter.submitted && !filter.perfilGrupoSelecionado?.nomePerfil && (
-                      <small className="p-invalid">Nome é obrigatório.</small>
-                    )}
-                  </div>
+                  </span>
+                  <ProDropdown
+                    optionLabel={'nomePerfil'}
+                    optionValue={'nomePerfil'}
+                    showClear={false}
+                    filter={false}
+                    options={filter.listaPerfilGrupos}
+                    value={filter.perfilGrupoSelecionado?.nomePerfil || undefined}
+                    onChange={(e: any) => controller.onSelecionarPerfilGrupo(e.target.value)}
+                  />
+                  {filter.submitted && !filter.perfilGrupoSelecionado?.nomePerfil && (
+                    <small className="p-invalid">Nome é obrigatório.</small>
+                  )}
+                </div>
+              </div>
+              <div className="col-12 md:col-6">
+                <label htmlFor="funcionalidades">Funcionalidades:</label>
+                <div className="p-inputgroup">
+                  <ProDropdown
+                    optionLabel={'modulo'}
+                    optionValue={'modulo'}
+                    showClear={false}
+                    filter={false}
+                    emptyMessage={
+                      filter.listaFuncionalidades?.length === 0
+                        ? 'Nenhum registro'
+                        : 'Selecionar o Perfil'
+                    }
+                    options={filter.listaFuncionalidades}
+                    value={filter.funcionalidadesSelecionado?.modulo || undefined}
+                    onChange={(e: any) => controller.onSelecionarFuncionalidades(e.target.value)}
+                  />
+                  {filter.submitted && !filter.funcionalidadesSelecionado?.modulo && (
+                    <small className="p-invalid">Nome é obrigatório.</small>
+                  )}
+                </div>
+              </div>
+              <div className="col-12 md:col-2">
+                <div className="p-inputgroup">
+                  <Button
+                    loading={filter.loading}
+                    label="Adicionar"
+                    icon="pi pi-plus-circle"
+                    className="p-button p-button"
+                    onClick={controller.adicionarListadeCadastro}
+                  />
+                </div>
+              </div>
+
+              <div className="col-12 md:col-10"></div>
+
+              <div className="col-12 md:col-12">
+                <div className="p-inputgroup">
+                  <DataTable
+                    value={filter.addControleAcessos}
+                    emptyMessage="Nenhum resultado encontrado!"
+                    sortOrder={1}
+                    responsiveLayout="stack"
+                  >
+                    <Column
+                      field="perfil.nomePerfil"
+                      header="Menu"
+                      style={{ minWidth: '200px' }}
+                    ></Column>
+                    <Column
+                      field="funcionalidades.menu"
+                      header="Menu"
+                      style={{ minWidth: '200px' }}
+                    ></Column>
+                    <Column
+                      field="funcionalidades.modulo"
+                      header="Modulo"
+                      style={{ minWidth: '200px' }}
+                      className="text-red-50"
+                    ></Column>
+                  </DataTable>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Dialog>
+
+        <Dialog
+          visible={filter.cadastrarPerfilModalDialog}
+          modal
+          header="Cadastrar Perfil"
+          maximizable={true}
+          maximized={true}
+          style={{ width: '100%', height: '100%', whiteSpace: 'nowrap' }}
+          footer={modalDialogPerfilFooter}
+          onHide={controller.fecharCadastrarPerfilModal}
+        >
+          <div className="card">
+            <div className="grid p-fluid">
+              <div className="col-12 md:col-12">
+                <div className="p-inputgroup">
+                  <span className="p-inputgroup-addon">
+                    <i className="pi pi-shield"></i>
+                  </span>
+                  <InputText
+                    placeholder="Nome"
+                    value={filter.perfilGrupoSelecionado?.nomePerfil}
+                    onChange={(e) => {
+                      filter.setPerfilGrupoSelecionado({
+                        ...filter.perfilGrupoSelecionado,
+                        nomePerfil: e.target.value,
+                      });
+                    }}
+                  />
+                  {filter.submitted && !filter.perfilGrupoSelecionado?.nomePerfil && (
+                    <small className="p-invalid">Nome é obrigatório.</small>
+                  )}
                 </div>
               </div>
             </div>

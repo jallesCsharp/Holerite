@@ -1,6 +1,9 @@
 import AbstractController from '../../../../../../provider/services/abstractController';
 import ToastService from '../../../../../../provider/services/toastService';
+import { FilterFuncionalidades } from '../../../../../@types/filters/FilterFuncionalidades';
 import { PerfilModel } from '../../../../../@types/model/PerfilModel';
+import ControleAcessoService from '../../../../../services/ControleAcessoService';
+import FuncionalidadesService from '../../../../../services/FuncionalidadesService';
 import PerfilService from '../../../../../services/PerfilService';
 import { Mensagem } from '../../../../../shared/mensagem/Mensagem';
 import PerfilGruposFilter from '../../models/Perfil/PerfilGruposFilter';
@@ -10,6 +13,10 @@ export default class PerfilGruposController extends AbstractController {
 
   private perfilService = new PerfilService();
 
+  private controleAcessoService = new ControleAcessoService();
+
+  private funcionalidadesService = new FuncionalidadesService();
+
   constructor(filter: PerfilGruposFilter) {
     super();
     this.filter = filter;
@@ -17,11 +24,12 @@ export default class PerfilGruposController extends AbstractController {
 
   async init() {
     super.init();
-    await this.obterPerfilGrupos();
+    await this.obterControleAcesso();
     this.breadCrumbService.change([{ label: 'Controle de Acessos', id: 'configuracoes-perfil' }]);
   }
 
-  public openNew = () => {
+  public openNew = async () => {
+    await this.obterPerfilGrupos();
     this.filter.setPerfilGruposModalDialog(true);
     this.filter.setPerfilGrupoSelecionado({
       ...this.filter.perfilGrupoSelecionado,
@@ -29,18 +37,57 @@ export default class PerfilGruposController extends AbstractController {
     });
   };
 
+  public adicionarListadeCadastro = async () => {
+    if (this.filter.perfilGrupoSelecionado && this.filter.funcionalidadesSelecionado) {
+      const itemControle = {
+        perfil: this.filter.perfilGrupoSelecionado,
+        funcionalidades: this.filter.funcionalidadesSelecionado,
+      };
+
+      console.log('lista');
+      console.log(itemControle);
+      this.filter.setAddControleAcessos({ itemControle });
+      // this.filter.setAddControleAcessos([itemControle]);
+
+      console.log('add - 2');
+      console.log(this.filter.listaControleAcessos);
+      console.log(this.filter.addControleAcessos);
+      this.filter.setFuncionalidadesSelecionado(null);
+    }
+  };
+
   public onDialogCancelarPerfilGrupos = () => {
+    this.init();
     this.filter.setSubmitted(false);
     this.filter.setPerfilGruposModalDialog(false);
   };
 
+  public CadastrarPerfilGrupos = () => {
+    this.filter.setCadastrarPerfilModalDialog(true);
+    this.filter.setPerfilGrupoSelecionado(null);
+  };
+
+  public fecharCadastrarPerfilModal = async () => {
+    await this.init();
+    this.filter.setCadastrarPerfilModalDialog(false);
+  };
+
   public onSelecionarPerfilGrupo = (perfil: string) => {
-    console.log('lista grupo');
-    console.log(this.filter.listaPerfilGrupos);
     if (this.filter.listaPerfilGrupos) {
       for (let i = 0; i < this.filter.listaPerfilGrupos.length; i++) {
         if (this.filter.listaPerfilGrupos[i].nomePerfil === perfil) {
           this.filter.setPerfilGrupoSelecionado(this.filter.listaPerfilGrupos[i]);
+          this.obterFuncionalidades(this.filter.listaPerfilGrupos[i]?.nomePerfil);
+        }
+      }
+    }
+  };
+
+  public onSelecionarFuncionalidades = (funcionalidade: string) => {
+    if (this.filter.listaFuncionalidades) {
+      for (let i = 0; i < this.filter.listaFuncionalidades.length; i++) {
+        if (this.filter.listaFuncionalidades[i].modulo === funcionalidade) {
+          this.filter.setFuncionalidadesSelecionado(this.filter.listaFuncionalidades[i]);
         }
       }
     }
@@ -57,10 +104,6 @@ export default class PerfilGruposController extends AbstractController {
     }
   }
 
-  public CadastrarPerfilGrupos = () => {
-    this.filter.setCadastrarPerfilModalDialog(true);
-  };
-
   async onUpdatePerfil(perfil?: PerfilModel) {
     this.blockUIService.start();
     const teste = await this.perfilService.UpdatePerfil(perfil);
@@ -76,24 +119,52 @@ export default class PerfilGruposController extends AbstractController {
   }
 
   public onDialogCancelar = () => {
+    this.init();
     this.filter.setSubmitted(false);
     this.filter.setPerfilGruposModalDialog(false);
   };
 
-  async obterPerfilGrupos() {
+  async obterControleAcesso() {
     this.blockUIService.start();
-    const result = await this.perfilService.GetAll();
-    this.filter.setListaPerfilGrupos(result.data);
+    const result = await this.controleAcessoService.GetAll();
     this.filter.setListaControleAcessos(result.data);
     ToastService.showSuccess(`Busca Realizada com Sucesso!`);
     this.blockUIService.stop();
   }
 
-  public fecharModal = () => {
+  async obterPerfilGrupos() {
+    this.blockUIService.start();
+    const result = await this.perfilService.GetAll();
+    this.filter.setListaPerfilGrupos(result.data);
+    ToastService.showSuccess(`Cadastrar Funcionalidades!`);
+    this.blockUIService.stop();
+  }
+
+  async obterFuncionalidades(nomePerfil?: string) {
+    this.blockUIService.start();
+    let filter: FilterFuncionalidades = {
+      Id: null,
+      Menu: null,
+      Modulo: null,
+      NomePerfil: nomePerfil === undefined ? null : nomePerfil,
+      Ativo: null,
+    };
+
+    const result = await this.funcionalidadesService.GetFuncionalidades(filter);
+    this.filter.setListaFuncionalidades(result.data);
+    if (result.data?.length) {
+      ToastService.showInfo(`Total de Funcionalidades disponivel ${result.data?.length}!`);
+    } else {
+      ToastService.showWarn(`Grupo "${nomePerfil}" não tem funcionalidades disponivel!`);
+    }
+    this.blockUIService.stop();
+  }
+
+  public fecharModal = async () => {
     this.filter.setSubmitted(false);
     this.filter.setPerfilGruposModalDialog(false);
     this.filter.setLoading(false);
-    this.obterPerfilGrupos();
+    await this.obterControleAcesso();
   };
 
   public onSalvarPerfilGrupos = async () => {

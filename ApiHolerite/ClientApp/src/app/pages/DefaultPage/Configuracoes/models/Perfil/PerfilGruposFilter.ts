@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ControleAcessosModel } from '../../../../../@types/model/ControleAcessosModel';
 import { PerfilModel } from '../../../../../@types/model/PerfilModel';
+import { FuncionalidadesModel } from '../../../../../@types/model/FuncionalidadesModel';
 
 export default class PerfilGruposFilter {
   public cadastrarPerfilModalDialog?: boolean;
@@ -27,6 +28,10 @@ export default class PerfilGruposFilter {
 
   public setPerfilGrupoSelecionado: (e: any) => void;
 
+  public funcionalidadesSelecionado?: FuncionalidadesModel;
+
+  public setFuncionalidadesSelecionado: (e: any) => void;
+
   public controleAcessosSelecionado?: ControleAcessosModel | undefined;
 
   public setControleAcessosSelecionado: (e: any) => void;
@@ -35,9 +40,17 @@ export default class PerfilGruposFilter {
 
   public setListaPerfilGrupos: (e: any) => void;
 
-  public listaControleAcessos?: ControleAcessosModel[] | undefined;
+  public listaFuncionalidades?: FuncionalidadesModel[];
+
+  public setListaFuncionalidades: (e: any) => void;
+
+  public listaControleAcessos?: ControleAcessosModel[];
 
   public setListaControleAcessos: (e: any) => void;
+
+  public addControleAcessos?: any;
+
+  public setAddControleAcessos: (e: any) => void;
 
   constructor() {
     [this.submitted, this.setSubmitted] = useState<boolean>(false);
@@ -49,10 +62,19 @@ export default class PerfilGruposFilter {
     [this.perfilGrupoSelecionado, this.setPerfilGrupoSelecionado] = useState<
       PerfilModel | undefined
     >();
+    [this.funcionalidadesSelecionado, this.setFuncionalidadesSelecionado] = useState<
+      FuncionalidadesModel | undefined
+    >();
     [this.controleAcessosSelecionado, this.setControleAcessosSelecionado] = useState<
       ControleAcessosModel | undefined
     >();
     [this.listaPerfilGrupos, this.setListaPerfilGrupos] = useState<PerfilModel[] | undefined>();
-    [this.listaControleAcessos, this.setListaControleAcessos] = useState<ControleAcessosModel[]>();
+    [this.listaFuncionalidades, this.setListaFuncionalidades] = useState<
+      FuncionalidadesModel[] | undefined
+    >();
+    [this.listaControleAcessos, this.setListaControleAcessos] = useState<
+      ControleAcessosModel[] | undefined
+    >();
+    [this.addControleAcessos, this.setAddControleAcessos] = useState<any | undefined>();
   }
 }

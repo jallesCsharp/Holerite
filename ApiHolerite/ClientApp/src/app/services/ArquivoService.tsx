@@ -58,7 +58,6 @@ export default class ArquivoService extends AbstractService {
     filter: FilterArquivosHolerite,
   ): Promise<TResponse<ArquivosModel[]>> {
     try {
-      console.log(filter);
       let param = '';
 
       if (
@@ -101,8 +100,6 @@ export default class ArquivoService extends AbstractService {
       ) {
         param = `?EmailEnviado=${filter.EmailEnviado}`;
       }
-      console.log('param');
-      console.log(param);
 
       const response = await apiUrl.get('/Arquivos/GetPesquisarArquivos' + param);
 

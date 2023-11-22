@@ -6,11 +6,6 @@ using Holerite.Core.Interfaces.Services.Controler;
 using Holerite.Core.Messages;
 using Holerite.Core.Validation;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Holerite.Application.Commands.Controler.Handlers
 {
@@ -38,9 +33,7 @@ namespace Holerite.Application.Commands.Controler.Handlers
         {
             IEnumerable<PerfilDto?> listaControleAcesso = await _perfilService.GetAll();
 
-            var teste = await _controleAcessosService.GetAll();
-
-            ValidationResult.Data = teste;
+            ValidationResult.Data = listaControleAcesso;
 
             return ValidationResult;
 

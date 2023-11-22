@@ -10,4 +10,5 @@ export interface ControleAcessosModel {
   perfilId?: string;
   perfil: PerfilModel;
   funcionalidades: FuncionalidadesModel[];
+  funcionalidade: FuncionalidadesModel;
 }

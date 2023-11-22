@@ -22,6 +22,7 @@ public static class ServicesInjector
         services.AddScoped<IControlerService, ControlerService>();
         services.AddScoped<IPerfilService, PerfilService>();
         services.AddScoped<IControleAcessosService, ControleAcessosService>();
+        services.AddScoped<IFuncionalidadesService, FuncionalidadesService>();
 
         return services;
 

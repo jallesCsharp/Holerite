@@ -15,6 +15,7 @@ using Holerite.Application.Commands.Controler.Handlers;
 using Holerite.Application.Commands.Controler.Requests;
 using Holerite.Application.Commands.Controler.Requests.ControleAcessosRequest;
 using Holerite.Application.Commands.Controler.Requests.PerfilRequest;
+using Holerite.Application.Commands.Controler.Requests.FuncionalidadesRequest;
 
 namespace Holerite.IOC.IOC;
 
@@ -81,6 +82,8 @@ public static class MediatorInjector
         services.AddScoped<IRequestHandler<UpdatePerfilRequest, ValidationResultBag>, PerfilCommandHandler>();
         services.AddScoped<IRequestHandler<DeletePerfilRequest, ValidationResultBag>, PerfilCommandHandler>();
         services.AddScoped<IRequestHandler<FilterPerfilRequest, ValidationResultBag>, PerfilCommandHandler>();
+        
+        services.AddScoped<IRequestHandler<FilterFuncionalidadesRequest, ValidationResultBag>, FuncionalidadesCommandHandler>();
 
 
         return services;
