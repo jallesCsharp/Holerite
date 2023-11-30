@@ -24,7 +24,7 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
 
     if (filter.listaControleAcessos) {
       for (let customer of filter.listaControleAcessos) {
-        if (customer.perfil.nomePerfil === name) {
+        if (customer.perfil?.nomePerfil === name) {
           total++;
         }
       }
@@ -229,23 +229,14 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
               <div className="col-12 md:col-12">
                 <div className="p-inputgroup">
                   <DataTable
-                    value={filter.addControleAcessos}
+                    value={filter.addListaControleAcessos?.funcionalidades}
                     emptyMessage="Nenhum resultado encontrado!"
                     sortOrder={1}
                     responsiveLayout="stack"
                   >
+                    <Column field="menu" header="Menu" style={{ minWidth: '200px' }}></Column>
                     <Column
-                      field="perfil.nomePerfil"
-                      header="Menu"
-                      style={{ minWidth: '200px' }}
-                    ></Column>
-                    <Column
-                      field="funcionalidades.menu"
-                      header="Menu"
-                      style={{ minWidth: '200px' }}
-                    ></Column>
-                    <Column
-                      field="funcionalidades.modulo"
+                      field="modulo"
                       header="Modulo"
                       style={{ minWidth: '200px' }}
                       className="text-red-50"

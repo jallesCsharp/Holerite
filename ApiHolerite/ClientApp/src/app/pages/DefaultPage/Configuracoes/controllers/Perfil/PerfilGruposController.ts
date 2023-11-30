@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import AbstractController from '../../../../../../provider/services/abstractController';
 import ToastService from '../../../../../../provider/services/toastService';
 import { FilterFuncionalidades } from '../../../../../@types/filters/FilterFuncionalidades';
@@ -17,9 +18,14 @@ export default class PerfilGruposController extends AbstractController {
 
   private funcionalidadesService = new FuncionalidadesService();
 
+  public cadastrarFuncionalidades?: any[];
+
+  private setCadastrarFuncionalidades: (e: any) => void;
+
   constructor(filter: PerfilGruposFilter) {
     super();
     this.filter = filter;
+    [this.cadastrarFuncionalidades, this.setCadastrarFuncionalidades] = useState([]);
   }
 
   async init() {
@@ -38,22 +44,27 @@ export default class PerfilGruposController extends AbstractController {
   };
 
   public adicionarListadeCadastro = async () => {
-    if (this.filter.perfilGrupoSelecionado && this.filter.funcionalidadesSelecionado) {
-      const itemControle = {
-        perfil: this.filter.perfilGrupoSelecionado,
-        funcionalidades: this.filter.funcionalidadesSelecionado,
-      };
+    console.log('adicionarListadeCadastro');
+    console.log(this.filter.addListaControleAcessos);
+    console.log('listaFuncionalidades');
+    console.log(this.filter.listaFuncionalidades);
 
-      console.log('lista');
-      console.log(itemControle);
-      this.filter.setAddControleAcessos({ itemControle });
-      // this.filter.setAddControleAcessos([itemControle]);
+    console.log('funcionalidadesSelecionado');
+    console.log(this.filter.funcionalidadesSelecionado);
 
-      console.log('add - 2');
-      console.log(this.filter.listaControleAcessos);
-      console.log(this.filter.addControleAcessos);
-      this.filter.setFuncionalidadesSelecionado(null);
+    if (this.filter.funcionalidadesSelecionado) {
+      this.setCadastrarFuncionalidades(
+        this.cadastrarFuncionalidades?.push(this.filter.funcionalidadesSelecionado),
+      );
     }
+
+    this.filter.setFuncionalidadesSelecionado(undefined);
+
+    // this.filter.setFuncionalidadesSelecionado(null);
+
+    console.log(this.cadastrarFuncionalidades);
+
+    console.log('adicionarListadeCadastro - fim');
   };
 
   public onDialogCancelarPerfilGrupos = () => {

@@ -24,7 +24,7 @@ export default class PerfilGruposFilter {
 
   public setSubmitted: (e: any) => void;
 
-  public perfilGrupoSelecionado?: PerfilModel;
+  public perfilGrupoSelecionado?: PerfilModel | undefined;
 
   public setPerfilGrupoSelecionado: (e: any) => void;
 
@@ -48,9 +48,9 @@ export default class PerfilGruposFilter {
 
   public setListaControleAcessos: (e: any) => void;
 
-  public addControleAcessos?: any;
+  public addListaControleAcessos?: ControleAcessosModel;
 
-  public setAddControleAcessos: (e: any) => void;
+  public setAddListaControleAcessos: (e: any) => void;
 
   constructor() {
     [this.submitted, this.setSubmitted] = useState<boolean>(false);
@@ -75,6 +75,7 @@ export default class PerfilGruposFilter {
     [this.listaControleAcessos, this.setListaControleAcessos] = useState<
       ControleAcessosModel[] | undefined
     >();
-    [this.addControleAcessos, this.setAddControleAcessos] = useState<any | undefined>();
+    [this.addListaControleAcessos, this.setAddListaControleAcessos] =
+      useState<ControleAcessosModel>();
   }
 }

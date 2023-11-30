@@ -44,8 +44,6 @@ export default class FuncionalidadesService extends AbstractService {
     try {
       let param = '';
 
-      console.log(filter);
-
       if (
         filter.Ativo === null &&
         filter.Id === null &&
@@ -56,13 +54,7 @@ export default class FuncionalidadesService extends AbstractService {
         param = `?NomePerfil=${filter.NomePerfil}`;
       }
 
-      console.log('Funcionalidades - param');
-      console.log(param);
-
       const response = await apiUrl.get('/Funcionalidades' + param);
-
-      console.log('Funcionalidades - response');
-      console.log(response);
 
       const data: Array<FuncionalidadesModel> = response.data;
       const resultTrue = Object.values(response)[1];

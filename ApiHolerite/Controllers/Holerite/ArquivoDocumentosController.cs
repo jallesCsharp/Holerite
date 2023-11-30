@@ -40,6 +40,7 @@ namespace ApiHolerite.Controllers.Holerite
             }
             catch (Exception eX)
             {
+                LoggerError(eX, "GetArquivosDocumentos");
                 var bag = new ValidationResultBag();
                 bag.Errors.Add(new ValidationFailure(StatusCodes.Status400BadRequest.ToString(), $"{eX.Message}"));
                 return CustomResponse(bag);
@@ -66,6 +67,7 @@ namespace ApiHolerite.Controllers.Holerite
             }
             catch (Exception eX)
             {
+                LoggerError(eX, "Create");
                 return CustomResponse(new Dictionary<string, object>
                 {
                     {"errors", eX.Message },
@@ -81,8 +83,21 @@ namespace ApiHolerite.Controllers.Holerite
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdateArquivoDocumentosRequest command)
         {
-            var result = await _mediator.Send(command);
-            return CustomResponse(result);
+            try
+            {
+                var result = await _mediator.Send(command);
+                return CustomResponse(result);
+            }
+            catch (Exception eX)
+            {
+                LoggerError(eX, "Update");
+                return CustomResponse(new Dictionary<string, object>
+                {
+                    {"errors", eX.Message },
+                    {"success", false }
+                });
+            }
+            
         }
 
         [HttpDelete("{id:Guid}")]
@@ -100,8 +115,9 @@ namespace ApiHolerite.Controllers.Holerite
 
                 return CustomResponse(result);
             }
-            catch (Exception)
+            catch (Exception eX)
             {
+                LoggerError(eX, "Delete");
                 return CustomResponse(StatusCodes.Status400BadRequest);
             }
         }

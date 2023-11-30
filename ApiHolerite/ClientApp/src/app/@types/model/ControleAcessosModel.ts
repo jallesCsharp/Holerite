@@ -2,13 +2,12 @@ import { FuncionalidadesModel } from './FuncionalidadesModel';
 import { PerfilModel } from './PerfilModel';
 
 export interface ControleAcessosModel {
-  id?: string;
-  created?: Date;
-  updated?: Date;
-  deleted?: Date;
-  funcionalidadesId?: string;
-  perfilId?: string;
-  perfil: PerfilModel;
+  id?: string | null;
+  created?: Date | null;
+  updated?: Date | null;
+  deleted?: Date | null;
+  funcionalidadesId?: string | null;
+  perfilId?: string | null;
+  perfil: PerfilModel | null;
   funcionalidades: FuncionalidadesModel[];
-  funcionalidade: FuncionalidadesModel;
 }

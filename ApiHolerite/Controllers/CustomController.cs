@@ -5,6 +5,7 @@ using Holerite.Core.Validation;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace ApiHolerite.Controllers
 {
@@ -58,6 +59,14 @@ namespace ApiHolerite.Controllers
             return !Errors.Any();
         }
 
+        protected void LoggerError(Exception logger, string mensagem)
+        {
+            _logger.LogError(logger, mensagem);
+        }
 
+        protected void LoggerInformation(string mensagem, object[] objects = null)
+        {
+            _logger.LogInformation(mensagem, objects);
+        }
     }
 }

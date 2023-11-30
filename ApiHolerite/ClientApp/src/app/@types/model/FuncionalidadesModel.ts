@@ -1,9 +1,9 @@
 export interface FuncionalidadesModel {
-  id?: string;
-  created?: Date;
-  updated?: Date;
-  deleted?: Date;
-  menu?: string;
-  modulo?: string;
-  ativo?: boolean;
+  id?: string | null;
+  created?: Date | null;
+  updated?: Date | null;
+  deleted?: Date | null;
+  menu?: string | null;
+  modulo?: string | null;
+  ativo?: boolean | null;
 }

@@ -40,6 +40,7 @@ namespace ApiHolerite.Controllers.Holerite
             }
             catch (Exception eX)
             {
+                LoggerError(eX, "GetArquivoHolerite");
                 var bag = new ValidationResultBag();
                 bag.Errors.Add(new ValidationFailure(StatusCodes.Status400BadRequest.ToString(), $"{eX.Message}"));
                 return CustomResponse(bag);
@@ -61,6 +62,7 @@ namespace ApiHolerite.Controllers.Holerite
             }
             catch (Exception eX)
             {
+                LoggerError(eX, "GetPesquisarArquivos");
                 var bag = new ValidationResultBag();
                 bag.Errors.Add(new ValidationFailure(StatusCodes.Status400BadRequest.ToString(), $"{eX.Message}"));
                 return CustomResponse(bag);
@@ -79,11 +81,12 @@ namespace ApiHolerite.Controllers.Holerite
             {
                 if (request is null)
                     return CustomResponse("Objeto inválido");
-                var resulte = await _mediator.Send(request);
+                var resulte = await _mediator.Send(request);                
                 return CustomResponse(resulte);
             }
             catch (Exception eX)
             {
+                LoggerError(eX, "GetPesquisarArquivosPendentes");
                 var bag = new ValidationResultBag();
                 bag.Errors.Add(new ValidationFailure(StatusCodes.Status400BadRequest.ToString(), $"{eX.Message}"));
                 return CustomResponse(bag);
@@ -105,8 +108,9 @@ namespace ApiHolerite.Controllers.Holerite
                 var resulte = await _mediator.Send(request);
                 return CustomResponse(resulte);
             }
-            catch (Exception)
+            catch (Exception eX)
             {
+                LoggerError(eX, "Create");
                 return CustomResponse(StatusCodes.Status400BadRequest);
             }
         }
@@ -124,8 +128,9 @@ namespace ApiHolerite.Controllers.Holerite
                 var resulte = await _mediator.Send(request);
                 return CustomResponse(resulte);
             }
-            catch (Exception)
+            catch (Exception eX)
             {
+                LoggerError(eX, "ConfirmarEnvioEmailPendentes");
                 return CustomResponse(StatusCodes.Status400BadRequest);
             }
         }
@@ -143,8 +148,9 @@ namespace ApiHolerite.Controllers.Holerite
                 var resulte = await _mediator.Send(request);
                 return CustomResponse(resulte);
             }
-            catch (Exception)
+            catch (Exception eX)
             {
+                LoggerError(eX, "ReenviarEmail");
                 return CustomResponse(StatusCodes.Status400BadRequest);
             }
         }
@@ -155,8 +161,17 @@ namespace ApiHolerite.Controllers.Holerite
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdateArquivosRequest command)
         {
-            var result = await _mediator.Send(command);
-            return CustomResponse(result);
+            try
+            {
+                var result = await _mediator.Send(command);
+                return CustomResponse(result);
+            }
+            catch (Exception eX)
+            {
+                LoggerError(eX, "Update");
+                return CustomResponse(StatusCodes.Status400BadRequest);
+            }
+            
         }
 
         [HttpPatch("{id}")]
@@ -165,11 +180,20 @@ namespace ApiHolerite.Controllers.Holerite
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Patch(Guid id, JsonPatchDocument<PatchArquivosRequest> patchRequest)
         {
-            var command = new PatchArquivosRequest(patchRequest);
+            try
+            {
+                var command = new PatchArquivosRequest(patchRequest);
 
-            var result = await _mediator.Send(command);
+                var result = await _mediator.Send(command);
 
-            return CustomResponse(result);
+                return CustomResponse(result);
+            }
+            catch (Exception eX)
+            {
+                LoggerError(eX, "Patch");
+                return CustomResponse(StatusCodes.Status400BadRequest);
+            }
+            
         }
 
         [HttpDelete("{id:Guid}")]
@@ -187,8 +211,9 @@ namespace ApiHolerite.Controllers.Holerite
 
                 return CustomResponse(result);
             }
-            catch (Exception)
+            catch (Exception eX)
             {
+                LoggerError(eX, "Delete");
                 return CustomResponse(StatusCodes.Status400BadRequest);
             }
         }
