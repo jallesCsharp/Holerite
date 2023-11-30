@@ -10,7 +10,7 @@ namespace Holerite.Application.Commands.Controler.Requests
 {
     public class LoginAuthRequest : Command
     {
-        public string? Cpf { get; set; }
+        public string? LoginAuth { get; set; }
         public string? Password { get; set; }
 
         public override bool IsValid()

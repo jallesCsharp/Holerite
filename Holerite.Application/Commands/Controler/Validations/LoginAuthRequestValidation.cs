@@ -12,9 +12,9 @@ namespace Holerite.Application.Commands.Controler.Validations
     {
         public LoginAuthRequestValidation()
         {
-            RuleFor(x => x.Cpf)
+            RuleFor(x => x.LoginAuth)
                 .NotEmpty()
-                .WithMessage("Cpf Campo Obrigatório.");
+                .WithMessage("Login Campo Obrigatório.");
 
             RuleFor(x => x.Password)
                 .NotEmpty()

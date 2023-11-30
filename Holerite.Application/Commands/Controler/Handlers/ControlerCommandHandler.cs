@@ -61,7 +61,7 @@ namespace Holerite.Application.Commands.Controler.Handlers
                 return ValidationResult;
             }
 
-            var loginAuthDto = await _controlerService.LoginAuth(request.Cpf ?? "", request.Password);
+            var loginAuthDto = await _controlerService.LoginAuth(request.LoginAuth ?? "", request.Password);
 
             if (loginAuthDto is null)
             {

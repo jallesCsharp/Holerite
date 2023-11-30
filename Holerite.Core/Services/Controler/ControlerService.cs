@@ -32,10 +32,10 @@ namespace Holerite.Core.Services.Controler
             _perfilRepository = perfilRepository;
         }
 
-        public async Task<LoginAuthDto> LoginAuth(string? pCpf, string? pPassword)
+        public async Task<LoginAuthDto> LoginAuth(string? pLoginAuth, string? pPassword)
         {
             var loginAuth = await _loginRepository
-                    .QueryableFor(p => p.LoginAuth == pCpf)
+                    .QueryableFor(p => p.LoginAuth == pLoginAuth)
                     .Include(pX => pX.Pessoas)
                     .Include(p => p.Perfil).ThenInclude(pX => pX.ControleAcessos).ThenInclude(pX => pX.Funcionalidades)
                     .FirstOrDefaultAsync();
