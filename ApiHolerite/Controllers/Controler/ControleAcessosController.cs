@@ -62,6 +62,25 @@ namespace ApiHolerite.Controllers.Controler
             }
         }
 
+        [HttpPost("PerfilControleAcesso")]
+        //[EnableCors("AlowsCors")]
+        [ProducesResponseType(typeof(ControleAcessosResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> CreateControleAcessos([FromBody] CreatePerfilControleAcessoRequest request)
+        {
+            try
+            {
+                if (request is null)
+                    return CustomResponse("Objeto inválido");
+                var resulte = await _mediator.Send(request);
+                return CustomResponse(resulte);
+            }
+            catch (Exception)
+            {
+                return CustomResponse(StatusCodes.Status400BadRequest);
+            }
+        }
+
         [HttpPut]
         //[EnableCors("AlowsCors")]
         [ProducesResponseType(typeof(ControleAcessosResponse), StatusCodes.Status200OK)]

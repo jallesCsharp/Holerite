@@ -72,6 +72,7 @@ public static class MediatorInjector
 
 
         services.AddScoped<IRequestHandler<CreateControleAcessosRequest, ValidationResultBag>, ControleAcessosCommandHandler>();
+        services.AddScoped<IRequestHandler<CreatePerfilControleAcessoRequest, ValidationResultBag>, ControleAcessosCommandHandler>();
         services.AddScoped<IRequestHandler<PatchControleAcessosRequest, ValidationResultBag>, ControleAcessosCommandHandler>();
         services.AddScoped<IRequestHandler<UpdateControleAcessosRequest, ValidationResultBag>, ControleAcessosCommandHandler>();
         services.AddScoped<IRequestHandler<DeleteControleAcessosRequest, ValidationResultBag>, ControleAcessosCommandHandler>();

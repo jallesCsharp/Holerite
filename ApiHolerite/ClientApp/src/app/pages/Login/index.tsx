@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Login } from './pages/Login';
 import Logout from './pages/Logout';
+import Login from './pages/Login';
 
 export const LoginPage: React.FC = () => {
   return (

@@ -6,11 +6,13 @@ using Holerite.Core.Validation;
 using Holerite.Core.Interfaces.Services.Controler;
 using Holerite.Application.Commands.Controler.Requests.ControleAcessosRequest;
 using Holerite.Application.Commands.Controler.Responses.ControleAcessosResponses;
+using Holerite.Core.Models;
 
 namespace Holerite.Application.Commands.Controler.Handlers
 {
     public class ControleAcessosCommandHandler : CommandHandler,
         IRequestHandler<CreateControleAcessosRequest, ValidationResultBag>,
+        IRequestHandler<CreatePerfilControleAcessoRequest, ValidationResultBag>,
         IRequestHandler<PatchControleAcessosRequest, ValidationResultBag>,
         IRequestHandler<UpdateControleAcessosRequest, ValidationResultBag>,
         IRequestHandler<DeleteControleAcessosRequest, ValidationResultBag>,
@@ -49,6 +51,31 @@ namespace Holerite.Application.Commands.Controler.Handlers
             var result = await _controleAcessosService.Create(controleAcesso);
 
             ValidationResult.Data = _mapper.Map<ControleAcessosResponse>(result);
+
+            return ValidationResult;
+        }
+        
+        public async Task<ValidationResultBag> Handle(CreatePerfilControleAcessoRequest request, CancellationToken cancellationToken)
+        {
+            if (request.Funcionalidades is null)
+                throw new Exception("Lista de Funcionalidades nulo.");
+            List<ControleAcessosDto> listaControleAcessos = new List<ControleAcessosDto>();
+
+            request.Funcionalidades.ToList().ForEach(item =>
+            {
+                listaControleAcessos.Add(new ControleAcessosDto()
+                {
+                    PerfilId = request.Perfil?.Id,
+                    FuncionalidadesId = item.Id,
+                    Created = DateTime.UtcNow,
+
+                });
+            });
+            await _controleAcessosService.CreateAll(listaControleAcessos);
+
+            List<ControleAcessosDto>? result = await _controleAcessosService.GetByPerfilId(request.Perfil?.Id);
+
+            ValidationResult.Data = _mapper.Map<List<ControleAcessosResponse>>(result);
 
             return ValidationResult;
         }

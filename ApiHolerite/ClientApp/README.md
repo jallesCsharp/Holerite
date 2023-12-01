@@ -25,5 +25,11 @@ Sempre que for implementar um novo componente, deve-se:
 - Seguir o que já foi implementado
 - Ativar o eslint e prettier com o autosave da IDE que estiver utilizando, isso evitará que o código saia do padrão já pré definido
 
+
+-insert into public."ControleAcessos" 
+values (gen_random_uuid(), (select "Id" from public."Perfil" p where p."NomePerfil" = 'ADMINISTRADOR'), (select "Id" from public."Funcionalidades" f where f."Modulo" = 'CONFIGURACAO_PERFIL_GRUPOS'), true, '2023-11-30', '2023-11-30' ,'2023-11-30' )
+
+
+
 ### Componente de calendário
 - https://github.com/wix/react-native-calendars

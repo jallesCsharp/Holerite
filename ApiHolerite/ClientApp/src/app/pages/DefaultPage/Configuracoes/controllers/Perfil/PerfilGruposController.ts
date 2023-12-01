@@ -8,6 +8,7 @@ import FuncionalidadesService from '../../../../../services/FuncionalidadesServi
 import PerfilService from '../../../../../services/PerfilService';
 import { Mensagem } from '../../../../../shared/mensagem/Mensagem';
 import PerfilGruposFilter from '../../models/Perfil/PerfilGruposFilter';
+import { ControleAcessosModel } from '../../../../../@types/model/ControleAcessosModel';
 
 export default class PerfilGruposController extends AbstractController {
   public filter: PerfilGruposFilter;
@@ -43,28 +44,9 @@ export default class PerfilGruposController extends AbstractController {
     });
   };
 
-  public adicionarListadeCadastro = async () => {
-    console.log('adicionarListadeCadastro');
-    console.log(this.filter.addListaControleAcessos);
-    console.log('listaFuncionalidades');
-    console.log(this.filter.listaFuncionalidades);
-
-    console.log('funcionalidadesSelecionado');
-    console.log(this.filter.funcionalidadesSelecionado);
-
-    if (this.filter.funcionalidadesSelecionado) {
-      this.setCadastrarFuncionalidades(
-        this.cadastrarFuncionalidades?.push(this.filter.funcionalidadesSelecionado),
-      );
-    }
-
-    this.filter.setFuncionalidadesSelecionado(undefined);
-
-    // this.filter.setFuncionalidadesSelecionado(null);
-
-    console.log(this.cadastrarFuncionalidades);
-
-    console.log('adicionarListadeCadastro - fim');
+  public removerFuncionalidadeTemplate = (item: ControleAcessosModel) => {
+    this.filter.setControleAcessosSelecionado(item);
+    this.filter.setRemoverModalDialog(true);
   };
 
   public onDialogCancelarPerfilGrupos = () => {
@@ -78,12 +60,59 @@ export default class PerfilGruposController extends AbstractController {
     this.filter.setPerfilGrupoSelecionado(null);
   };
 
+  public removerSelecionado = async () => {
+    this.blockUIService.start();
+    this.filter.setRemoverModalDialog(false);
+    console.log('iniciar remocao');
+    let result = await this.controleAcessoService.RemoverControler(
+      this.filter.controleAcessosSelecionado,
+    );
+    ToastService.showWarn(result.success === true ? 'Remover com Sucesso!!!' : 'Tente novamente!');
+    this.fecharModalConfirmacao();
+    this.blockUIService.stop();
+  };
+
   public fecharCadastrarPerfilModal = async () => {
     await this.init();
     this.filter.setCadastrarPerfilModalDialog(false);
   };
 
+  public onDialogCancelar = () => {
+    this.init();
+    this.filter.setSubmitted(false);
+    this.filter.setPerfilGruposModalDialog(false);
+  };
+
+  public fecharModalConfirmacao = () => {
+    this.filter.setRemoverModalDialog(true);
+    this.filter.setControleAcessosSelecionado(null);
+  };
+
+  public fecharModal = async () => {
+    this.filter.setSubmitted(false);
+    this.filter.setPerfilGruposModalDialog(false);
+    this.filter.setLoading(false);
+    this.setCadastrarFuncionalidades([]);
+    this.filter.setAddFuncionalidades([]);
+    await this.obterControleAcesso();
+  };
+
+  public adicionarListadeCadastro = async () => {
+    if (this.filter.funcionalidadesSelecionado) {
+      this.cadastrarFuncionalidades?.push(this.filter.funcionalidadesSelecionado);
+
+      this.filter.setAddFuncionalidades(this.cadastrarFuncionalidades);
+      const removerItem = this.filter.listaFuncionalidades?.filter(
+        (x) => x.id !== this.filter.funcionalidadesSelecionado?.id,
+      );
+      this.filter.setListaFuncionalidades(removerItem);
+    }
+    this.filter.setFuncionalidadesSelecionado(undefined);
+  };
+
   public onSelecionarPerfilGrupo = (perfil: string) => {
+    this.setCadastrarFuncionalidades([]);
+    this.filter.setAddFuncionalidades([]);
     if (this.filter.listaPerfilGrupos) {
       for (let i = 0; i < this.filter.listaPerfilGrupos.length; i++) {
         if (this.filter.listaPerfilGrupos[i].nomePerfil === perfil) {
@@ -129,13 +158,8 @@ export default class PerfilGruposController extends AbstractController {
     return teste;
   }
 
-  public onDialogCancelar = () => {
-    this.init();
-    this.filter.setSubmitted(false);
-    this.filter.setPerfilGruposModalDialog(false);
-  };
-
   async obterControleAcesso() {
+    this.filter.setListaControleAcessos([]);
     this.blockUIService.start();
     const result = await this.controleAcessoService.GetAll();
     this.filter.setListaControleAcessos(result.data);
@@ -171,13 +195,6 @@ export default class PerfilGruposController extends AbstractController {
     this.blockUIService.stop();
   }
 
-  public fecharModal = async () => {
-    this.filter.setSubmitted(false);
-    this.filter.setPerfilGruposModalDialog(false);
-    this.filter.setLoading(false);
-    await this.obterControleAcesso();
-  };
-
   public onSalvarPerfilGrupos = async () => {
     this.filter.setLoading(true);
     try {
@@ -212,6 +229,38 @@ export default class PerfilGruposController extends AbstractController {
           this.filter.setListaPerfilGrupos(result.data);
           return result.data;
         });
+      }
+      this.blockUIService.stop();
+      this.fecharModal();
+    } catch (error) {
+      ToastService.showError(Mensagem.ERROR_501 + error);
+      this.blockUIService.stop();
+      this.fecharModal();
+    }
+  };
+
+  public onSalvarPerfilControler = async () => {
+    console.log('onSalvarPerfilControler');
+    this.filter.setLoading(true);
+    try {
+      this.blockUIService.start();
+      if (this.filter.addFuncionalidades && this.filter.perfilGrupoSelecionado) {
+        await this.controleAcessoService
+          .InsertPerfilControler(this.filter.addFuncionalidades, this.filter.perfilGrupoSelecionado)
+          .then((result) => {
+            if (result.success == false) {
+              ToastService.showError(
+                'Error: ' + result.errors.status + ' - ' + result.errors.data.errors.Messagens[0],
+              );
+              return;
+            }
+            if (result.data?.toString() === '400') {
+              ToastService.showError(Mensagem.ERROR_400);
+              return;
+            }
+            this.filter.setListaControleAcessos(result.data);
+            return result.data;
+          });
       }
       this.blockUIService.stop();
       this.fecharModal();

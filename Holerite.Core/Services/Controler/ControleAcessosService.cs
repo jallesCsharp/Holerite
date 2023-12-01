@@ -31,6 +31,10 @@ namespace Holerite.Core.Services.Controler
                 .QueryableFor()
                 .Include(pX => pX.Perfil)
                 .Include(pX => pX.Funcionalidades)
+                .Where(pX => !pX.Deleted.HasValue)
+                .OrderBy(pX => pX.Funcionalidades.Menu)
+                .OrderBy(pX => pX.Funcionalidades.Modulo)
+                .OrderBy(pX => pX.PerfilId)
                 .ToListAsync();
 
             perfil.ForEach(item => {
@@ -44,6 +48,7 @@ namespace Holerite.Core.Services.Controler
         {
             var controleAcessos = await _repository
                 .QueryableFor(p => p.Id == id)
+                .Where(pX => !pX.Deleted.HasValue)
                 .Include(pX => pX.Perfil)
                 .Include(pX => pX.Funcionalidades)
                 .FirstOrDefaultAsync();
@@ -52,10 +57,18 @@ namespace Holerite.Core.Services.Controler
 
         public async Task<ControleAcessosDto> Create(ControleAcessosDto controleAcessosDto)
         {
-            var controleAcessos = _mapper.Map<ControleAcessos>(controleAcessosDto);
+            ControleAcessos controleAcessos = _mapper.Map<ControleAcessos>(controleAcessosDto);
             var result = _repository.Add(controleAcessos);
             await _repository.UnitOfWork.Commit();
             return _mapper.Map<ControleAcessosDto>(result);
+        }
+
+        public async Task<List<ControleAcessosDto>> CreateAll(List<ControleAcessosDto> pListaControleAcessos)
+        {
+            List<ControleAcessos> controleAcessos = _mapper.Map<List<ControleAcessos>>(pListaControleAcessos);
+            var result = _repository.AddRange(controleAcessos);
+            await _repository.UnitOfWork.Commit();
+            return _mapper.Map<List<ControleAcessosDto>>(result);
         }
 
         public async Task<ControleAcessosDto> Update(ControleAcessosDto controleAcessosDto)
@@ -79,6 +92,24 @@ namespace Holerite.Core.Services.Controler
             {
                 throw new Exception(eX.Message);
             }
+        }
+
+        public async Task<List<ControleAcessosDto>> GetByPerfilId(Guid? id)
+        {
+            try
+            {
+                var controleAcessos = await _repository
+                .QueryableFor(p => p.PerfilId == id)
+                .Where(pX => !pX.Deleted.HasValue)
+                .Include(pX => pX.Perfil)
+                .Include(pX => pX.Funcionalidades)
+                .FirstOrDefaultAsync();
+                return _mapper.Map<List<ControleAcessosDto>>(controleAcessos);
+            }
+            catch (Exception eX)
+            {
+                throw new Exception(eX.Message);
+            }            
         }
     }
 }

@@ -6,38 +6,44 @@ import { LoginModel } from '../../../@types/model/LoginModel';
 import LoginController from '../controllers/LoginController';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-export const Login: React.FC = () => {
+const Login: React.FC = () => {
   const controller = new LoginController();
   useEffect(() => {
     controller.init();
   }, []);
 
   const [isCadastrar, setIsCadastrar] = useState(false);
-  const [cpf, setCpf] = useState('');
+  const [loginAuth, setLoginAuth] = useState('');
   const [spinner, setSpinner] = useState<boolean>(false);
   const [password, setPassword] = useState('');
 
+  // function validade() {
+  //   SetIsError(false);
+  //   return false;
+  // }
+
   const handleLogin = async () => {
-    setSpinner(true);
-    if (cpf && password) {
-      const userLogin: LoginModel = {
-        cpf: cpf,
-        password: password,
-      };
+    // setSpinner(true);
+    console.log('antes logar');
 
-      await controller.logar(userLogin);
+    const userLogin: LoginModel = {
+      cpf: loginAuth,
+      password: password,
+    };
+    await controller.logar(userLogin);
+    console.log('Login teste');
 
-      // const isLogged = await auth.authLogin(userLogin);
-      // console.log('isLogged');
-      // console.log(isLogged);
-      // authService.save(Object.values(isLogged)[1]);
+    setSpinner(false);
+    // const isLogged = await auth.authLogin(userLogin);
+    // console.log('isLogged');
+    // console.log(isLogged);P
+    // authService.save(Object.values(isLogged)[1]);
 
-      // if (isLogged.success) {
-      //   return <Link to="/"></Link>;
-      // } else {
-      //   alert('Senha ou E-mail errado!!!');
-      // }
-    }
+    // if (isLogged.success) {
+    //   return <Link to="/"></Link>;
+    // } else {
+    //   alert('Senha ou E-mail errado!!!');
+    // }
   };
 
   return (
@@ -50,16 +56,19 @@ export const Login: React.FC = () => {
             <div className="card p-fluid">
               <div className="field grid">
                 <label htmlFor="cpf-cnpj" className="col-12 mb-2 md:col-2">
-                  CPF/CNPJ
+                  CPF
                 </label>
                 <div className="col-12 md:col-10">
                   <BordaCampo />
                   <InputText
                     id="cpf-cnpj"
                     type="text"
-                    value={cpf}
-                    onChange={(e) => setCpf(e.target.value)}
+                    value={loginAuth}
+                    onChange={(e) => setLoginAuth(e.target.value)}
                   />
+                  {!loginAuth && controller.submitted && (
+                    <small className="p-invalid">Campo é obrigatório.</small>
+                  )}
                 </div>
               </div>
               <div className="field grid">
@@ -74,6 +83,9 @@ export const Login: React.FC = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  {!password && controller.submitted && (
+                    <small className="p-invalid">Senha é obrigatório.</small>
+                  )}
                 </div>
               </div>
               {isCadastrar && (
@@ -121,3 +133,4 @@ export const Login: React.FC = () => {
     </Container>
   );
 };
+export default Login;

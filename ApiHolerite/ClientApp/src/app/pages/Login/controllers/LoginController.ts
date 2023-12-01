@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import AbstractController from '../../../../provider/services/abstractController';
 import AuthService from '../../../../provider/services/authService';
-import ToastService from '../../../../provider/services/toastService';
 import { LoginModel } from '../../../@types/model/LoginModel';
 import LoginService from '../../../services/LoginService';
+import ToastService from '../../../../provider/services/toastService';
 
 export default class LoginController extends AbstractController {
   private loginService = new LoginService();
@@ -14,9 +14,14 @@ export default class LoginController extends AbstractController {
 
   private setLoginModel: any;
 
+  public submitted?: boolean;
+
+  private SetSubmitted: (e: any) => void;
+
   constructor() {
     super();
     [this.loginModel, this.setLoginModel] = useState();
+    [this.submitted, this.SetSubmitted] = useState<boolean>(false);
   }
 
   init() {
@@ -25,9 +30,10 @@ export default class LoginController extends AbstractController {
 
   public async logar(data: LoginModel) {
     this.blockUIService.start();
-
+    console.log('Inicio');
     if (!data.cpf || data.cpf.length == 0 || !data.password || data.password.length == 0) {
-      return 'Informe o Login ou Senha';
+      console.log('validação if');
+      return this.SetSubmitted(true);
     }
     try {
       const response = await this.loginService.authLogin(data);

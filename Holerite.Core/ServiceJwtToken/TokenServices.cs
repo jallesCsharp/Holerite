@@ -16,16 +16,22 @@ namespace Holerite.Core.ServiceJwtToken
     {
         public static string GenerateToken(LoginAuthDto user)
         {
+            if (user.Pessoas == null)
+            {
+                user.Pessoas = new PessoasDto();
+                user.Pessoas.Id = Guid.NewGuid();
+                user.Pessoas.Nome = "Sistema";
+            }
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             byte[] key = Encoding.ASCII.GetBytes(Token.Secret);
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                   new Claim(ClaimTypes.Hash, user.Pessoas.Id.AsString()),
-                   new Claim(ClaimTypes.Name, user.Pessoas.Nome.AsString()),
+                   new Claim(ClaimTypes.Hash, user.Pessoas.Id.AsString() ?? ""),
+                   new Claim(ClaimTypes.Name, user.Pessoas.Nome.AsString() ?? ""),
                    new Claim(ClaimTypes.NameIdentifier, user.Id.AsString()),
-                   new Claim(ClaimTypes.Role, user.Perfil.NomePerfil.AsString()),
+                   new Claim(ClaimTypes.Role, user.Perfil.NomePerfil.AsString() ?? ""),
                 }),
                 Expires = DateTime.UtcNow.AddHours(48),
                 SigningCredentials = new SigningCredentials(

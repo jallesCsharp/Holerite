@@ -33,7 +33,7 @@ namespace Holerite.Core.Services.Controler
             List<PerfilDto> listaPerfils = new List<PerfilDto>();
             listaPerfils = _mapper.Map<List<PerfilDto>>(
                 await _repository
-                .QueryableFor(pX => pX.Deleted.HasValue != true)
+                .QueryableFor(pX => !pX.Deleted.HasValue)
                 .ToListAsync());
             return _mapper.Map<IEnumerable<PerfilDto>>(listaPerfils);
         }
@@ -42,6 +42,7 @@ namespace Holerite.Core.Services.Controler
         {
             var perfil = await _repository
                 .QueryableFor(p => p.Id == id)
+                .Where(pX => !pX.Deleted.HasValue)
                 .FirstOrDefaultAsync();
             return _mapper.Map<PerfilDto>(perfil);
         }
@@ -96,6 +97,7 @@ namespace Holerite.Core.Services.Controler
         {
             var perfil = await _repository
                 .QueryableFor(p => p.NomePerfil == pNomePerfil)
+                .Where(pX => !pX.Deleted.HasValue)
                 .FirstOrDefaultAsync();
             return _mapper.Map<PerfilDto>(perfil);
         }

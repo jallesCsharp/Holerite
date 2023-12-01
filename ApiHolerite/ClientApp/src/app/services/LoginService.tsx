@@ -13,7 +13,7 @@ export default class LoginService extends AbstractService {
     try {
       const loginApiUrl =
         process.env.REACT_APP_API_URL +
-        'Login/LoginAuth?Cpf=' +
+        'Login/LoginAuth?LoginAuth=' +
         loginData.cpf +
         '&Password=' +
         loginData.password;

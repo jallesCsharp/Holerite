@@ -34,8 +34,6 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
   };
 
   const headerTemplate = (data: any) => {
-    console.log('headerTemplate');
-    console.log(data);
     return (
       <React.Fragment>
         <span className="image-text">{data.perfil.nomePerfil}</span>
@@ -62,7 +60,24 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
     ToastService.showSuccess(event.data.perfil.nomePerfil);
   };
 
-  const modalDialogFooter = (
+  const modalConfirmacaoDialogFooter = (
+    <>
+      <Button
+        label="Não"
+        icon="pi pi-times"
+        className="p-button p-button-danger"
+        onClick={controller.fecharModalConfirmacao}
+      />
+      <Button
+        label="Confirmar"
+        icon="pi pi-check"
+        className="p-button p-button-success"
+        onClick={controller.removerSelecionado}
+      />
+    </>
+  );
+
+  const perfilControlerModalDialogFooter = (
     <>
       <Button
         loading={filter.loading}
@@ -76,7 +91,7 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
         label="Gravar"
         icon="pi pi-check"
         className="p-button p-button-success"
-        onClick={controller.onSalvarPerfilGrupos}
+        onClick={controller.onSalvarPerfilControler}
       />
     </>
   );
@@ -99,6 +114,19 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
       />
     </>
   );
+
+  const actionBodyTemplate = (rowData: any) => {
+    return (
+      <div className="actions">
+        <Button
+          icon="pi pi-trash"
+          className="p-button-rounded p-button-danger"
+          style={{ marginRight: '.5em' }}
+          onClick={() => controller.removerFuncionalidadeTemplate(rowData)}
+        />
+      </div>
+    );
+  };
 
   const leftToolbarTemplate = () => {
     return (
@@ -150,6 +178,12 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
               style={{ minWidth: '200px' }}
               className="text-red-50"
             ></Column>
+            <Column
+              header="Ações"
+              align={'center'}
+              style={{ width: '15%', height: '10%', textAlign: 'center' }}
+              body={actionBodyTemplate}
+            ></Column>
           </DataTable>
         </Card>
 
@@ -159,7 +193,7 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
           header="Cadastrar Controle de Acesso"
           maximizable={true}
           style={{ width: '95%', height: '95%', whiteSpace: 'nowrap' }}
-          footer={modalDialogFooter}
+          footer={perfilControlerModalDialogFooter}
           onHide={controller.onDialogCancelar}
         >
           <div className="card">
@@ -215,6 +249,7 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
               <div className="col-12 md:col-2">
                 <div className="p-inputgroup">
                   <Button
+                    disabled={!filter.funcionalidadesSelecionado}
                     loading={filter.loading}
                     label="Adicionar"
                     icon="pi pi-plus-circle"
@@ -229,7 +264,7 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
               <div className="col-12 md:col-12">
                 <div className="p-inputgroup">
                   <DataTable
-                    value={filter.addListaControleAcessos?.funcionalidades}
+                    value={filter.addFuncionalidades}
                     emptyMessage="Nenhum resultado encontrado!"
                     sortOrder={1}
                     responsiveLayout="stack"
@@ -281,6 +316,22 @@ const DataGridPerfilGrupos: React.FC<Props> = ({ filter, controller }) => {
                 </div>
               </div>
             </div>
+          </div>
+        </Dialog>
+
+        <Dialog
+          visible={filter.removerModalDialog}
+          modal
+          style={{ width: '40%', height: '95%', whiteSpace: 'nowrap' }}
+          header="Confirma"
+          footer={modalConfirmacaoDialogFooter}
+          onHide={controller.fecharModalConfirmacao}
+        >
+          <div className="flex align-items-center justify-content-center">
+            <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+            <span>
+              Tem certeza que deseja excluir Usuário <b>{}</b>?
+            </span>
           </div>
         </Dialog>
       </div>

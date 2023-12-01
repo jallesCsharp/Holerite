@@ -37,14 +37,15 @@ namespace Holerite.Core.Services.Controler
             var loginAuth = await _loginRepository
                     .QueryableFor(p => p.LoginAuth == pLoginAuth)
                     .Include(pX => pX.Pessoas)
-                    .Include(p => p.Perfil).ThenInclude(pX => pX.ControleAcessos).ThenInclude(pX => pX.Funcionalidades)
+                    .Include(p => p.Perfil)
+                    .ThenInclude(pX => pX.ControleAcessos)
+                    .ThenInclude(pX => pX.Funcionalidades)
                     .FirstOrDefaultAsync();
 
             if (loginAuth is null)
                 throw new Exception("Login não Encontrado!!!");
 
             string descriptografarSenha = pPassword; //XAesCrip.Decriptografar(pLogin.Senha);
-            var tee = XAesCrip.Criptografar(pPassword);
             string confimaSenha = XAesCrip.Decriptografar(loginAuth.Senha);
 
             if (descriptografarSenha != confimaSenha) throw new Exception("Senha ou Usuário não valido!!");
@@ -52,19 +53,16 @@ namespace Holerite.Core.Services.Controler
             LoginAuthDto loginAuthDto = _mapper.Map<LoginAuthDto>(loginAuth);
 
             loginAuthDto.Jwt = loginAuth.Jwt = TokenServices.GenerateToken(loginAuthDto);
-            _loginRepository.Update(loginAuth);
-            await _loginRepository.UnitOfWork.Commit();
-            //if (!TokenServices.ValidateToken(loginAuthDto.Jwt))
-            //{
-            //}
-            
 
-            var controle = loginAuth.Perfil.ControleAcessos.ToList();
+            var controle = loginAuth.Perfil?.ControleAcessos?.Where(pX => !pX.Deleted.HasValue).ToList();
             List<FuncionalidadesResponseDto> funcionalidade = new List<FuncionalidadesResponseDto>();
-            controle.ForEach(item =>
+            controle?.ForEach(item =>
             {
                 funcionalidade.Add(_mapper.Map<FuncionalidadesResponseDto>(item.Funcionalidades));
             });
+            loginAuth.Perfil = null;
+            _loginRepository.Update(loginAuth);
+            await _loginRepository.UnitOfWork.Commit();            
 
             loginAuthDto.Funcionalidades = funcionalidade;
 

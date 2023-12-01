@@ -2,6 +2,8 @@ import AbstractService from '../../provider/services/abstractService';
 import { apiUrl } from '../shared/apis/api';
 import { TResponse } from '../../provider/@types/http';
 import { ControleAcessosModel } from '../@types/model/ControleAcessosModel';
+import { FuncionalidadesModel } from '../@types/model/FuncionalidadesModel';
+import { PerfilModel } from '../@types/model/PerfilModel';
 
 export default class ControleAcessoService extends AbstractService {
   constructor() {
@@ -77,8 +79,21 @@ export default class ControleAcessoService extends AbstractService {
     }
   }
 
-  public async InsertPerfil(data?: ControleAcessosModel): Promise<TResponse<ControleAcessosModel>> {
-    const response = await apiUrl.post('/ControleAcessossssss', data);
+  public async InsertPerfilControler(
+    dataFuncionalidades?: FuncionalidadesModel[],
+    dataPerfil?: PerfilModel,
+  ): Promise<TResponse<ControleAcessosModel>> {
+    console.log('InsertPerfilControler');
+    console.log(
+      apiUrl.post('/PerfilControleAcesso', {
+        Perfil: dataPerfil,
+        Funcionalidades: dataFuncionalidades,
+      }),
+    );
+    const response = await apiUrl.post('/ControleAcessos/PerfilControleAcesso', {
+      Perfil: dataPerfil,
+      Funcionalidades: dataFuncionalidades,
+    });
     return response.data;
   }
 
@@ -86,6 +101,17 @@ export default class ControleAcessoService extends AbstractService {
     model?: ControleAcessosModel,
   ): Promise<TResponse<ControleAcessosModel>> {
     const response = await apiUrl.delete(`ControleAcessosssss/id:length(24)?id=${model?.id}`);
+    return {
+      success: response.data,
+      data: null,
+      errors: null,
+    };
+  }
+
+  public async RemoverControler(
+    model?: ControleAcessosModel,
+  ): Promise<TResponse<ControleAcessosModel>> {
+    const response = await apiUrl.delete(`ControleAcessos/${model?.id}`);
     return {
       success: response.data,
       data: null,

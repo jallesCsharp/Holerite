@@ -16,9 +16,9 @@ export default class PerfilGruposFilter {
 
   public setLoading: (e: any) => void;
 
-  public deleteModalDialog?: boolean;
+  public removerModalDialog?: boolean;
 
-  public setDeleteModalDialog: (e: any) => void;
+  public setRemoverModalDialog: (e: any) => void;
 
   public submitted?: boolean;
 
@@ -44,6 +44,10 @@ export default class PerfilGruposFilter {
 
   public setListaFuncionalidades: (e: any) => void;
 
+  public addFuncionalidades?: FuncionalidadesModel[];
+
+  public setAddFuncionalidades: (e: any) => void;
+
   public listaControleAcessos?: ControleAcessosModel[];
 
   public setListaControleAcessos: (e: any) => void;
@@ -58,7 +62,7 @@ export default class PerfilGruposFilter {
     [this.cadastrarPerfilModalDialog, this.setCadastrarPerfilModalDialog] =
       useState<boolean>(false);
     [this.perfilGruposModalDialog, this.setPerfilGruposModalDialog] = useState<boolean>(false);
-    [this.deleteModalDialog, this.setDeleteModalDialog] = useState<boolean>(false);
+    [this.removerModalDialog, this.setRemoverModalDialog] = useState<boolean>(false);
     [this.perfilGrupoSelecionado, this.setPerfilGrupoSelecionado] = useState<
       PerfilModel | undefined
     >();
@@ -72,6 +76,7 @@ export default class PerfilGruposFilter {
     [this.listaFuncionalidades, this.setListaFuncionalidades] = useState<
       FuncionalidadesModel[] | undefined
     >();
+    [this.addFuncionalidades, this.setAddFuncionalidades] = useState<FuncionalidadesModel[]>();
     [this.listaControleAcessos, this.setListaControleAcessos] = useState<
       ControleAcessosModel[] | undefined
     >();
